@@ -10,13 +10,13 @@ module "resource_group" {
 }
 
 ##############################################################################
-# ICD mongodb database
+# ICD mongodb database with auto scale
 ##############################################################################
-
 module "mongodb" {
   source            = "../.."
   resource_group_id = module.resource_group.resource_group_id
   instance_name     = "${var.prefix}-mongodb"
   region            = var.region
   tags              = var.resource_tags
+  auto_scaling      = var.auto_scaling
 }
