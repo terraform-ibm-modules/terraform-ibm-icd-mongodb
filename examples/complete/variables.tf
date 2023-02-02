@@ -45,15 +45,3 @@ variable "service_credentials" {
   type        = list(string)
   default     = ["mongodb_credential_microservices", "mongodb_credential_dev_1", "mongodb_credential_dev_2"]
 }
-
-variable "existing_sm_instance_guid" {
-  type        = string
-  description = "Existing Secrets Manager GUID. If not provided an new instance will be provisioned"
-  default     = null
-}
-
-variable "existing_sm_instance_region" {
-  type        = string
-  description = "Required if value is passed into var.existing_sm_instance_guid"
-  default     = null
-}

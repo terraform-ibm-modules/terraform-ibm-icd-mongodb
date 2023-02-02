@@ -13,8 +13,6 @@ const regionSelectionPath = "../common-dev-assets/common-go-assets/icd-region-pr
 
 // Use existing resource group
 const resourceGroup = "geretain-test-mongo"
-const secretsManagerGuid = "8ad00d9f-2844-43d6-bdac-194097c3d2eb"
-const secretsManagerRegion = "us-south"
 
 const defaultExampleTerraformDir = "examples/default"
 const autoscalingExampleTerraformDir = "examples/autoscale"
@@ -61,9 +59,7 @@ func testRunComplete(t *testing.T, version string) {
 		ResourceGroup:      resourceGroup,
 		BestRegionYAMLPath: regionSelectionPath,
 		TerraformVars: map[string]interface{}{
-			"mongodb_version":             version,
-			"existing_sm_instance_guid":   secretsManagerGuid,
-			"existing_sm_instance_region": secretsManagerRegion,
+			"mongodb_version": version,
 		},
 	})
 
