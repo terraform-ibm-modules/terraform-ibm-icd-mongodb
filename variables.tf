@@ -140,7 +140,7 @@ variable "members" {
     condition = alltrue([
       var.members == 3
     ])
-    error_message = "Member group members must be >= 3 or <=3 in increments of 1."
+    error_message = "MongoDB data members must be 3 per cluster."
   }
 }
 

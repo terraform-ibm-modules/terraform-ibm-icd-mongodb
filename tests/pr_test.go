@@ -24,7 +24,7 @@ func TestRunDefaultExample(t *testing.T) {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:       t,
 		TerraformDir:  defaultExampleTerraformDir,
-		Prefix:        "mongodb",
+		Prefix:        "mongodb-def",
 		ResourceGroup: resourceGroup,
 	})
 
@@ -39,7 +39,7 @@ func TestRunAutoscaleExample(t *testing.T) {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:            t,
 		TerraformDir:       autoscalingExampleTerraformDir,
-		Prefix:             "mongodb",
+		Prefix:             "mongodb-auto",
 		ResourceGroup:      resourceGroup,
 		BestRegionYAMLPath: regionSelectionPath,
 	})
@@ -55,7 +55,7 @@ func testRunComplete(t *testing.T, version string) {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:            t,
 		TerraformDir:       completeExampleTerraformDir,
-		Prefix:             "mongodb",
+		Prefix:             "mongodb-comp",
 		ResourceGroup:      resourceGroup,
 		BestRegionYAMLPath: regionSelectionPath,
 		TerraformVars: map[string]interface{}{
@@ -85,7 +85,7 @@ func TestRunUpgradeExample(t *testing.T) {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:            t,
 		TerraformDir:       defaultExampleTerraformDir,
-		Prefix:             "mongodb-template-upg",
+		Prefix:             "mongodb-upg",
 		ResourceGroup:      resourceGroup,
 		BestRegionYAMLPath: regionSelectionPath,
 	})
