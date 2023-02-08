@@ -19,7 +19,7 @@
 ```terraform
 module "mongodb" {
     # replace "master" with a GIT release version to lock into a specific release
-    source = "git::https://github.ibm.com/GoldenEye/icd-mongodb-module?ref=master"
+    source = "git::https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb?ref=master"
     resource_group_id = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"
     region = "us-south"
     instance_name = "my-mongodb-instance"
