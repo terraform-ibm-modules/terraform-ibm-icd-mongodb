@@ -1,4 +1,4 @@
-# Encryption example
+# Complete example with Encryption and CBR rules
 
 An example that adds encryption to the [default example](../default/README.md).
 

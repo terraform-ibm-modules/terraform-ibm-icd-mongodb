@@ -40,7 +40,7 @@ You need the following permissions to run this module.
 ## Examples
 
 - [ Autoscale example](examples/autoscale)
-- [ Encryption example](examples/complete)
+- [ Complete example with Encryption and CBR rules](examples/complete)
 - [ Default example](examples/default)
 <!-- END EXAMPLES HOOK -->
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
@@ -53,7 +53,9 @@ You need the following permissions to run this module.
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | git::https://github.com/terraform-ibm-modules/terraform-ibm-cbr//cbr-rule-module | v1.1.0 |
 
 ## Resources
 
@@ -68,6 +70,7 @@ No modules.
 | <a name="input_allowlist"></a> [allowlist](#input\_allowlist) | (Optional, List of Objects) A list of allowed IP addresses for the database. | <pre>list(object({<br>    address     = string<br>    description = string<br>  }))</pre> | `[]` | no |
 | <a name="input_auto_scaling"></a> [auto\_scaling](#input\_auto\_scaling) | Configure rules to allow your database to automatically increase its resources. Single block of autoscaling is allowed at once. | <pre>object({<br>    cpu = object({<br>      rate_increase_percent       = optional(number)<br>      rate_limit_count_per_member = optional(number)<br>      rate_period_seconds         = optional(number)<br>      rate_units                  = optional(string)<br>    })<br>    disk = object({<br>      capacity_enabled             = optional(bool)<br>      free_space_less_than_percent = optional(number)<br>      io_above_percent             = optional(number)<br>      io_over_period               = optional(string)<br>      io_enabled                   = optional(bool)<br>      rate_increase_percent        = optional(number)<br>      rate_limit_mb_per_member     = optional(number)<br>      rate_period_seconds          = optional(number)<br>      rate_units                   = optional(string)<br>    })<br>    memory = object({<br>      io_above_percent         = optional(number)<br>      io_enabled               = optional(bool)<br>      io_over_period           = optional(string)<br>      rate_increase_percent    = optional(number)<br>      rate_limit_mb_per_member = optional(number)<br>      rate_period_seconds      = optional(number)<br>      rate_units               = optional(string)<br>    })<br>  })</pre> | <pre>{<br>  "cpu": {},<br>  "disk": {},<br>  "memory": {}<br>}</pre> | no |
 | <a name="input_backup_encryption_key_crn"></a> [backup\_encryption\_key\_crn](#input\_backup\_encryption\_key\_crn) | (Optional) The CRN of a key protect key, that you want to use for encrypting disk that holds deployment backups. If null, will use 'key\_protect\_key\_crn' as encryption key. If 'key\_protect\_key\_crn' is also null database is encrypted by using randomly generated keys. | `string` | `null` | no |
+| <a name="input_cbr_rules"></a> [cbr\_rules](#input\_cbr\_rules) | (Optional, list) List of CBR rules to create, if operations is not set it will default to api-type:data-plane | <pre>list(object({<br>    description = string<br>    account_id  = string<br>    rule_contexts = list(object({<br>      attributes = optional(list(object({<br>        name  = string<br>        value = string<br>    }))) }))<br>    enforcement_mode = string<br>    tags = optional(list(object({<br>      name  = string<br>      value = string<br>    })))<br>    operations = optional(list(object({<br>      api_types = list(object({<br>        api_type_id = string<br>      }))<br>    })))<br>  }))</pre> | `[]` | no |
 | <a name="input_configuration"></a> [configuration](#input\_configuration) | Database Configuration in JSON format. | <pre>object({<br>    maxmemory                   = optional(number)<br>    maxmemory-policy            = optional(string)<br>    appendonly                  = optional(string)<br>    maxmemory-samples           = optional(number)<br>    stop-writes-on-bgsave-error = optional(string)<br>  })</pre> | `null` | no |
 | <a name="input_cpu_count"></a> [cpu\_count](#input\_cpu\_count) | Number of CPU cores available to the mongodb instance | `number` | `7` | no |
 | <a name="input_disk_mb"></a> [disk\_mb](#input\_disk\_mb) | Disk available to the mongodb instance | `number` | `20480` | no |

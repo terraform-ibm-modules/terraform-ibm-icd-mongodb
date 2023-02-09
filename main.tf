@@ -85,3 +85,47 @@ resource "ibm_database" "mongodb" {
     ]
   }
 }
+
+##############################################################################
+# Context Based Restrictions
+##############################################################################
+
+module "cbr_rule" {
+  count            = length(var.cbr_rules) > 0 ? length(var.cbr_rules) : 0
+  source           = "git::https://github.com/terraform-ibm-modules/terraform-ibm-cbr//cbr-rule-module?ref=v1.1.0"
+  rule_description = var.cbr_rules[count.index].description
+  enforcement_mode = var.cbr_rules[count.index].enforcement_mode
+  rule_contexts    = var.cbr_rules[count.index].rule_contexts
+  resources = [{
+    attributes = [
+      {
+        name     = "accountId"
+        value    = var.cbr_rules[count.index].account_id
+        operator = "stringEquals"
+      },
+      {
+        name     = "serviceInstance"
+        value    = ibm_database.mongodb.id
+        operator = "stringEquals"
+      },
+      {
+        name     = "serviceName"
+        value    = "databases-for-mongodb"
+        operator = "stringEquals"
+      }
+    ],
+    tags = var.cbr_rules[count.index].tags != null ? var.cbr_rules[count.index].tags : [
+      {
+        name  = "terraform-rule"
+        value = "allow-mongodb"
+      }
+    ]
+  }]
+  operations = var.cbr_rules[count.index].operations != null ? var.cbr_rules[count.index].operations : [{
+    api_types = [
+      {
+        api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"
+      }
+    ]
+  }]
+}

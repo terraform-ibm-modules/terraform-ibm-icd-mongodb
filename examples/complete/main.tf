@@ -10,6 +10,23 @@ module "resource_group" {
 }
 
 ##############################################################################
+# VPC
+##############################################################################
+resource "ibm_is_vpc" "example_vpc" {
+  name           = "${var.prefix}-vpc"
+  resource_group = module.resource_group.resource_group_id
+  tags           = var.resource_tags
+}
+
+resource "ibm_is_subnet" "testacc_subnet" {
+  name                     = "${var.prefix}-subnet"
+  vpc                      = ibm_is_vpc.example_vpc.id
+  zone                     = "${var.region}-1"
+  total_ipv4_address_count = 256
+  resource_group           = module.resource_group.resource_group_id
+}
+
+##############################################################################
 # Key Protect All Inclusive
 ##############################################################################
 
@@ -66,6 +83,27 @@ resource "ibm_resource_key" "service_credentials" {
 }
 
 ##############################################################################
+# Get Cloud Account ID
+##############################################################################
+
+data "ibm_iam_account_settings" "iam_account_settings" {
+}
+
+##############################################################################
+# Create CBR Zone
+##############################################################################
+module "cbr_zone" {
+  source           = "git::https://github.com/terraform-ibm-modules/terraform-ibm-cbr//cbr-zone-module?ref=v1.1.0"
+  name             = "${var.prefix}-VPC-network-zone"
+  zone_description = "CBR Network zone containing VPC"
+  account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+  addresses = [{
+    type  = "vpc", # to bind a specific vpc to the zone
+    value = ibm_is_vpc.example_vpc.crn,
+  }]
+}
+
+##############################################################################
 # ICD mongodb database
 ##############################################################################
 
@@ -74,7 +112,36 @@ module "mongodb" {
   resource_group_id   = module.resource_group.resource_group_id
   mongodb_version     = var.mongodb_version
   instance_name       = "${var.prefix}-mongodb"
+  endpoints           = "private"
   region              = var.region
   key_protect_key_crn = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
   tags                = var.resource_tags
+  cbr_rules = [
+    {
+      description      = "sample rule"
+      enforcement_mode = "enabled"
+      account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+      tags = [
+        {
+          name  = "environment"
+          value = "${var.prefix}-test"
+        },
+        {
+          name  = "terraform-rule"
+          value = "allow-${var.prefix}-vpc-to-${var.prefix}-mongodb"
+        }
+      ]
+      rule_contexts = [{
+        attributes = [
+          {
+            "name" : "endpointType",
+            "value" : "private"
+          },
+          {
+            name  = "networkZoneId"
+            value = module.cbr_zone.zone_id
+        }]
+      }]
+    }
+  ]
 }
