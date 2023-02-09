@@ -68,7 +68,6 @@ resource "ibm_resource_instance" "secrets_manager" {
   timeouts {
     create = "30m"
   }
-
 }
 
 ##############################################################################
