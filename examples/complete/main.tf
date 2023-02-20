@@ -36,24 +36,6 @@ resource "ibm_iam_authorization_policy" "policy" {
   roles                       = ["Reader"]
 }
 
-########################################
-## Create Secrets Manager layer
-########################################
-
-resource "ibm_resource_instance" "secrets_manager" {
-  name              = "${var.prefix}-sm"
-  service           = "secrets-manager"
-  service_endpoints = "public-and-private"
-  plan              = var.sm_service_plan
-  location          = var.region
-  resource_group_id = module.resource_group.resource_group_id
-
-  timeouts {
-    create = "30m"
-  }
-
-}
-
 ##############################################################################
 # Service Credentials
 ##############################################################################
