@@ -59,7 +59,8 @@ func testRunComplete(t *testing.T, version string) {
 		ResourceGroup:      resourceGroup,
 		BestRegionYAMLPath: regionSelectionPath,
 		TerraformVars: map[string]interface{}{
-			"mongodb_version": version,
+			"mongodb_version":  version,
+			"enforcement_mode": "disabled",
 		},
 	})
 
@@ -85,6 +86,9 @@ func TestRunUpgradeExample(t *testing.T) {
 		Prefix:             "mongodb-upg",
 		ResourceGroup:      resourceGroup,
 		BestRegionYAMLPath: regionSelectionPath,
+		TerraformVars: map[string]interface{}{
+			"enforcement_mode": "disabled",
+		},
 	})
 
 	output, err := options.RunTestUpgrade()

@@ -34,7 +34,7 @@ module "key_protect_all_inclusive" {
   providers = {
     restapi = restapi.kp
   }
-  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-key-protect-all-inclusive.git?ref=v3.0.2"
+  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-key-protect-all-inclusive.git?ref=v3.1.0"
   resource_group_id = module.resource_group.resource_group_id
   # Note: Database instance and Key Protect must be created in the same region when using BYOK
   # See https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok
@@ -51,23 +51,6 @@ resource "ibm_iam_authorization_policy" "policy" {
   target_service_name         = "kms"
   target_resource_instance_id = module.key_protect_all_inclusive.key_protect_guid
   roles                       = ["Reader"]
-}
-
-########################################
-## Create Secrets Manager layer
-########################################
-
-resource "ibm_resource_instance" "secrets_manager" {
-  name              = "${var.prefix}-sm"
-  service           = "secrets-manager"
-  service_endpoints = "public-and-private"
-  plan              = var.sm_service_plan
-  location          = var.region
-  resource_group_id = module.resource_group.resource_group_id
-
-  timeouts {
-    create = "30m"
-  }
 }
 
 ##############################################################################
@@ -118,18 +101,8 @@ module "mongodb" {
   cbr_rules = [
     {
       description      = "sample rule"
-      enforcement_mode = "enabled"
+      enforcement_mode = var.enforcement_mode
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-      tags = [
-        {
-          name  = "environment"
-          value = "${var.prefix}-test"
-        },
-        {
-          name  = "terraform-rule"
-          value = "allow-${var.prefix}-vpc-to-${var.prefix}-mongodb"
-        }
-      ]
       rule_contexts = [{
         attributes = [
           {

@@ -34,14 +34,14 @@ variable "mongodb_version" {
   default     = null
 }
 
-variable "sm_service_plan" {
-  type        = string
-  description = "Secrets Manager plan"
-  default     = "trial"
-}
-
 variable "service_credentials" {
   description = "A list of service credentials that you want to create for the database"
   type        = list(string)
   default     = ["mongodb_credential_microservices", "mongodb_credential_dev_1", "mongodb_credential_dev_2"]
+}
+
+variable "enforcement_mode" {
+  description = "whether or not enforce a rule upon creation and update the rule enforcement."
+  type        = string
+  default     = "enabled"
 }

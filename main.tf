@@ -121,7 +121,8 @@ module "cbr_rule" {
       }
     ]
   }]
-  operations = var.cbr_rules[count.index].operations != null ? var.cbr_rules[count.index].operations : [{
+  #  There is only 1 operation type for Redis so it is not exposed as a configuration
+  operations = [{
     api_types = [
       {
         api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"
