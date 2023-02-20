@@ -105,7 +105,7 @@ module "cbr_rule" {
       },
       {
         name     = "serviceInstance"
-        value    = ibm_database.mongodb.id
+        value    = ibm_database.mongodb.guid
         operator = "stringEquals"
       },
       {

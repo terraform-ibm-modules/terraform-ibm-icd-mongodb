@@ -222,9 +222,19 @@
     }
   },
   "outputs": {
+    "guid": {
+      "name": "guid",
+      "description": "mongodb instance guid",
+      "value": "ibm_database.mongodb.guid",
+      "pos": {
+        "filename": "outputs.tf",
+        "line": 10
+      },
+      "type": "TypeString"
+    },
     "id": {
       "name": "id",
-      "description": "mongodb instance id",
+      "description": "mongodb instance id (CRN)",
       "value": "ibm_database.mongodb.id",
       "pos": {
         "filename": "outputs.tf",
@@ -237,7 +247,7 @@
       "value": "ibm_database.mongodb.version",
       "pos": {
         "filename": "outputs.tf",
-        "line": 10
+        "line": 15
       },
       "type": "TypeString"
     }
