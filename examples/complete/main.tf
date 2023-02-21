@@ -100,7 +100,7 @@ module "mongodb" {
   tags                = var.resource_tags
   cbr_rules = [
     {
-      description      = "sample rule"
+      description      = "${var.prefix}-mongodb access only from vpc"
       enforcement_mode = var.enforcement_mode
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
       rule_contexts = [{
