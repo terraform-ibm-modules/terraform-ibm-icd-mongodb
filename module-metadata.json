@@ -34,6 +34,23 @@
         "line": 85
       }
     },
+    "cbr_rules": {
+      "name": "cbr_rules",
+      "type": "list(object({\n    description = string\n    account_id  = string\n    rule_contexts = list(object({\n      attributes = optional(list(object({\n        name  = string\n        value = string\n    }))) }))\n    enforcement_mode = string\n  }))",
+      "description": "(Optional, list) List of CBR rules to create",
+      "default": [],
+      "source": [
+        "module.cbr_rule",
+        "module.cbr_rule",
+        "module.cbr_rule",
+        "module.cbr_rule",
+        "module.cbr_rule"
+      ],
+      "pos": {
+        "filename": "variables.tf",
+        "line": 186
+      }
+    },
     "configuration": {
       "name": "configuration",
       "type": "object({\n    maxmemory                   = optional(number)\n    maxmemory-policy            = optional(string)\n    appendonly                  = optional(string)\n    maxmemory-samples           = optional(number)\n    stop-writes-on-bgsave-error = optional(string)\n  })",
@@ -205,9 +222,19 @@
     }
   },
   "outputs": {
+    "guid": {
+      "name": "guid",
+      "description": "mongodb instance guid",
+      "value": "ibm_database.mongodb.guid",
+      "pos": {
+        "filename": "outputs.tf",
+        "line": 10
+      },
+      "type": "TypeString"
+    },
     "id": {
       "name": "id",
-      "description": "mongodb instance id",
+      "description": "mongodb instance id (CRN)",
       "value": "ibm_database.mongodb.id",
       "pos": {
         "filename": "outputs.tf",
@@ -220,7 +247,7 @@
       "value": "ibm_database.mongodb.version",
       "pos": {
         "filename": "outputs.tf",
-        "line": 10
+        "line": 15
       },
       "type": "TypeString"
     }
@@ -262,5 +289,66 @@
     }
   },
   "data_resources": {},
-  "module_calls": {}
+  "module_calls": {
+    "cbr_rule": {
+      "name": "cbr_rule",
+      "source": "git::https://github.com/terraform-ibm-modules/terraform-ibm-cbr//cbr-rule-module?ref=v1.1.2",
+      "attributes": {
+        "count": "cbr_rules",
+        "enforcement_mode": "cbr_rules",
+        "resources": "cbr_rules",
+        "rule_contexts": "cbr_rules",
+        "rule_description": "cbr_rules"
+      },
+      "managed_resources": {
+        "ibm_cbr_rule.cbr_rule": {
+          "mode": "managed",
+          "type": "ibm_cbr_rule",
+          "name": "cbr_rule",
+          "attributes": {
+            "description": "rule_description",
+            "enforcement_mode": "enforcement_mode"
+          },
+          "provider": {
+            "name": "ibm"
+          },
+          "pos": {
+            "filename": ".terraform/modules/cbr_rule/cbr-rule-module/main.tf",
+            "line": 7
+          }
+        }
+      },
+      "data_resources": {},
+      "outputs": {
+        "rule_crn": {
+          "name": "rule_crn",
+          "description": "CBR rule resource instance crn",
+          "pos": {
+            "filename": ".terraform/modules/cbr_rule/cbr-rule-module/outputs.tf",
+            "line": 10
+          }
+        },
+        "rule_href": {
+          "name": "rule_href",
+          "description": "CBR rule resource href",
+          "pos": {
+            "filename": ".terraform/modules/cbr_rule/cbr-rule-module/outputs.tf",
+            "line": 15
+          }
+        },
+        "rule_id": {
+          "name": "rule_id",
+          "description": "CBR rule resource instance id",
+          "pos": {
+            "filename": ".terraform/modules/cbr_rule/cbr-rule-module/outputs.tf",
+            "line": 5
+          }
+        }
+      },
+      "pos": {
+        "filename": "main.tf",
+        "line": 93
+      }
+    }
+  }
 }

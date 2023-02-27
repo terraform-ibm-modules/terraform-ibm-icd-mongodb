@@ -39,3 +39,9 @@ variable "service_credentials" {
   type        = list(string)
   default     = ["mongodb_credential_microservices", "mongodb_credential_dev_1", "mongodb_credential_dev_2"]
 }
+
+variable "enforcement_mode" {
+  description = "whether or not enforce a rule upon creation and update the rule enforcement."
+  type        = string
+  default     = "enabled"
+}

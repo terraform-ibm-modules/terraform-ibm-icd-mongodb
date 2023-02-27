@@ -11,3 +11,8 @@ output "version" {
   description = "MongoDB instance version"
   value       = module.mongodb.version
 }
+
+output "guid" {
+  description = "mongodb instance guid"
+  value       = module.mongodb.guid
+}
