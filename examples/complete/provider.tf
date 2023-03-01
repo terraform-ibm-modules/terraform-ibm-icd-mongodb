@@ -2,6 +2,7 @@ provider "ibm" {
   ibmcloud_api_key = var.ibmcloud_api_key
   region           = var.region
 }
+
 # used by the restapi provider to authenticate the API call based on API key
 data "ibm_iam_auth_token" "token_data" {
 }

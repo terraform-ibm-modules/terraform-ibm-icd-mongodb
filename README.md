@@ -42,6 +42,7 @@ You need the following permissions to run this module.
 - [ Autoscale example](examples/autoscale)
 - [ Complete example with Encryption and CBR rules](examples/complete)
 - [ Default example](examples/default)
+- [ FS Cloud profile example](examples/fscloud)
 <!-- END EXAMPLES HOOK -->
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements

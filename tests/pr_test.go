@@ -17,6 +17,23 @@ const resourceGroup = "geretain-test-mongo"
 const defaultExampleTerraformDir = "examples/default"
 const autoscalingExampleTerraformDir = "examples/autoscale"
 const completeExampleTerraformDir = "examples/complete"
+const fsCloudTerraformDir = "examples/fscloud"
+
+func TestRunRedisFSCloudExample(t *testing.T) {
+	t.Parallel()
+
+	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+		Testing:            t,
+		TerraformDir:       fsCloudTerraformDir,
+		Prefix:             "mongodb-fs",
+		ResourceGroup:      resourceGroup,
+		BestRegionYAMLPath: regionSelectionPath,
+	})
+
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
+}
 
 func TestRunDefaultExample(t *testing.T) {
 	t.Parallel()
