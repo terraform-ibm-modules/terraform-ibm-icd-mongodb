@@ -31,9 +31,6 @@ resource "ibm_is_subnet" "testacc_subnet" {
 ##############################################################################
 
 module "key_protect_all_inclusive" {
-  providers = {
-    restapi = restapi.kp
-  }
   source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-key-protect-all-inclusive.git?ref=v4.0.0"
   resource_group_id = module.resource_group.resource_group_id
   # Note: Database instance and Key Protect must be created in the same region when using BYOK
