@@ -19,7 +19,7 @@ const autoscalingExampleTerraformDir = "examples/autoscale"
 const completeExampleTerraformDir = "examples/complete"
 const fsCloudTerraformDir = "examples/fscloud"
 
-func TestRunRedisFSCloudExample(t *testing.T) {
+func TestRunMongoDBFSCloudExample(t *testing.T) {
 	t.Parallel()
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{

@@ -3,7 +3,7 @@
 ##############################################################################
 
 variable "resource_group_id" {
-  description = "ID of resource group to use when creating the redis database"
+  description = "ID of resource group to use when creating the mongodb database"
   type        = string
 }
 
