@@ -3,7 +3,7 @@
     {
       "scc_goal_id": "3000205",
       "description": "Check whether Databases for MongoDB network access is restricted to a specific IP range",
-      "ignore_reason": "To be addressed in https://github.ibm.com/GoldenEye/issues/issues/3905",
+      "ignore_reason": "To be addressed in https://github.ibm.com/oneibmcloud/CD-CRA/issues/1691",
       "is_valid": true
     },
     {
