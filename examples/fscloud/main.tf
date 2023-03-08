@@ -51,17 +51,6 @@ resource "ibm_iam_authorization_policy" "policy" {
 }
 
 ##############################################################################
-# Service Credentials
-##############################################################################
-
-resource "ibm_resource_key" "service_credentials" {
-  count                = length(var.service_credentials)
-  name                 = var.service_credentials[count.index]
-  resource_instance_id = module.mongodb.id
-  tags                 = var.resource_tags
-}
-
-##############################################################################
 # Get Cloud Account ID
 ##############################################################################
 
@@ -72,7 +61,7 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 # Create CBR Zone
 ##############################################################################
 module "cbr_zone" {
-  source           = "git::https://github.com/terraform-ibm-modules/terraform-ibm-cbr//cbr-zone-module?ref=v1.1.3"
+  source           = "git::https://github.com/terraform-ibm-modules/terraform-ibm-cbr//cbr-zone-module?ref=v1.1.2"
   name             = "${var.prefix}-VPC-network-zone"
   zone_description = "CBR Network zone containing VPC"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
@@ -87,18 +76,16 @@ module "cbr_zone" {
 ##############################################################################
 
 module "mongodb" {
-  source              = "../.."
+  source              = "../../profiles/fscloud"
   resource_group_id   = module.resource_group.resource_group_id
-  mongodb_version     = var.mongodb_version
   instance_name       = "${var.prefix}-mongodb"
-  endpoints           = "private"
   region              = var.region
-  key_protect_key_crn = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
   tags                = var.resource_tags
+  key_protect_key_crn = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
   cbr_rules = [
     {
       description      = "${var.prefix}-mongodb access only from vpc"
-      enforcement_mode = var.enforcement_mode
+      enforcement_mode = "enabled"
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
       rule_contexts = [{
         attributes = [
