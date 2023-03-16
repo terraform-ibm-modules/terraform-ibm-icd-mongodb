@@ -75,13 +75,18 @@ module "cbr_zone" {
 # ICD mongodb database
 ##############################################################################
 
+locals {
+  kp_backup_crn = var.backup_encryption_key_crn != null ? var.backup_encryption_key_crn : module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
+}
+
 module "mongodb" {
-  source              = "../../profiles/fscloud"
-  resource_group_id   = module.resource_group.resource_group_id
-  instance_name       = "${var.prefix}-mongodb"
-  region              = var.region
-  tags                = var.resource_tags
-  key_protect_key_crn = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
+  source                    = "../../profiles/fscloud"
+  resource_group_id         = module.resource_group.resource_group_id
+  instance_name             = "${var.prefix}-mongodb"
+  region                    = var.region
+  tags                      = var.resource_tags
+  key_protect_key_crn       = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
+  backup_encryption_key_crn = local.kp_backup_crn
   cbr_rules = [
     {
       description      = "${var.prefix}-mongodb access only from vpc"

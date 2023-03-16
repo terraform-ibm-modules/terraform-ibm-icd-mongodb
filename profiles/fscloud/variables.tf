@@ -86,13 +86,12 @@ variable "tags" {
 
 variable "key_protect_key_crn" {
   type        = string
-  description = "The root key CRN of a Key Management Service like Key Protect or Hyper Protect Crypto Service (HPCS) that you want to use for disk encryption. See https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok for current list of supported regions for BYOK"
+  description = "The root key CRN of a Hyper Protect Crypto Service (HPCS) that you want to use for disk encryption."
 }
 
 variable "backup_encryption_key_crn" {
   type        = string
   description = "The CRN of a key protect key, that you want to use for encrypting disk that holds deployment backups. If null, will use 'key_protect_key_crn' as encryption key. If 'key_protect_key_crn' is also null database is encrypted by using randomly generated keys."
-  default     = null
 }
 
 variable "auto_scaling" {
