@@ -9,7 +9,7 @@ variable "instance_name" {
 
 variable "region" {
   type        = string
-  description = "The IBM Cloud region where instance will be created"
+  description = "The region MongoDB is to be created on. The region must support BYOK region if Key Protect Key is used or KYOK region if Hyper Protect Crypto Service (HPCS) is used."
   default     = "us-south"
 }
 
@@ -17,6 +17,18 @@ variable "plan" {
   type        = string
   description = "The name of the service plan that you choose for your mongodb instance"
   default     = "standard"
+}
+
+variable "existing_kms_instance_guid" {
+  description = "The GUID of the Hyper Protect or Key Protect instance in which the key specified in var.kms_key_crn is coming from. Only required if skip_iam_authorization_policy is false"
+  type        = string
+  default     = null
+}
+
+variable "skip_iam_authorization_policy" {
+  type        = bool
+  description = "Set to true to skip the creation of an IAM authorization policy that permits all MongoDB instances in the given Resource group to read the encryption key from the Hyper Protect or Key Protect instance in `existing_kms_instance_guid`."
+  default     = true
 }
 
 variable "allowlist" {
@@ -76,7 +88,7 @@ variable "endpoints" {
   }
 }
 
-variable "key_protect_key_crn" {
+variable "kms_key_crn" {
   type        = string
   description = "(Optional) The root key CRN of a Key Management Service like Key Protect or Hyper Protect Crypto Service (HPCS) that you want to use for disk encryption. If `null`, database is encrypted by using randomly generated keys. See https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok for current list of supported regions for BYOK"
   default     = null
@@ -84,7 +96,7 @@ variable "key_protect_key_crn" {
 
 variable "backup_encryption_key_crn" {
   type        = string
-  description = "(Optional) The CRN of a key protect key, that you want to use for encrypting disk that holds deployment backups. If null, will use 'key_protect_key_crn' as encryption key. If 'key_protect_key_crn' is also null database is encrypted by using randomly generated keys."
+  description = "(Optional) The CRN of a Key Protect Key to use for encrypting backups. If left null, the value passed for the 'kms_key_crn' variable will be used. Take note that Hyper Protect Crypto Services for IBM Cloud® Databases backups is not currently supported."
   default     = null
 }
 
