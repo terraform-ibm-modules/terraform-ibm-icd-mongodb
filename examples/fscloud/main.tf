@@ -22,7 +22,7 @@ module "key_protect_all_inclusive" {
   region                    = var.region
   key_protect_instance_name = "${var.prefix}-kp"
   resource_tags             = var.resource_tags
-  key_map                   = { "icd-pg" = ["${var.prefix}-pg"] }
+  key_map                   = { "icd-mongodb" = ["${var.prefix}-mongodb"] }
 }
 
 # Create IAM Access Policy to allow Key protect to access MongoDB instance
@@ -84,7 +84,7 @@ module "mongodb" {
   tags                       = var.resource_tags
   kms_key_crn                = var.kms_key_crn
   existing_kms_instance_guid = var.existing_kms_instance_guid
-  backup_encryption_key_crn  = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
+  backup_encryption_key_crn  = module.key_protect_all_inclusive.keys["icd-mongodb.${var.prefix}-mongodb"].crn
   cbr_rules = [
     {
       description      = "${var.prefix}-mongodb access only from vpc"

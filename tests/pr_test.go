@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/common"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 )
 
@@ -45,10 +46,9 @@ func TestRunDefaultExample(t *testing.T) {
 	t.Parallel()
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:       t,
-		TerraformDir:  defaultExampleTerraformDir,
-		Prefix:        "mongodb-def",
-		ResourceGroup: resourceGroup,
+		Testing:      t,
+		TerraformDir: defaultExampleTerraformDir,
+		Prefix:       "mongodb-def",
 	})
 
 	output, err := options.RunTestConsistency()
@@ -63,7 +63,6 @@ func TestRunAutoscaleExample(t *testing.T) {
 		Testing:            t,
 		TerraformDir:       autoscalingExampleTerraformDir,
 		Prefix:             "mongodb-auto",
-		ResourceGroup:      resourceGroup,
 		BestRegionYAMLPath: regionSelectionPath,
 	})
 
@@ -96,7 +95,6 @@ func testRunComplete(t *testing.T, version string) {
 		Testing:            t,
 		TerraformDir:       completeExampleTerraformDir,
 		Prefix:             "mongodb-comp",
-		ResourceGroup:      resourceGroup,
 		BestRegionYAMLPath: regionSelectionPath,
 		TerraformVars: map[string]interface{}{
 			"mongodb_version": version,
@@ -123,7 +121,6 @@ func TestRunUpgradeExample(t *testing.T) {
 		Testing:            t,
 		TerraformDir:       completeExampleTerraformDir,
 		Prefix:             "mongodb-upg",
-		ResourceGroup:      resourceGroup,
 		BestRegionYAMLPath: regionSelectionPath,
 	})
 

@@ -87,14 +87,14 @@ module "cbr_zone" {
 ##############################################################################
 
 module "mongodb" {
-  source              = "../.."
-  resource_group_id   = module.resource_group.resource_group_id
-  mongodb_version     = var.mongodb_version
-  instance_name       = "${var.prefix}-mongodb"
-  endpoints           = "private"
-  region              = var.region
-  key_protect_key_crn = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
-  tags                = var.resource_tags
+  source            = "../.."
+  resource_group_id = module.resource_group.resource_group_id
+  mongodb_version   = var.mongodb_version
+  instance_name     = "${var.prefix}-mongodb"
+  endpoints         = "private"
+  region            = var.region
+  kms_key_crn       = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
+  tags              = var.resource_tags
   cbr_rules = [
     {
       description      = "${var.prefix}-mongodb access only from vpc"
