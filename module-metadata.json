@@ -17,7 +17,7 @@
       "description": "Configure rules to allow your database to automatically increase its resources. Single block of autoscaling is allowed at once.",
       "pos": {
         "filename": "variables.tf",
-        "line": 159
+        "line": 166
       }
     },
     "backup_encryption_key_crn": {
@@ -43,7 +43,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 194
+        "line": 201
       }
     },
     "configuration": {
@@ -65,7 +65,7 @@
       "default": 7,
       "pos": {
         "filename": "variables.tf",
-        "line": 131
+        "line": 138
       }
     },
     "disk_mb": {
@@ -75,7 +75,7 @@
       "default": 20480,
       "pos": {
         "filename": "variables.tf",
-        "line": 117
+        "line": 124
       }
     },
     "endpoints": {
@@ -139,7 +139,7 @@
       "default": 3,
       "pos": {
         "filename": "variables.tf",
-        "line": 146
+        "line": 153
       }
     },
     "memory_mb": {
@@ -149,7 +149,7 @@
       "default": 1024,
       "pos": {
         "filename": "variables.tf",
-        "line": 103
+        "line": 110
       }
     },
     "mongodb_version": {
@@ -307,7 +307,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 31
+        "line": 33
       }
     },
     "ibm_iam_authorization_policy.kms_policy": {
@@ -324,7 +324,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 22
+        "line": 24
       }
     }
   },
@@ -403,7 +403,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 122
+        "line": 124
       }
     }
   }

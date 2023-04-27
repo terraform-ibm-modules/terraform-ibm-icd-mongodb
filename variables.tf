@@ -98,6 +98,13 @@ variable "backup_encryption_key_crn" {
   type        = string
   description = "(Optional) The CRN of a Key Protect Key to use for encrypting backups. If left null, the value passed for the 'kms_key_crn' variable will be used. Take note that Hyper Protect Crypto Services for IBM Cloud® Databases backups is not currently supported."
   default     = null
+  validation {
+    condition = anytrue([
+      var.backup_encryption_key_crn == null,
+      can(regex(".*kms.*", var.backup_encryption_key_crn))
+    ])
+    error_message = "A Key Protect key is required for encryption of backups"
+  }
 }
 
 variable "memory_mb" {
