@@ -10,11 +10,11 @@
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-<!-- Remove the content in this H2 heading after completing the steps -->
+This module implements an instance of the IBM Cloud Databases for MongoDB service.
+
+:exclamation: **Important:** This module does not support major version upgrades or updates to encryption and backup encryption keys. To upgrade the version, create another MongoDB instance with the updated version and follow the steps in [Upgrading to a new major version](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-upgrading) in the IBM Cloud Docs.
 
 ## Usage
-
-:exclamation: **Important:** This module does not support major version upgrades or updates to encryption and backup encryption keys. To upgrade the version, create a new MongoDB instance with the updated version, and follow the steps in [Upgrading to a new major version](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-upgrading) in the IBM Cloud docs.
 
 ```terraform
 module "mongodb" {
@@ -24,7 +24,6 @@ module "mongodb" {
     region = "us-south"
     instance_name = "my-mongodb-instance"
 }
-
 ```
 
 ## Required IAM access policies
