@@ -109,19 +109,19 @@ variable "backup_encryption_key_crn" {
 
 variable "memory_mb" {
   type        = number
-  description = "Memory available to the database instance in MB. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing"
+  description = "Memory available to the database instance in MB. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
   default     = 1024
 }
 
 variable "disk_mb" {
   type        = number
-  description = "Disk space available to the database instance. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing"
+  description = "Disk space available to the database instance. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
   default     = 20480
 }
 
 variable "cpu_count" {
   type        = number
-  description = "The number of CPU cores available to the database instance. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing"
+  description = "The number of CPU cores available to the database instance. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
   default     = 7
 }
 
