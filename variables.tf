@@ -96,7 +96,7 @@ variable "memory_mb" {
 
 variable "disk_mb" {
   type        = number
-  description = "Disk space available to the database instance. The disk space available to the member group must fall within the range of 1024 to 4194304, in increments of 1024."
+  description = "Disk space available to the database instance. The disk space available to the member group must fall within the range of 10240 to 4194304, in increments of 1024."
   default     = 20480
 }
 
