@@ -90,44 +90,20 @@ variable "backup_encryption_key_crn" {
 
 variable "memory_mb" {
   type        = number
-  description = "Memory available to the mongodb instance"
+  description = "Memory available to the database instance in MB. The memory available to the member group must fall within the range of 1024 to 114688, in increments of 128."
   default     = 1024
-
-  validation {
-    condition = alltrue([
-      var.memory_mb >= 1024,
-      var.memory_mb <= 114688
-    ])
-    error_message = "Member group memory must be >= 1024 and <= 114688 in increments of 128."
-  }
 }
 
 variable "disk_mb" {
   type        = number
-  description = "Disk available to the mongodb instance"
+  description = "Disk space available to the database instance. The disk space available to the member group must fall within the range of 1024 to 4194304, in increments of 1024."
   default     = 20480
-
-  validation {
-    condition = alltrue([
-      var.disk_mb >= 5120,
-      var.disk_mb <= 4194304
-    ])
-    error_message = "Member group disk must be >= 5120 and <= 4194304 in increments of 1024."
-  }
 }
 
 variable "cpu_count" {
   type        = number
-  description = "Number of CPU cores available to the mongodb instance"
+  description = "The number of CPU cores available to the database instance. For dedicated member group CPUs must be between 3 and 28, inclusive of both numbers, in increments of 1. When the CPU core is set to 0 cores it uses compute resources on shared hosts."
   default     = 7
-
-  validation {
-    condition = alltrue([
-      var.cpu_count >= 6,
-      var.cpu_count <= 28
-    ])
-    error_message = "Number of cpus must be >= 6 and <= 28 in increments of 1."
-  }
 }
 
 

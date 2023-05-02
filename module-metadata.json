@@ -17,7 +17,7 @@
       "description": "Configure rules to allow your database to automatically increase its resources. Single block of autoscaling is allowed at once.",
       "pos": {
         "filename": "variables.tf",
-        "line": 147
+        "line": 123
       }
     },
     "backup_encryption_key_crn": {
@@ -43,7 +43,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 182
+        "line": 158
       }
     },
     "configuration": {
@@ -61,21 +61,21 @@
     "cpu_count": {
       "name": "cpu_count",
       "type": "number",
-      "description": "Number of CPU cores available to the mongodb instance",
+      "description": "The number of CPU cores available to the database instance. For dedicated member group CPUs must be between 3 and 28, inclusive of both numbers, in increments of 1. When the CPU core is set to 0 cores it uses compute resources on shared hosts.",
       "default": 7,
       "pos": {
         "filename": "variables.tf",
-        "line": 119
+        "line": 103
       }
     },
     "disk_mb": {
       "name": "disk_mb",
       "type": "number",
-      "description": "Disk available to the mongodb instance",
+      "description": "Disk space available to the database instance. The disk space available to the member group must fall within the range of 1024 to 4194304, in increments of 1024.",
       "default": 20480,
       "pos": {
         "filename": "variables.tf",
-        "line": 105
+        "line": 97
       }
     },
     "endpoints": {
@@ -125,13 +125,13 @@
       "default": 3,
       "pos": {
         "filename": "variables.tf",
-        "line": 134
+        "line": 110
       }
     },
     "memory_mb": {
       "name": "memory_mb",
       "type": "number",
-      "description": "Memory available to the mongodb instance",
+      "description": "Memory available to the database instance in MB. The memory available to the member group must fall within the range of 1024 to 114688, in increments of 128.",
       "default": 1024,
       "pos": {
         "filename": "variables.tf",
