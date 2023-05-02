@@ -109,19 +109,19 @@ variable "backup_encryption_key_crn" {
 
 variable "memory_mb" {
   type        = number
-  description = "Memory available to the database instance in MB. The memory available to the member group must fall within the range of 1024 to 114688, in increments of 128."
+  description = "Memory available to the database instance in MB. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing"
   default     = 1024
 }
 
 variable "disk_mb" {
   type        = number
-  description = "Disk space available to the database instance. The disk space available to the member group must fall within the range of 10240 to 4194304, in increments of 1024."
+  description = "Disk space available to the database instance. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing"
   default     = 20480
 }
 
 variable "cpu_count" {
   type        = number
-  description = "The number of CPU cores available to the database instance. For dedicated member group CPUs must be between 3 and 28, inclusive of both numbers, in increments of 1. When the CPU core is set to 0 cores it uses compute resources on shared hosts."
+  description = "The number of CPU cores available to the database instance. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing"
   default     = 7
 }
 
