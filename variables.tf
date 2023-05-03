@@ -109,44 +109,20 @@ variable "backup_encryption_key_crn" {
 
 variable "memory_mb" {
   type        = number
-  description = "Memory available to the mongodb instance"
+  description = "Memory available to the database instance in MB. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
   default     = 1024
-
-  validation {
-    condition = alltrue([
-      var.memory_mb >= 1024,
-      var.memory_mb <= 114688
-    ])
-    error_message = "Member group memory must be >= 1024 and <= 114688 in increments of 128."
-  }
 }
 
 variable "disk_mb" {
   type        = number
-  description = "Disk available to the mongodb instance"
+  description = "Disk space available to the database instance. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
   default     = 20480
-
-  validation {
-    condition = alltrue([
-      var.disk_mb >= 5120,
-      var.disk_mb <= 4194304
-    ])
-    error_message = "Member group disk must be >= 5120 and <= 4194304 in increments of 1024."
-  }
 }
 
 variable "cpu_count" {
   type        = number
-  description = "Number of CPU cores available to the mongodb instance"
+  description = "The number of CPU cores available to the database instance. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
   default     = 7
-
-  validation {
-    condition = alltrue([
-      var.cpu_count >= 6,
-      var.cpu_count <= 28
-    ])
-    error_message = "Number of cpus must be >= 6 and <= 28 in increments of 1."
-  }
 }
 
 

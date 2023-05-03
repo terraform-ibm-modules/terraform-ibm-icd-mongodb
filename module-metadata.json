@@ -17,7 +17,7 @@
       "description": "Optional rules to allow the database to increase resources in response to usage. Only a single autoscaling block is allowed. Make sure you understand the effects of autoscaling, especially for production environments. See https://ibm.biz/autoscaling-considerations in the IBM Cloud Docs.",
       "pos": {
         "filename": "variables.tf",
-        "line": 166
+        "line": 142
       }
     },
     "backup_encryption_key_crn": {
@@ -43,7 +43,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 201
+        "line": 177
       }
     },
     "configuration": {
@@ -61,21 +61,21 @@
     "cpu_count": {
       "name": "cpu_count",
       "type": "number",
-      "description": "Number of CPU cores available to the mongodb instance",
+      "description": "The number of CPU cores available to the database instance. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
       "default": 7,
       "pos": {
         "filename": "variables.tf",
-        "line": 138
+        "line": 122
       }
     },
     "disk_mb": {
       "name": "disk_mb",
       "type": "number",
-      "description": "Disk available to the mongodb instance",
+      "description": "Disk space available to the database instance. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
       "default": 20480,
       "pos": {
         "filename": "variables.tf",
-        "line": 124
+        "line": 116
       }
     },
     "endpoints": {
@@ -139,13 +139,13 @@
       "default": 3,
       "pos": {
         "filename": "variables.tf",
-        "line": 153
+        "line": 129
       }
     },
     "memory_mb": {
       "name": "memory_mb",
       "type": "number",
-      "description": "Memory available to the mongodb instance",
+      "description": "Memory available to the database instance in MB. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
       "default": 1024,
       "pos": {
         "filename": "variables.tf",
