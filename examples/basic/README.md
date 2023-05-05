@@ -1,4 +1,4 @@
-# Default example
+# Basic example
 
 An end-to-end example that uses the module's default variable values.
 
