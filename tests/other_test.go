@@ -9,7 +9,7 @@ import (
 
 const basicExampleTerraformDir = "examples/basic"
 
-func TestRunDefaultExample(t *testing.T) {
+func TestRunBasicExample(t *testing.T) {
 	t.Parallel()
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{

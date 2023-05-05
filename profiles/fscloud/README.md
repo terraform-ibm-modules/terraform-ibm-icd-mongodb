@@ -1,18 +1,11 @@
-<!-- BEGIN MODULE HOOK -->
 # Financial Services Cloud Profile
 
 This is a profile for MongoDB that meets FS Cloud requirements.
 It has been scanned by [IBM Code Risk Analyzer (CRA)](https://cloud.ibm.com/docs/code-risk-analyzer-cli-plugin?topic=code-risk-analyzer-cli-plugin-cra-cli-plugin#terraform-command) and meets all applicable goals with the following exception:
-- 3000205: Check whether Databases for MongoDB network access is restricted to a specific IP range.
+- rule-beb7b289-706b-4dc0-b01d-b1d15d4331e3: Check whether Databases for MongoDB network access is restricted to a specific IP range.
   - This is ignored because the CBR locks this down and CRA does not check this
 
 ## Note: If no Context Based Restriction(CBR) rules are not passed, you must configure Context Based Restrictions externally to be compliant.
-<!-- END MODULE HOOK -->
-
-<!-- BEGIN EXAMPLES HOOK -->
-## Examples
-- [ Financial Services Cloud profile example](../../examples/fscloud)
-<!-- END EXAMPLES HOOK -->
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -60,13 +53,3 @@ No resources.
 | <a name="output_id"></a> [id](#output\_id) | mongodb instance id |
 | <a name="output_version"></a> [version](#output\_version) | mongodb instance version |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-<!-- BEGIN CONTRIBUTING HOOK -->
-
-<!-- Leave this section as is so that your module has a link to local development environment set up steps for contributors to follow -->
-## Contributing
-
-You can report issues and request features for this module in GitHub issues in the module repo. See [Report an issue or request a feature](https://github.com/terraform-ibm-modules/.github/blob/main/.github/SUPPORT.md).
-
-To set up your local development environment, see [Local development setup](https://terraform-ibm-modules.github.io/documentation/#/local-dev-setup) in the project documentation.
-<!-- Source for this readme file: https://github.com/terraform-ibm-modules/common-dev-assets/tree/main/module-assets/ci/module-template-automation -->
-<!-- END CONTRIBUTING HOOK -->
