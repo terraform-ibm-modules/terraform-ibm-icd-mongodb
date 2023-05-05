@@ -29,7 +29,7 @@ variable "resource_tags" {
 }
 
 variable "mongodb_version" {
-  type        = number
+  type        = string
   description = "Version of the mongodb instance"
   default     = null
 }

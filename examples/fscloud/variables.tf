@@ -39,7 +39,7 @@ variable "kms_key_crn" {
 }
 
 variable "mongodb_version" {
-  type        = number
+  type        = string
   description = "Version of the mongodb instance"
   default     = null
 }
