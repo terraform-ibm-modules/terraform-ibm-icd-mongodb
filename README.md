@@ -39,9 +39,8 @@ You need the following permissions to run this module.
 <!-- BEGIN EXAMPLES HOOK -->
 ## Examples
 
-- [ Autoscale example](examples/autoscale)
+- [ Default example](examples/basic)
 - [ Complete example with Encryption and CBR rules](examples/complete)
-- [ Default example](examples/default)
 - [ Financial Services Cloud profile example](examples/fscloud)
 <!-- END EXAMPLES HOOK -->
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
