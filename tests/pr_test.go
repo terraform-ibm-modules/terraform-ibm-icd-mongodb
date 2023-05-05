@@ -50,7 +50,7 @@ func TestRunFSCloudExample(t *testing.T) {
 			"region":                     region,
 			"existing_kms_instance_guid": permanentResources["hpcs_south"],
 			"kms_key_crn":                permanentResources["hpcs_south_root_key_crn"],
-			"mongodb_version":            "4.4", // Always lock to the latest supported MongoDB version
+			"mongodb_version":            "5.0", // Always lock to the latest supported MongoDB version
 		},
 	})
 	output, err := options.RunTestConsistency()
@@ -67,7 +67,7 @@ func TestRunCompleteUpgradeExample(t *testing.T) {
 		Prefix:             "mongodb-upg",
 		BestRegionYAMLPath: regionSelectionPath,
 		TerraformVars: map[string]interface{}{
-			"mongodb_version": "4.2", // Always lock to the lowest supported MongoDB version
+			"mongodb_version": "4.4", // Always lock to the lowest supported MongoDB version
 		},
 	})
 

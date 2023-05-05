@@ -59,10 +59,10 @@ variable "mongodb_version" {
   validation {
     condition = anytrue([
       var.mongodb_version == null,
+      var.mongodb_version == "5.0",
       var.mongodb_version == "4.4",
-      var.mongodb_version == "4.2",
     ])
-    error_message = "Version must be 4.2 or 4.4. If null, the current default ICD mongodb version is used"
+    error_message = "Version must be 4.4 or 5.0. If null, the current default ICD mongodb version is used"
   }
 }
 
