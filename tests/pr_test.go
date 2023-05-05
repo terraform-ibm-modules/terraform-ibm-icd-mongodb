@@ -50,6 +50,7 @@ func TestRunFSCloudExample(t *testing.T) {
 			"region":                     region,
 			"existing_kms_instance_guid": permanentResources["hpcs_south"],
 			"kms_key_crn":                permanentResources["hpcs_south_root_key_crn"],
+			"mongodb_version":            "4.4",
 		},
 	})
 	output, err := options.RunTestConsistency()
