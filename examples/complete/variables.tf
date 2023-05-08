@@ -29,8 +29,8 @@ variable "resource_tags" {
 }
 
 variable "mongodb_version" {
-  type        = number
-  description = "Version of the mongodb instance"
+  type        = string
+  description = "Version of the mongodb instance. If left at null, the latest version is provisioned."
   default     = null
 }
 
@@ -44,4 +44,46 @@ variable "enforcement_mode" {
   description = "whether or not enforce a rule upon creation and update the rule enforcement."
   type        = string
   default     = "enabled"
+}
+
+variable "auto_scaling" {
+  type = object({
+    cpu = object({
+      rate_increase_percent       = optional(number)
+      rate_limit_count_per_member = optional(number)
+      rate_period_seconds         = optional(number)
+      rate_units                  = optional(string)
+    })
+    disk = object({
+      capacity_enabled             = optional(bool)
+      free_space_less_than_percent = optional(number)
+      io_above_percent             = optional(number)
+      io_enabled                   = optional(bool)
+      io_over_period               = optional(string)
+      rate_increase_percent        = optional(number)
+      rate_limit_mb_per_member     = optional(number)
+      rate_period_seconds          = optional(number)
+      rate_units                   = optional(string)
+    })
+    memory = object({
+      io_above_percent         = optional(number)
+      io_enabled               = optional(bool)
+      io_over_period           = optional(string)
+      rate_increase_percent    = optional(number)
+      rate_limit_mb_per_member = optional(number)
+      rate_period_seconds      = optional(number)
+      rate_units               = optional(string)
+    })
+  })
+  description = "Configure rules to allow your database to automatically increase its resources. Single block of autoscaling is allowed at once."
+  default = {
+    cpu = {}
+    disk = {
+      capacity_enabled : true,
+      io_enabled : true
+    }
+    memory = {
+      io_enabled : true,
+    }
+  }
 }

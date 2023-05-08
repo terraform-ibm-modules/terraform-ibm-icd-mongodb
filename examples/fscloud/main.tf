@@ -84,6 +84,7 @@ module "mongodb" {
   tags                       = var.resource_tags
   kms_key_crn                = var.kms_key_crn
   existing_kms_instance_guid = var.existing_kms_instance_guid
+  mongodb_version            = var.mongodb_version
   backup_encryption_key_crn  = module.key_protect_all_inclusive.keys["icd-mongodb.${var.prefix}-mongodb"].crn
   cbr_rules = [
     {

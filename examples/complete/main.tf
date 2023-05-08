@@ -95,6 +95,7 @@ module "mongodb" {
   region            = var.region
   kms_key_crn       = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
   tags              = var.resource_tags
+  auto_scaling      = var.auto_scaling
   cbr_rules = [
     {
       description      = "${var.prefix}-mongodb access only from vpc"
