@@ -9,7 +9,7 @@ This example expects you have Hyper Protect Crypto Service instances in the regi
 An example using the fscloud profile to deploy a compliant MongoDB instance. This example uses the IBM Cloud terraform provider to:
 
 - Create a new resource group if one is not passed in.
-- Create a Key protect instance.
+- Create a Key protect instance and generate backup encryption key.
 - Create an IAM Authorization between MongoDB instance resource group and Key Protect Instance for backup_encryption_key_crn as backup encryption key is not supported by Hyper Protect instances yet.
 - Create an IAM Authorization between MongoDB instance Resource group and HPSC permanent Instance.
 - Create a new ICD MongoDB instance and credentials that is encrypted using the Hyper Protect Crypto Service resources that are passed in.
