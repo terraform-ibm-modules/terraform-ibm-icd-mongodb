@@ -1,4 +1,4 @@
-# Complete example with Encryption and CBR rules
+# Complete example with encryption, autoscaling, and CBR rules
 
 This end-to-end example uses the IBM Cloud terraform provider to:
 

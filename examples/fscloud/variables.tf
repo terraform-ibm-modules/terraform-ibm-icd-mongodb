@@ -40,6 +40,6 @@ variable "kms_key_crn" {
 
 variable "mongodb_version" {
   type        = string
-  description = "Version of the mongodb instance"
+  description = "Version of the mongodb instance. If left at null, the latest version is provisioned."
   default     = null
 }
