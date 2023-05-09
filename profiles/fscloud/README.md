@@ -1,7 +1,5 @@
 # Profile for IBM Cloud Framework for Financial Services
 
----
-
 This profile for MongoDB meets the requirements of the IBM Cloud Framework for Financial Services.
 
 The Terraform plan from this example was scanned by [IBM Code Risk Analyzer (CRA)](https://cloud.ibm.com/docs/code-risk-analyzer-cli-plugin?topic=code-risk-analyzer-cli-plugin-cra-cli-plugin#terraform-command) for compliance with the IBM Cloud Framework for Financial Services profile that is specified by the IBM Security and Compliance Center.
