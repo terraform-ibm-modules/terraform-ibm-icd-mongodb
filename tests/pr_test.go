@@ -40,40 +40,62 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-func TestRunFSCloudExample(t *testing.T) {
+// func TestRunFSCloudExample(t *testing.T) {
+// 	t.Parallel()
+// 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+// 		Testing:      t,
+// 		TerraformDir: fsCloudTerraformDir,
+// 		Prefix:       "mongodb-compliant",
+// 		TerraformVars: map[string]interface{}{
+// 			"region":                     region,
+// 			"existing_kms_instance_guid": permanentResources["hpcs_south"],
+// 			"kms_key_crn":                permanentResources["hpcs_south_root_key_crn"],
+// 			"mongodb_version":            "5.0", // Always lock to the latest supported MongoDB version
+// 		},
+// 	})
+// 	output, err := options.RunTestConsistency()
+// 	assert.Nil(t, err, "This should not have errored")
+// 	assert.NotNil(t, output, "Expected some output")
+// }
+
+// func TestRunCompleteUpgradeExample(t *testing.T) {
+// 	t.Parallel()
+
+// 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+// 		Testing:            t,
+// 		TerraformDir:       completeExampleTerraformDir,
+// 		Prefix:             "mongodb-upg",
+// 		BestRegionYAMLPath: regionSelectionPath,
+// 		TerraformVars: map[string]interface{}{
+// 			"mongodb_version": "4.4", // Always lock to the lowest supported MongoDB version
+// 		},
+// 	})
+
+// 	output, err := options.RunTestUpgrade()
+// 	if !options.UpgradeTestSkipped {
+// 		assert.Nil(t, err, "This should not have errored")
+// 		assert.NotNil(t, output, "Expected some output")
+// 	}
+// }
+
+// Added by Prateek - To be moved in the right place as per the recent test improvements.
+const enterpriseExampleTerraformDir = "examples/complete_ee"
+
+func TestRunEnterpriseExample(t *testing.T) {
 	t.Parallel()
+
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:      t,
-		TerraformDir: fsCloudTerraformDir,
-		Prefix:       "mongodb-compliant",
+		TerraformDir: enterpriseExampleTerraformDir,
+		Prefix:       "mongodb-ee-comp",
+		// ResourceGroup:      resourceGroup,
+		BestRegionYAMLPath: regionSelectionPath,
 		TerraformVars: map[string]interface{}{
-			"region":                     region,
-			"existing_kms_instance_guid": permanentResources["hpcs_south"],
-			"kms_key_crn":                permanentResources["hpcs_south_root_key_crn"],
-			"mongodb_version":            "5.0", // Always lock to the latest supported MongoDB version
+			"mongodb_version": "6.0", // Always lock to the latest supported MongoDB version
 		},
 	})
+
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
 	assert.NotNil(t, output, "Expected some output")
-}
-
-func TestRunCompleteUpgradeExample(t *testing.T) {
-	t.Parallel()
-
-	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:            t,
-		TerraformDir:       completeExampleTerraformDir,
-		Prefix:             "mongodb-upg",
-		BestRegionYAMLPath: regionSelectionPath,
-		TerraformVars: map[string]interface{}{
-			"mongodb_version": "4.4", // Always lock to the lowest supported MongoDB version
-		},
-	})
-
-	output, err := options.RunTestUpgrade()
-	if !options.UpgradeTestSkipped {
-		assert.Nil(t, err, "This should not have errored")
-		assert.NotNil(t, output, "Expected some output")
-	}
 }

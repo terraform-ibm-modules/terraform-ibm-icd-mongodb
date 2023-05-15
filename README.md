@@ -41,6 +41,7 @@ You need the following permissions to run this module.
 
 - [ Basic example](examples/basic)
 - [ Complete example with encryption, autoscaling, and CBR rules](examples/complete)
+- [ Complete example with encryption, autoscaling, and CBR rules for Enterprise Edition](examples/complete_ee)
 - [ Financial Services Cloud profile example](examples/fscloud)
 <!-- END EXAMPLES HOOK -->
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
