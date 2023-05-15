@@ -91,7 +91,7 @@ func TestRunEnterpriseExample(t *testing.T) {
 		// ResourceGroup:      resourceGroup,
 		BestRegionYAMLPath: regionSelectionPath,
 		TerraformVars: map[string]interface{}{
-			"mongodb_version": "6.0", // Always lock to the latest supported MongoDB version
+			"mongodb_version": "5.0", // Always lock to the latest supported MongoDB version
 		},
 	})
 
