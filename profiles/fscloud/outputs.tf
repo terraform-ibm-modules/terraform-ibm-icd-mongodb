@@ -18,12 +18,12 @@ output "version" {
 }
 
 output "crn" {
-  description = "Postgresql instance crn"
+  description = "MongoDB instance crn"
   value       = module.mongodb.crn
 }
 
 output "cbr_rule_ids" {
-  description = "CBR rule ids created to restrict Postgresql"
+  description = "CBR rule ids created to restrict MongoDB"
   value       = module.mongodb.cbr_rule_ids
 }
 

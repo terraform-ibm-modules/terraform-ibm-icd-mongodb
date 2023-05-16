@@ -274,7 +274,7 @@
   "outputs": {
     "cbr_rule_ids": {
       "name": "cbr_rule_ids",
-      "description": "CBR rule ids created to restrict Postgresql",
+      "description": "CBR rule ids created to restrict MongoDB",
       "pos": {
         "filename": "outputs.tf",
         "line": 25
@@ -282,7 +282,7 @@
     },
     "crn": {
       "name": "crn",
-      "description": "Postgresql instance crn",
+      "description": "MongoDB instance crn",
       "value": "ibm_database.mongodb.resource_crn",
       "pos": {
         "filename": "outputs.tf",
@@ -292,7 +292,7 @@
     },
     "guid": {
       "name": "guid",
-      "description": "mongodb instance guid",
+      "description": "MongoDB instance guid",
       "value": "ibm_database.mongodb.guid",
       "pos": {
         "filename": "outputs.tf",
@@ -302,7 +302,7 @@
     },
     "id": {
       "name": "id",
-      "description": "mongodb instance id (CRN)",
+      "description": "MongoDB instance ID",
       "value": "ibm_database.mongodb.id",
       "pos": {
         "filename": "outputs.tf",
@@ -331,7 +331,7 @@
     },
     "version": {
       "name": "version",
-      "description": "mongodb instance version",
+      "description": "MongoDB instance version",
       "value": "ibm_database.mongodb.version",
       "pos": {
         "filename": "outputs.tf",

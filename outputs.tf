@@ -3,27 +3,27 @@
 ##############################################################################
 
 output "id" {
-  description = "mongodb instance id (CRN)"
+  description = "MongoDB instance ID"
   value       = ibm_database.mongodb.id
 }
 
 output "guid" {
-  description = "mongodb instance guid"
+  description = "MongoDB instance guid"
   value       = ibm_database.mongodb.guid
 }
 
 output "version" {
-  description = "mongodb instance version"
+  description = "MongoDB instance version"
   value       = ibm_database.mongodb.version
 }
 
 output "crn" {
-  description = "Postgresql instance crn"
+  description = "MongoDB instance crn"
   value       = ibm_database.mongodb.resource_crn
 }
 
 output "cbr_rule_ids" {
-  description = "CBR rule ids created to restrict Postgresql"
+  description = "CBR rule ids created to restrict MongoDB"
   value       = module.cbr_rule[*].rule_id
 }
 

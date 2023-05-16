@@ -48,9 +48,9 @@ variable "service_credential_names" {
   description = "Map of name, role for service credentials that you want to create for the database"
   type        = map(string)
   default = {
-    "postgressql_admin" : "Administrator",
-    "postgressql_operator" : "Operator",
-    "postgressql_viewer" : "Viewer",
-    "postgressql_editor" : "Editor",
+    "mongodb_admin" : "Administrator",
+    "mongodb_operator" : "Operator",
+    "mongodb_viewer" : "Viewer",
+    "mongodb_editor" : "Editor",
   }
 }
