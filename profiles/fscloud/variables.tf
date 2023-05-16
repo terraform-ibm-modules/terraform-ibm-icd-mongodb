@@ -113,38 +113,34 @@ variable "skip_iam_authorization_policy" {
 variable "auto_scaling" {
   type = object({
     cpu = object({
-      rate_increase_percent       = optional(number)
-      rate_limit_count_per_member = optional(number)
-      rate_period_seconds         = optional(number)
-      rate_units                  = optional(string)
+      rate_increase_percent       = optional(number, 10)
+      rate_limit_count_per_member = optional(number, 20)
+      rate_period_seconds         = optional(number, 900)
+      rate_units                  = optional(string, "count")
     })
     disk = object({
-      capacity_enabled             = optional(bool)
-      free_space_less_than_percent = optional(number)
-      io_above_percent             = optional(number)
-      io_over_period               = optional(string)
-      io_enabled                   = optional(bool)
-      rate_increase_percent        = optional(number)
-      rate_limit_mb_per_member     = optional(number)
-      rate_period_seconds          = optional(number)
-      rate_units                   = optional(string)
+      capacity_enabled             = optional(bool, false)
+      free_space_less_than_percent = optional(number, 10)
+      io_above_percent             = optional(number, 90)
+      io_enabled                   = optional(bool, false)
+      io_over_period               = optional(string, "15m")
+      rate_increase_percent        = optional(number, 10)
+      rate_limit_mb_per_member     = optional(number, 3670016)
+      rate_period_seconds          = optional(number, 900)
+      rate_units                   = optional(string, "mb")
     })
     memory = object({
-      io_above_percent         = optional(number)
-      io_enabled               = optional(bool)
-      io_over_period           = optional(string)
-      rate_increase_percent    = optional(number)
-      rate_limit_mb_per_member = optional(number)
-      rate_period_seconds      = optional(number)
-      rate_units               = optional(string)
+      io_above_percent         = optional(number, 90)
+      io_enabled               = optional(bool, false)
+      io_over_period           = optional(string, "15m")
+      rate_increase_percent    = optional(number, 10)
+      rate_limit_mb_per_member = optional(number, 114688)
+      rate_period_seconds      = optional(number, 900)
+      rate_units               = optional(string, "mb")
     })
   })
-  description = "Configure rules to allow your database to automatically increase its resources. Single block of autoscaling is allowed at once."
-  default = {
-    cpu    = {}
-    disk   = {}
-    memory = {}
-  }
+  description = "Optional rules to allow the database to increase resources in response to usage. Only a single autoscaling block is allowed. Make sure you understand the effects of autoscaling, especially for production environments. See https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-autoscaling&interface=cli#autoscaling-considerations in the IBM Cloud Docs."
+  default     = null
 }
 
 ##############################################################

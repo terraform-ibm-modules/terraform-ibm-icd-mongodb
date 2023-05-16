@@ -1,10 +1,10 @@
 # Complete example with encryption, autoscaling, and CBR rules
 
-This end-to-end example uses the IBM Cloud terraform provider to:
+An end-to-end example that uses the IBM Cloud Terraform provider to create the following infrastructure:
 
-- Create a new resource group if one is not passed in.
-- Create Key Protect instance with root key.
-- Create a new ICD MongoDB database instance with auto-scaling and BYOK encryption enabled.
-- Create service credentials for the database instance.
-- Create a Virtual Private Cloud (VPC).
-- Create Context Based Restriction (CBR) to only allow MongoDB to be accessible from the VPC.
+- A resource group, if one is not passed in.
+- A Key Protect instance with a root key.
+- An instance of Databases for MongoDB with BYOK encryption and autoscaling enabled (automatically increases resources).
+- Service credentials for the database instance.
+- A sample virtual private cloud (VPC).
+- A context-based restriction (CBR) rule to only allow MongoDB to be accessible from within the VPC.
