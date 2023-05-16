@@ -1,32 +1,22 @@
 {
   "path": ".",
   "variables": {
-    "allowlist": {
-      "name": "allowlist",
-      "type": "list(object({\n    address     = string\n    description = string\n  }))",
-      "description": "(Optional, List of Objects) A list of allowed IP addresses for the database.",
-      "default": [],
-      "pos": {
-        "filename": "variables.tf",
-        "line": 34
-      }
-    },
     "auto_scaling": {
       "name": "auto_scaling",
       "type": "object({\n    cpu = object({\n      rate_increase_percent       = optional(number, 10)\n      rate_limit_count_per_member = optional(number, 20)\n      rate_period_seconds         = optional(number, 900)\n      rate_units                  = optional(string, \"count\")\n    })\n    disk = object({\n      capacity_enabled             = optional(bool, false)\n      free_space_less_than_percent = optional(number, 10)\n      io_above_percent             = optional(number, 90)\n      io_enabled                   = optional(bool, false)\n      io_over_period               = optional(string, \"15m\")\n      rate_increase_percent        = optional(number, 10)\n      rate_limit_mb_per_member     = optional(number, 3670016)\n      rate_period_seconds          = optional(number, 900)\n      rate_units                   = optional(string, \"mb\")\n    })\n    memory = object({\n      io_above_percent         = optional(number, 90)\n      io_enabled               = optional(bool, false)\n      io_over_period           = optional(string, \"15m\")\n      rate_increase_percent    = optional(number, 10)\n      rate_limit_mb_per_member = optional(number, 114688)\n      rate_period_seconds      = optional(number, 900)\n      rate_units               = optional(string, \"mb\")\n    })\n  })",
-      "description": "Configure rules to allow your database to automatically increase its resources. Single block of autoscaling is allowed at once.",
+      "description": "Optional rules to allow the database to increase resources in response to usage. Only a single autoscaling block is allowed. Make sure you understand the effects of autoscaling, especially for production environments. See https://ibm.biz/autoscaling-considerations in the IBM Cloud Docs.",
       "pos": {
         "filename": "variables.tf",
-        "line": 142
+        "line": 122
       }
     },
     "backup_encryption_key_crn": {
       "name": "backup_encryption_key_crn",
       "type": "string",
-      "description": "(Optional) The CRN of a Key Protect Key to use for encrypting backups. If left null, the value passed for the 'kms_key_crn' variable will be used. Take note that Hyper Protect Crypto Services for IBM Cloud® Databases backups is not currently supported.",
+      "description": "The CRN of a Key Protect key, that you want to use for encrypting disk that holds deployment backups. Only used if var.kms_encryption_enabled is set to true. If no value passed, the value passed for the 'kms_key_crn' variable will be used. BYOK for backups is available only in US regions us-south and us-east, and eu-de. Only keys in the us-south and eu-de are durable to region failures. To ensure that your backups are available even if a region failure occurs, you must use a key from us-south or eu-de. Take note that Hyper Protect Crypto Services for IBM Cloud® Databases backups is not currently supported, so if no value is passed here, but a HPCS value is passed for var.kms_key_crn, databases backup encryption will use the default encryption keys.",
       "pos": {
         "filename": "variables.tf",
-        "line": 97
+        "line": 179
       }
     },
     "cbr_rules": {
@@ -43,65 +33,65 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 177
+        "line": 205
       }
     },
     "configuration": {
       "name": "configuration",
       "type": "object({\n    maxmemory                   = optional(number)\n    maxmemory-policy            = optional(string)\n    appendonly                  = optional(string)\n    maxmemory-samples           = optional(number)\n    stop-writes-on-bgsave-error = optional(string)\n  })",
-      "description": "Database Configuration in JSON format.",
+      "description": "Database Configuration.",
       "source": [
         "ibm_database.mongodb.configuration"
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 43
+        "line": 35
       }
     },
     "cpu_count": {
       "name": "cpu_count",
       "type": "number",
-      "description": "The number of CPU cores available to the database instance. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
-      "default": 7,
+      "description": "Allocated dedicated CPU per-member. For shared CPU, set to 0. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
+      "default": 0,
       "pos": {
         "filename": "variables.tf",
-        "line": 122
+        "line": 97
       }
     },
     "disk_mb": {
       "name": "disk_mb",
       "type": "number",
-      "description": "Disk space available to the database instance. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
-      "default": 20480,
+      "description": "Allocated disk per-member. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
+      "default": 10240,
       "pos": {
         "filename": "variables.tf",
-        "line": 116
+        "line": 90
       }
     },
     "endpoints": {
       "name": "endpoints",
       "type": "string",
-      "description": "Endpoints available to the mongodb instance (public, private, public-and-private)",
+      "description": "Specify whether you want to enable the public, private, or both service endpoints. Supported values are 'public', 'private', or 'public-and-private'.",
       "default": "private",
       "source": [
         "ibm_database.mongodb.service_endpoints"
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 80
+        "line": 72
       },
       "options": "public, private, public-and-private"
     },
     "existing_kms_instance_guid": {
       "name": "existing_kms_instance_guid",
       "type": "string",
-      "description": "The GUID of the Hyper Protect or Key Protect instance in which the key specified in var.kms_key_crn is coming from. Only required if skip_iam_authorization_policy is false",
+      "description": "The GUID of the Hyper Protect or Key Protect instance in which the key specified in var.kms_key_crn and var.backup_encryption_key_crn is coming from. Only required if var.kms_encryption_enabled is 'true', var.skip_iam_authorization_policy is 'false', and passing a value for var.kms_key_crn and/or var.backup_encryption_key_crn.",
       "source": [
         "ibm_iam_authorization_policy.kms_policy.target_resource_instance_id"
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 22
+        "line": 195
       },
       "immutable": true,
       "computed": true
@@ -109,7 +99,7 @@
     "instance_name": {
       "name": "instance_name",
       "type": "string",
-      "description": "Name of the MongoDB instance",
+      "description": "The name to give the MongoDB instance.",
       "required": true,
       "source": [
         "ibm_database.mongodb.name"
@@ -119,16 +109,29 @@
         "line": 5
       }
     },
+    "kms_encryption_enabled": {
+      "name": "kms_encryption_enabled",
+      "type": "bool",
+      "description": "Set this to true to control the encryption keys used to encrypt the data that you store in IBM Cloud® Databases. If set to false, the data is encrypted by using randomly generated keys. For more info on Key Protect integration, see https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect. For more info on HPCS integration, see https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-hpcs",
+      "default": false,
+      "source": [
+        "ibm_iam_authorization_policy.kms_policy.count"
+      ],
+      "pos": {
+        "filename": "variables.tf",
+        "line": 159
+      }
+    },
     "kms_key_crn": {
       "name": "kms_key_crn",
       "type": "string",
-      "description": "(Optional) The root key CRN of a Key Management Service like Key Protect or Hyper Protect Crypto Service (HPCS) that you want to use for disk encryption. If `null`, database is encrypted by using randomly generated keys. See https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect\u0026interface=ui#key-byok for current list of supported regions for BYOK",
+      "description": "The root key CRN of a Key Management Services like Key Protect or Hyper Protect Crypto Service (HPCS) that you want to use for disk encryption. Only used if var.kms_encryption_enabled is set to true.",
       "source": [
         "ibm_database.mongodb.key_protect_key"
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 91
+        "line": 165
       },
       "immutable": true
     },
@@ -139,29 +142,29 @@
       "default": 3,
       "pos": {
         "filename": "variables.tf",
-        "line": 129
+        "line": 104
       }
     },
     "memory_mb": {
       "name": "memory_mb",
       "type": "number",
-      "description": "Memory available to the database instance in MB. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
+      "description": "Allocated memory per-member. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
       "default": 1024,
       "pos": {
         "filename": "variables.tf",
-        "line": 110
+        "line": 83
       }
     },
     "mongodb_version": {
       "name": "mongodb_version",
       "type": "string",
-      "description": "The version of the mongodb to be provisioned",
+      "description": "The version of the MongoDB to provision. If no value passed, the current ICD preferred version is used.",
       "source": [
         "ibm_database.mongodb.version"
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 55
+        "line": 47
       },
       "immutable": true,
       "computed": true
@@ -169,7 +172,7 @@
     "plan": {
       "name": "plan",
       "type": "string",
-      "description": "The name of the service plan that you choose for your mongodb instance",
+      "description": "The name of the service plan that you choose for your MongoDB instance",
       "default": "standard",
       "required": true,
       "source": [
@@ -177,15 +180,28 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 16
+        "line": 22
       },
       "immutable": true,
       "options": "standard, enterprise"
     },
+    "plan_validation": {
+      "name": "plan_validation",
+      "type": "bool",
+      "description": "Enable or disable validating the database parameters for MongoDB during the plan phase.",
+      "default": true,
+      "source": [
+        "ibm_database.mongodb.plan_validation"
+      ],
+      "pos": {
+        "filename": "variables.tf",
+        "line": 16
+      }
+    },
     "region": {
       "name": "region",
       "type": "string",
-      "description": "The region MongoDB is to be created on. The region must support BYOK region if Key Protect Key is used or KYOK region if Hyper Protect Crypto Service (HPCS) is used.",
+      "description": "The region where you want to deploy your instance.",
       "default": "us-south",
       "required": true,
       "source": [
@@ -200,7 +216,7 @@
     "resource_group_id": {
       "name": "resource_group_id",
       "type": "string",
-      "description": "The ID of the IMB Cloud resource group where you want to create the instance",
+      "description": "The resource group ID where the MongoDB instance will be created.",
       "required": true,
       "source": [
         "ibm_database.mongodb.resource_group_id",
@@ -208,7 +224,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 69
+        "line": 61
       },
       "cloud_data_type": "resource_group",
       "immutable": true,
@@ -217,34 +233,63 @@
         "resolved_to:id"
       ]
     },
-    "skip_iam_authorization_policy": {
-      "name": "skip_iam_authorization_policy",
-      "type": "bool",
-      "description": "Set to true to skip the creation of an IAM authorization policy that permits all MongoDB instances in the given Resource group to read the encryption key from the Hyper Protect or Key Protect instance in `existing_kms_instance_guid`.",
-      "default": true,
+    "service_credential_names": {
+      "name": "service_credential_names",
+      "type": "map(string)",
+      "description": "Map of name, role for service credentials that you want to create for the database",
+      "default": {},
       "source": [
-        "ibm_iam_authorization_policy.kms_policy.count"
+        "ibm_resource_key.service_credentials.for_each"
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 28
+        "line": 111
+      }
+    },
+    "skip_iam_authorization_policy": {
+      "name": "skip_iam_authorization_policy",
+      "type": "bool",
+      "description": "Set to true to skip the creation of an IAM authorization policy that permits all MongoDB database instances in the given resource group to read the encryption key from the Hyper Protect or Key Protect instance passed in var.existing_kms_instance_guid. If set to 'false', a value must be passed for var.existing_kms_instance_guid. No policy is created if var.kms_encryption_enabled is set to 'false'.",
+      "default": false,
+      "pos": {
+        "filename": "variables.tf",
+        "line": 189
       }
     },
     "tags": {
       "name": "tags",
       "type": "list(any)",
-      "description": "A list of tags that you want to add to your instance",
+      "description": "Optional list of tags to be added to the MongoDB instance and the associated service credentials (if creating).",
       "default": [],
       "source": [
-        "ibm_database.mongodb.tags"
+        "ibm_database.mongodb.tags",
+        "ibm_resource_key.service_credentials.tags"
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 74
+        "line": 66
       }
     }
   },
   "outputs": {
+    "cbr_rule_ids": {
+      "name": "cbr_rule_ids",
+      "description": "CBR rule ids created to restrict Postgresql",
+      "pos": {
+        "filename": "outputs.tf",
+        "line": 25
+      }
+    },
+    "crn": {
+      "name": "crn",
+      "description": "Postgresql instance crn",
+      "value": "ibm_database.mongodb.resource_crn",
+      "pos": {
+        "filename": "outputs.tf",
+        "line": 20
+      },
+      "type": "TypeString"
+    },
     "guid": {
       "name": "guid",
       "description": "mongodb instance guid",
@@ -262,6 +307,26 @@
       "pos": {
         "filename": "outputs.tf",
         "line": 5
+      }
+    },
+    "service_credentials_json": {
+      "name": "service_credentials_json",
+      "description": "Service credentials json map",
+      "value": "local.service_credentials_json",
+      "sensitive": true,
+      "pos": {
+        "filename": "outputs.tf",
+        "line": 30
+      }
+    },
+    "service_credentials_object": {
+      "name": "service_credentials_object",
+      "description": "Service credentials object",
+      "value": "local.service_credentials_object",
+      "sensitive": true,
+      "pos": {
+        "filename": "outputs.tf",
+        "line": 36
       }
     },
     "version": {
@@ -297,6 +362,7 @@
         "location": "region",
         "name": "instance_name",
         "plan": "plan",
+        "plan_validation": "plan_validation",
         "resource_group_id": "resource_group_id",
         "service_endpoints": "endpoints",
         "tags": "tags",
@@ -307,7 +373,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 33
+        "line": 40
       }
     },
     "ibm_iam_authorization_policy.kms_policy": {
@@ -315,7 +381,7 @@
       "type": "ibm_iam_authorization_policy",
       "name": "kms_policy",
       "attributes": {
-        "count": "skip_iam_authorization_policy",
+        "count": "kms_encryption_enabled",
         "source_resource_group_id": "resource_group_id",
         "target_resource_instance_id": "existing_kms_instance_guid"
       },
@@ -324,7 +390,23 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 24
+        "line": 31
+      }
+    },
+    "ibm_resource_key.service_credentials": {
+      "mode": "managed",
+      "type": "ibm_resource_key",
+      "name": "service_credentials",
+      "attributes": {
+        "for_each": "service_credential_names",
+        "tags": "tags"
+      },
+      "provider": {
+        "name": "ibm"
+      },
+      "pos": {
+        "filename": "main.tf",
+        "line": 162
       }
     }
   },
@@ -403,7 +485,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 124
+        "line": 123
       }
     }
   }

@@ -1,17 +1,18 @@
 # Financial Services Cloud profile example
 
-## *Note:* This example is only deploying MongoDB in a compliant manner the other infrastructure is not necessarily compliant.
+An end-to-end example that uses the [Profile for IBM Cloud Framework for Financial Services](../../profiles/fscloud/) to deploy an instance of IBM Cloud Databases for MongoDB.
 
-### Requirements
-This example expects you have Hyper Protect Crypto Service instances in the region you wish to deploy your MongoDB instance.
+The example uses the IBM Cloud Terraform provider to create the following infrastructure:
 
-### Deploys
-An example using the fscloud profile to deploy a compliant MongoDB instance. This example uses the IBM Cloud terraform provider to:
+- A resource group, if one is not passed in.
+- An IAM authorization between all MongoDB database instances in the given resource group, and the Hyper Protect Crypto Services instance that is passed in.
+- An IBM Cloud Databases MongoDB database instance that is encrypted with the Hyper Protect Crypto Services root key that is passed in.
+- Service Credentials for the PostgreSQL database instance.
+- A sample virtual private cloud (VPC).
+- A context-based restriction (CBR) rule to only allow MongoDB to be accessible from within the VPC.
 
-- Create a new resource group if one is not passed in.
-- Create a Key protect instance and generate backup encryption key.
-- Create an IAM Authorization between MongoDB instance resource group and Key Protect Instance for backup_encryption_key_crn as backup encryption key is not supported by Hyper Protect instances yet.
-- Create an IAM Authorization between MongoDB instance Resource group and HPSC permanent Instance.
-- Create a new ICD MongoDB instance and credentials that is encrypted using the Hyper Protect Crypto Service resources that are passed in.
-- Create a Sample VPC.
-- Create Context Based Restriction(CBR) to only allow MongoDB to be accessible from the VPC.
+:exclamation: **Important:** In this example, only the IBM Cloud Databases for MongoDB instance complies with the IBM Cloud Framework for Financial Services. Other parts of the infrastructure do not necessarily comply.
+
+## Before you begin
+
+- You need a Hyper Protect Crypto Service instance and root key available in the region that you want to deploy your MongoDB database instance to.

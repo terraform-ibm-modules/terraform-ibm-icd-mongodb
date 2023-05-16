@@ -30,20 +30,19 @@ variable "resource_tags" {
 
 variable "mongodb_version" {
   type        = string
-  description = "Version of the mongodb instance. If left at null, the latest version is provisioned."
+  description = "Version of the mongodb instance. If no value passed, the current ICD preferred version is used."
   default     = null
 }
 
-variable "service_credentials" {
-  description = "A list of service credentials that you want to create for the database"
-  type        = list(string)
-  default     = ["mongodb_credential_microservices", "mongodb_credential_dev_1", "mongodb_credential_dev_2"]
-}
-
-variable "enforcement_mode" {
-  description = "whether or not enforce a rule upon creation and update the rule enforcement."
-  type        = string
-  default     = "enabled"
+variable "service_credential_names" {
+  description = "Map of name, role for service credentials that you want to create for the database"
+  type        = map(string)
+  default = {
+    "mongodb_admin" : "Administrator",
+    "mongodb_operator" : "Operator",
+    "mongodb_viewer" : "Viewer",
+    "mongodb_viewer" : "Editor",
+  }
 }
 
 variable "auto_scaling" {

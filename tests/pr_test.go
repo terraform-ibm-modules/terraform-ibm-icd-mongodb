@@ -11,17 +11,11 @@ import (
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 )
 
+// Use existing resource group
+const resourceGroup = "geretain-test-mongo"
+
 // Restricting due to limited availability of BYOK in certain regions
 const regionSelectionPath = "../common-dev-assets/common-go-assets/icd-region-prefs.yaml"
-
-// Allow the tests to create a unique resource group for every test to ensure tests do not clash. This is due to the fact that the auth policy created by this module has to be scoped to the resource group and hence would clash if tests used same resource group.
-//const resourceGroup = "geretain-test-mongo"
-
-const completeExampleTerraformDir = "examples/complete"
-const fsCloudTerraformDir = "examples/fscloud"
-
-// For FSCloud test restricting region as Hyper Protect Crypto Service permanent instance deployed in 'us-south'
-const region = "us-south"
 
 // Define a struct with fields that match the structure of the YAML data
 const yamlLocation = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
@@ -44,13 +38,20 @@ func TestRunFSCloudExample(t *testing.T) {
 	t.Parallel()
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:      t,
-		TerraformDir: fsCloudTerraformDir,
-		Prefix:       "mongodb-compliant",
+		TerraformDir: "examples/fscloud",
+		Prefix:       "mongodb-fscloud",
+		Region:       "us-south", // For FSCloud locking into us-south since that is where the HPCS permanent instance is
+		/*
+		 Comment out the 'ResourceGroup' input to force this test to create a unique resource group to ensure tests do
+		 not clash. This is due to the fact that an auth policy may already exist in this resource group since we are
+		 re-using a permanent HPCS instance. By using a new resource group, the auth policy will not already exist
+		 since this module scopes auth policies by resource group.
+		*/
+		//ResourceGroup: resourceGroup,
 		TerraformVars: map[string]interface{}{
-			"region":                     region,
 			"existing_kms_instance_guid": permanentResources["hpcs_south"],
 			"kms_key_crn":                permanentResources["hpcs_south_root_key_crn"],
-			"mongodb_version":            "5.0", // Always lock to the latest supported MongoDB version
+			"mongodb_version":            "5.0", // Always lock this test into the latest supported MongoDB version
 		},
 	})
 	output, err := options.RunTestConsistency()
@@ -63,9 +64,10 @@ func TestRunCompleteUpgradeExample(t *testing.T) {
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:            t,
-		TerraformDir:       completeExampleTerraformDir,
+		TerraformDir:       "examples/complete",
 		Prefix:             "mongodb-upg",
 		BestRegionYAMLPath: regionSelectionPath,
+		ResourceGroup:      resourceGroup,
 		TerraformVars: map[string]interface{}{
 			"mongodb_version": "4.4", // Always lock to the lowest supported MongoDB version
 		},

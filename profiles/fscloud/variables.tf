@@ -3,30 +3,24 @@
 ##############################################################################
 
 variable "resource_group_id" {
-  description = "The resource group ID where the mongodb will be created"
   type        = string
+  description = "The resource group ID where the MongoDB instance will be created."
 }
 
 variable "mongodb_version" {
-  description = "The version of mongodb. If null, the current default ICD mongodb version is used."
+  description = "The version of the MongoDB to provision. If no value passed, the current ICD preferred version is used."
   type        = string
   default     = null
 }
 
-variable "plan" {
-  type        = string
-  description = "The name of the service plan that you choose for your mongodb instance"
-  default     = "standard"
-}
-
 variable "region" {
-  description = "The region mongodb is to be created on. The region must support KYOK."
+  description = "The region where you want to deploy your instance. Must be the same region as the Hyper Protect Crypto Service."
   type        = string
   default     = "us-south"
 }
 
 variable "configuration" {
-  description = "(Optional, Json String) Database Configuration in JSON format."
+  description = "Database Configuration."
   type = object({
     maxmemory                   = optional(number)
     maxmemory-policy            = optional(string)
@@ -37,24 +31,57 @@ variable "configuration" {
   default = null
 }
 
-variable "cpu_count" {
-  description = "Number of CPU cores available to the mongodb instance"
-  type        = number
-  default     = 7
+variable "plan" {
+  type        = string
+  description = "The name of the service plan that you choose for your MongoDB instance"
+  default     = "enterprise"
+  validation {
+    condition = anytrue([
+      var.plan == "standard",
+      var.plan == "enterprise",
+    ])
+    error_message = "Only supported plans are standard or enterprise"
+  }
 }
 
 variable "memory_mb" {
-  description = "Memory available to the mongodb instance"
   type        = number
-  default     = 1024
+  description = "Allocated memory per-member. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
+  default     = 14336
+  # Validation is done in terraform plan phase by IBM provider, so no need to add any extra validation here
 }
 
 variable "disk_mb" {
-  description = "Disk space available to the mongodb instance"
   type        = number
+  description = "Allocated disk per-member. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
   default     = 20480
+  # Validation is done in terraform plan phase by IBM provider, so no need to add any extra validation here
 }
 
+variable "cpu_count" {
+  type        = number
+  description = "Allocated dedicated CPU per-member. For shared CPU, set to 0. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
+  default     = 6
+  # Validation is done in terraform plan phase by IBM provider, so no need to add any extra validation here
+}
+
+variable "members" {
+  type        = number
+  description = "Allocated number of members"
+  default     = 3
+  # Validation is done in terraform plan phase by IBM provider, so no need to add any extra validation here
+}
+
+variable "service_credential_names" {
+  description = "Map of name, role for service credentials that you want to create for the database"
+  type        = map(string)
+  default     = {}
+
+  validation {
+    condition     = alltrue([for name, role in var.service_credential_names : contains(["Administrator", "Operator", "Viewer", "Editor"], role)])
+    error_message = "Valid values for service credential roles are 'Administrator', 'Operator', 'Viewer', and `Editor`"
+  }
+}
 
 variable "instance_name" {
   description = "Name of the mongodb instance"
@@ -63,28 +90,23 @@ variable "instance_name" {
 
 variable "tags" {
   type        = list(any)
-  description = "Optional list of tags to be applied to the mongodb instance."
+  description = "Optional list of tags to be added to the MongoDB instance and the associated service credentials (if creating)."
   default     = []
 }
 
 variable "kms_key_crn" {
   type        = string
-  description = "The root key CRN of a Hyper Protect Crypto Service (HPCS) that you want to use for disk encryption. See https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-hpcs&interface=ui for more information on integrating HPCS with mongodb instance."
+  description = "The root key CRN of the Hyper Protect Crypto Service (HPCS) to use for disk encryption."
 }
 
 variable "existing_kms_instance_guid" {
-  description = "The GUID of the Hyper Protect Crypto service."
+  description = "The GUID of the Hyper Protect Crypto Service."
   type        = string
-}
-
-variable "backup_encryption_key_crn" {
-  type        = string
-  description = "The CRN of a Key Protect Key to use for encrypting backups. Take note that Hyper Protect Crypto Services for IBM Cloud® Databases backups is not currently supported."
 }
 
 variable "skip_iam_authorization_policy" {
   type        = bool
-  description = "Set to true to skip the creation of an IAM authorization policy that permits all mongodb instances in the provided resource group reader access to the instance specified in the existing_kms_instance_guid variable."
+  description = "Set to true to skip the creation of an IAM authorization policy that permits all MongoDB database instances in the given resource group to read the encryption key from the Hyper Protect instance passed in var.existing_kms_instance_guid."
   default     = false
 }
 

@@ -8,11 +8,11 @@ module "mongodb" {
   mongodb_version               = var.mongodb_version
   existing_kms_instance_guid    = var.existing_kms_instance_guid
   kms_key_crn                   = var.kms_key_crn
-  backup_encryption_key_crn     = var.backup_encryption_key_crn
+  backup_encryption_key_crn     = null # Need to use default encryption until ICD HPCS adds support for backup encryption
   cbr_rules                     = var.cbr_rules
   tags                          = var.tags
   configuration                 = var.configuration
-  plan                          = var.plan
+  plan                          = "enterprise"
   memory_mb                     = var.memory_mb
   disk_mb                       = var.disk_mb
   cpu_count                     = var.cpu_count

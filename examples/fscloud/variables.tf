@@ -40,6 +40,17 @@ variable "kms_key_crn" {
 
 variable "mongodb_version" {
   type        = string
-  description = "Version of the mongodb instance. If left at null, the latest version is provisioned."
+  description = "Version of the mongodb instance. If no value passed, the current ICD preferred version is used."
   default     = null
+}
+
+variable "service_credential_names" {
+  description = "Map of name, role for service credentials that you want to create for the database"
+  type        = map(string)
+  default = {
+    "postgressql_admin" : "Administrator",
+    "postgressql_operator" : "Operator",
+    "postgressql_viewer" : "Viewer",
+    "postgressql_editor" : "Editor",
+  }
 }

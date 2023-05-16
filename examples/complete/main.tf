@@ -31,7 +31,7 @@ resource "ibm_is_subnet" "testacc_subnet" {
 ##############################################################################
 
 module "key_protect_all_inclusive" {
-  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-key-protect-all-inclusive.git?ref=v4.0.0"
+  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-key-protect-all-inclusive.git?ref=v4.1.0"
   resource_group_id = module.resource_group.resource_group_id
   # Note: Database instance and Key Protect must be created in the same region when using BYOK
   # See https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok
@@ -39,26 +39,6 @@ module "key_protect_all_inclusive" {
   key_protect_instance_name = "${var.prefix}-kp"
   resource_tags             = var.resource_tags
   key_map                   = { "icd" = ["${var.prefix}-mongodb"] }
-}
-
-# Create IAM Access Policy to allow Key protect to access Postgres instance
-resource "ibm_iam_authorization_policy" "policy" {
-  source_service_name         = "databases-for-mongodb"
-  source_resource_group_id    = module.resource_group.resource_group_id
-  target_service_name         = "kms"
-  target_resource_instance_id = module.key_protect_all_inclusive.key_protect_guid
-  roles                       = ["Reader"]
-}
-
-##############################################################################
-# Service Credentials
-##############################################################################
-
-resource "ibm_resource_key" "service_credentials" {
-  count                = length(var.service_credentials)
-  name                 = var.service_credentials[count.index]
-  resource_instance_id = module.mongodb.id
-  tags                 = var.resource_tags
 }
 
 ##############################################################################
@@ -83,23 +63,25 @@ module "cbr_zone" {
 }
 
 ##############################################################################
-# ICD mongodb database
+# ICD MongoDB instance
 ##############################################################################
 
 module "mongodb" {
-  source            = "../.."
-  resource_group_id = module.resource_group.resource_group_id
-  mongodb_version   = var.mongodb_version
-  instance_name     = "${var.prefix}-mongodb"
-  endpoints         = "private"
-  region            = var.region
-  kms_key_crn       = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
-  tags              = var.resource_tags
-  auto_scaling      = var.auto_scaling
+  source                     = "../.."
+  resource_group_id          = module.resource_group.resource_group_id
+  mongodb_version            = var.mongodb_version
+  instance_name              = "${var.prefix}-mongodb"
+  kms_encryption_enabled     = true
+  existing_kms_instance_guid = module.key_protect_all_inclusive.key_protect_guid
+  region                     = var.region
+  kms_key_crn                = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
+  tags                       = var.resource_tags
+  auto_scaling               = var.auto_scaling
+  service_credential_names   = var.service_credential_names
   cbr_rules = [
     {
       description      = "${var.prefix}-mongodb access only from vpc"
-      enforcement_mode = var.enforcement_mode
+      enforcement_mode = "enabled"
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
       rule_contexts = [{
         attributes = [
