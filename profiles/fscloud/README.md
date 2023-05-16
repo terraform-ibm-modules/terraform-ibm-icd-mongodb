@@ -6,7 +6,7 @@ The default values in this profile were scanned by [IBM Code Risk Analyzer (CRA)
 
 > rule-beb7b289-706b-4dc0-b01d-b1d15d4331e3: Check whether Databases for MongoDB network access is restricted to a specific IP range
 
-The IBM Cloud Framework for Financial Services mandates the application of an inbound network-based allowlist in front of the ICD MongoDB instance. You can comply with this requirement by using the `cbr_rules` variable in the module, which can be used to create a narrow context-based restriction rule that is scoped to the IBM Cloud Databases for MongoDB instance. CRA does not currently support checking for context-based restrictions, so you can ignore the failing CRA rule as long as you have set the context-based restriction.
+The IBM Cloud Framework for Financial Services mandates the application of an inbound network-based allowlist in front of the ICD MongoDB instance. You can comply with this requirement by using the `cbr_rules` variable in the module, which can be used to create a narrow context-based restriction rule that is scoped to the IBM Cloud Databases for MongoDB instance. CRA does not currently support checking for context-based restrictions, so you can ignore the failing rule after you set the context-based restriction.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
