@@ -6,7 +6,7 @@ The default values in this profile were scanned by [IBM Code Risk Analyzer (CRA)
 
 > rule-beb7b289-706b-4dc0-b01d-b1d15d4331e3: Check whether Databases for MongoDB network access is restricted to a specific IP range
 
-The IBM Cloud Framework for Financial Services mandates the application of an inbound network-based allowlist in front of the ICD MongoDB instance. You can comply with this requirement by using the `cbr_rules` variable in the module, which can be used to create a narrow context-based restriction rule that is scoped to the IBM Cloud Databases for MongoDB instance. CRA does not currently support checking for context-based restrictions, so you can ignore the failing rule after you set the context-based restriction.
+The IBM Cloud Framework for Financial Services mandates the application of an inbound network-based allowlist in front of the IBM Cloud Databases for (ICD) MongoDB instance. You can comply with this requirement by using the `cbr_rules` variable in the module, which can be used to create a narrow context-based restriction rule that is scoped to the MongoDB instance. CRA does not currently support checking for context-based restrictions, so you can ignore the failing rule after you set the context-based restriction.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -40,7 +40,7 @@ No resources.
 | <a name="input_kms_key_crn"></a> [kms\_key\_crn](#input\_kms\_key\_crn) | The root key CRN of the Hyper Protect Crypto Service (HPCS) to use for disk encryption. | `string` | n/a | yes |
 | <a name="input_members"></a> [members](#input\_members) | Allocated number of members | `number` | `3` | no |
 | <a name="input_memory_mb"></a> [memory\_mb](#input\_memory\_mb) | Allocated memory per member. For more information, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member | `number` | `14336` | no |
-| <a name="input_mongodb_version"></a> [mongodb\_version](#input\_mongodb\_version) | The version of the MongoDB to provision. If no value passed, the current ICD preferred version is used. | `string` | `null` | no |
+| <a name="input_mongodb_version"></a> [mongodb\_version](#input\_mongodb\_version) | Version of the MongoDB instance. If no value is passed, the current preferred version of IBM Cloud Databases is used. | `string` | `null` | no |
 | <a name="input_plan"></a> [plan](#input\_plan) | The name of the service plan that you choose for your MongoDB instance | `string` | `"enterprise"` | no |
 | <a name="input_region"></a> [region](#input\_region) | The region where you want to deploy your instance. Must be the same region as the Hyper Protect Crypto Services instance. | `string` | `"us-south"` | no |
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | The resource group ID where the MongoDB instance will be created. | `string` | n/a | yes |

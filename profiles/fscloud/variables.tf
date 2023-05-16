@@ -8,7 +8,7 @@ variable "resource_group_id" {
 }
 
 variable "mongodb_version" {
-  description = "The version of the MongoDB to provision. If no value passed, the current ICD preferred version is used."
+  description = "Version of the MongoDB instance. If no value is passed, the current preferred version of IBM Cloud Databases is used."
   type        = string
   default     = null
 }

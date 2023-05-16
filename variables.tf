@@ -54,7 +54,7 @@ variable "mongodb_version" {
       var.mongodb_version == "5.0",
       var.mongodb_version == "4.4",
     ])
-    error_message = "Version must be 4.4 or 5.0. If no value passed, the current ICD preferred version is used."
+    error_message = "Version must be 4.4 or 5.0. If no value is passed, the current preferred version of IBM Cloud Databases is used."
   }
 }
 
@@ -82,30 +82,30 @@ variable "endpoints" {
 
 variable "memory_mb" {
   type        = number
-  description = "Allocated memory per-member. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
+  description = "Allocated memory per member. For more information, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
   default     = 1024
-  # Validation is done in terraform plan phase by IBM provider, so no need to add any extra validation here
+  # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
 
 variable "disk_mb" {
   type        = number
-  description = "Allocated disk per-member. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
+  description = "Allocated disk per member. For more information, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
   default     = 10240
-  # Validation is done in terraform plan phase by IBM provider, so no need to add any extra validation here
+  # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
 
 variable "cpu_count" {
   type        = number
-  description = "Allocated dedicated CPU per-member. For shared CPU, set to 0. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
+  description = "Allocated dedicated CPU per member. For shared CPU, set to 0. For more information, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
   default     = 0
-  # Validation is done in terraform plan phase by IBM provider, so no need to add any extra validation here
+  # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
 
 variable "members" {
   type        = number
   description = "Allocated number of members"
   default     = 3
-  # Validation is done in terraform plan phase by IBM provider, so no need to add any extra validation here
+  # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
 
 variable "service_credential_names" {

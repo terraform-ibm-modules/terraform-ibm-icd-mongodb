@@ -30,7 +30,7 @@ variable "resource_tags" {
 
 variable "mongodb_version" {
   type        = string
-  description = "Version of the mongodb instance. If no value passed, the current ICD preferred version is used."
+  description = "Version of the MongoDB instance. If no value is passed, the current preferred version of IBM Cloud Databases is used."
   default     = null
 }
 

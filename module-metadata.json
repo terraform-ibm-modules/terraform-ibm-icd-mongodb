@@ -51,7 +51,7 @@
     "cpu_count": {
       "name": "cpu_count",
       "type": "number",
-      "description": "Allocated dedicated CPU per-member. For shared CPU, set to 0. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
+      "description": "Allocated dedicated CPU per member. For shared CPU, set to 0. For more information, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
       "default": 0,
       "pos": {
         "filename": "variables.tf",
@@ -61,7 +61,7 @@
     "disk_mb": {
       "name": "disk_mb",
       "type": "number",
-      "description": "Allocated disk per-member. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
+      "description": "Allocated disk per member. For more information, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
       "default": 10240,
       "pos": {
         "filename": "variables.tf",
@@ -148,7 +148,7 @@
     "memory_mb": {
       "name": "memory_mb",
       "type": "number",
-      "description": "Allocated memory per-member. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
+      "description": "Allocated memory per member. For more information, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member",
       "default": 1024,
       "pos": {
         "filename": "variables.tf",
