@@ -14,7 +14,7 @@ variable "mongodb_version" {
 }
 
 variable "region" {
-  description = "The region where you want to deploy your instance. Must be the same region as the Hyper Protect Crypto Service."
+  description = "The region where you want to deploy your instance. Must be the same region as the Hyper Protect Crypto Services instance."
   type        = string
   default     = "us-south"
 }
@@ -46,21 +46,21 @@ variable "plan" {
 
 variable "memory_mb" {
   type        = number
-  description = "Allocated memory per-member. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
+  description = "Allocated memory per member. For more information, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
   default     = 14336
   # Validation is done in terraform plan phase by IBM provider, so no need to add any extra validation here
 }
 
 variable "disk_mb" {
   type        = number
-  description = "Allocated disk per-member. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
+  description = "Allocated disk per member. For more information, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
   default     = 20480
   # Validation is done in terraform plan phase by IBM provider, so no need to add any extra validation here
 }
 
 variable "cpu_count" {
   type        = number
-  description = "Allocated dedicated CPU per-member. For shared CPU, set to 0. For more information refer to the docs https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
+  description = "Allocated dedicated CPU per member. For shared CPU, set to 0. For more information, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
   default     = 6
   # Validation is done in terraform plan phase by IBM provider, so no need to add any extra validation here
 }
@@ -100,13 +100,13 @@ variable "kms_key_crn" {
 }
 
 variable "existing_kms_instance_guid" {
-  description = "The GUID of the Hyper Protect Crypto Service."
+  description = "The GUID of the Hyper Protect Crypto Services instance."
   type        = string
 }
 
 variable "skip_iam_authorization_policy" {
   type        = bool
-  description = "Set to true to skip the creation of an IAM authorization policy that permits all MongoDB database instances in the given resource group to read the encryption key from the Hyper Protect instance passed in var.existing_kms_instance_guid."
+  description = "Set to true to skip the creation of an IAM authorization policy that permits all MongoDB database instances in the resource group to read the encryption key from the Hyper Protect Crypto Services instance. The HPCS instance is passed in through the var.existing_kms_instance_guid variable."
   default     = false
 }
 
