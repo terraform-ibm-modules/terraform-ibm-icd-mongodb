@@ -140,7 +140,11 @@ variable "auto_scaling" {
     })
   })
   description = "Optional rules to allow the database to increase resources in response to usage. Only a single autoscaling block is allowed. Make sure you understand the effects of autoscaling, especially for production environments. See https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-autoscaling&interface=cli#autoscaling-considerations in the IBM Cloud Docs."
-  default     = null
+  default = {
+    cpu    = {}
+    disk   = {}
+    memory = {}
+  }
 }
 
 ##############################################################
