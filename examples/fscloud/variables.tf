@@ -40,6 +40,17 @@ variable "kms_key_crn" {
 
 variable "mongodb_version" {
   type        = string
-  description = "Version of the mongodb instance. If left at null, the latest version is provisioned."
+  description = "Version of the MongoDB instance. If no value is passed, the current preferred version of IBM Cloud Databases is used."
   default     = null
+}
+
+variable "service_credential_names" {
+  description = "Map of name, role for service credentials that you want to create for the database"
+  type        = map(string)
+  default = {
+    "mongodb_admin" : "Administrator",
+    "mongodb_operator" : "Operator",
+    "mongodb_viewer" : "Viewer",
+    "mongodb_editor" : "Editor",
+  }
 }

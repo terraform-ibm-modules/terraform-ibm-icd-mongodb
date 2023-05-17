@@ -30,20 +30,19 @@ variable "resource_tags" {
 
 variable "mongodb_version" {
   type        = string
-  description = "Version of the mongodb instance. If left at null, the latest version is provisioned."
+  description = "Version of the MongoDB instance. If no value is passed, the current preferred version of IBM Cloud Databases is used."
   default     = null
 }
 
-variable "service_credentials" {
-  description = "A list of service credentials that you want to create for the database"
-  type        = list(string)
-  default     = ["mongodb_credential_microservices", "mongodb_credential_dev_1", "mongodb_credential_dev_2"]
-}
-
-variable "enforcement_mode" {
-  description = "whether or not enforce a rule upon creation and update the rule enforcement."
-  type        = string
-  default     = "enabled"
+variable "service_credential_names" {
+  description = "Map of name, role for service credentials that you want to create for the database"
+  type        = map(string)
+  default = {
+    "mongodb_admin" : "Administrator",
+    "mongodb_operator" : "Operator",
+    "mongodb_viewer" : "Viewer",
+    "mongodb_viewer" : "Editor",
+  }
 }
 
 variable "auto_scaling" {
@@ -75,7 +74,7 @@ variable "auto_scaling" {
       rate_units               = optional(string)
     })
   })
-  description = "Configure rules to allow your database to automatically increase its resources. Single block of autoscaling is allowed at once."
+  description = "Optional rules to allow the database to increase resources in response to usage. Only a single autoscaling block is allowed. Make sure you understand the effects of autoscaling, especially for production environments. See https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-autoscaling&interface=cli#autoscaling-considerations in the IBM Cloud Docs."
   default = {
     cpu = {}
     disk = {

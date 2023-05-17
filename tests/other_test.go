@@ -7,15 +7,15 @@ import (
 	"testing"
 )
 
-const basicExampleTerraformDir = "examples/basic"
-
 func TestRunBasicExample(t *testing.T) {
 	t.Parallel()
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:      t,
-		TerraformDir: basicExampleTerraformDir,
-		Prefix:       "mongodb-def",
+		Testing:            t,
+		TerraformDir:       "examples/basic",
+		Prefix:             "mongodb-basic",
+		BestRegionYAMLPath: regionSelectionPath,
+		ResourceGroup:      resourceGroup,
 	})
 
 	output, err := options.RunTestConsistency()

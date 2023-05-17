@@ -1,13 +1,24 @@
-/********************************************************************
-# This file is used to implement the ROOT module
-*********************************************************************/
-locals {
-  # The backup encryption key crn doesn't support Hyper Protect Crypto Service (HPCS) at the moment. If 'backup_encryption_key_crn' is null, will use 'kms_key_crn' as encryption key if its Key Protect key otherwise it will use using randomly generated keys.
-  # https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-hpcs&interface=cli
-  kp_backup_crn = var.backup_encryption_key_crn != null ? var.backup_encryption_key_crn : (can(regex(".*kms.*", var.kms_key_crn)) ? var.kms_key_crn : null)
+##############################################################################
+# ICD MongoDB module
+##############################################################################
 
+locals {
+  # Validation (approach based on https://github.com/hashicorp/terraform/issues/25609#issuecomment-1057614400)
+  # tflint-ignore: terraform_unused_declarations
+  validate_kms_values = !var.kms_encryption_enabled && (var.kms_key_crn != null || var.backup_encryption_key_crn != null) ? tobool("When passing values for var.backup_encryption_key_crn or var.kms_key_crn, you must set var.kms_encryption_enabled to true. Otherwise unset them to use default encryption") : true
+  # tflint-ignore: terraform_unused_declarations
+  validate_kms_vars = var.kms_encryption_enabled && var.kms_key_crn == null && var.backup_encryption_key_crn == null ? tobool("When setting var.kms_encryption_enabled to true, a value must be passed for var.kms_key_crn and/or var.backup_encryption_key_crn") : true
+  # tflint-ignore: terraform_unused_declarations
+  validate_auth_policy = var.kms_encryption_enabled && var.skip_iam_authorization_policy == false && var.existing_kms_instance_guid == null ? tobool("When var.skip_iam_authorization_policy is set to false, and var.kms_encryption_enabled to true, a value must be passed for var.existing_kms_instance_guid in order to create the auth policy.") : true
+
+  # If no value passed for 'backup_encryption_key_crn' use the value of 'kms_key_crn'. If this is a HPCS key (which is not currently supported for backup encryption), default to 'null' meaning encryption is done using randomly generated keys
+  # More info https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-hpcs
+  backup_encryption_key_crn = var.backup_encryption_key_crn != null ? var.backup_encryption_key_crn : (can(regex(".*kms.*", var.kms_key_crn)) ? var.kms_key_crn : null)
+
+  # Determine if auto scaling is enabled
   auto_scaling_enabled = var.auto_scaling == null ? [] : [1]
 
+  # Determine what KMS service is being used for database encryption
   kms_service = var.kms_key_crn != null ? (
     can(regex(".*kms.*", var.kms_key_crn)) ? "kms" : (
       can(regex(".*hs-crypto.*", var.kms_key_crn)) ? "hs-crypto" : "unrecognized key type"
@@ -15,14 +26,12 @@ locals {
   ) : "no key crn"
 
   # tflint-ignore: terraform_unused_declarations
-  validate_hpcs_guid_input = var.skip_iam_authorization_policy == false && var.existing_kms_instance_guid == null ? tobool("A value must be passed for var.existing_kms_instance_guid when creating an instance, var.skip_iam_authorization_policy is false.") : true
-  # tflint-ignore: terraform_unused_declarations
-  validate_kms_key_input = var.skip_iam_authorization_policy == false && var.kms_key_crn == null ? tobool("A value must be passed for var.kms_key_crn when creating an instance, var.skip_iam_authorization_policy is false.") : true
+  validate_skip_iam_authorization_policy = var.skip_iam_authorization_policy == false && (var.kms_key_crn == null || var.existing_kms_instance_guid == null) ? tobool("When var.skip_iam_authorization_policy is set to false, a value must be passed for var.existing_kms_instance_guid and var.kms_key_crn. Alternatively, if opting to use default encryption, set var.skip_iam_authorization_policy to true to skip creating any KMS auth policy creation.") : true
 }
 
-# Create IAM Authorization Policies to allow MongoDB to access kms for the encryption key
+# Create IAM Authorization Policies to allow MongoDB to access KMS for the encryption key
 resource "ibm_iam_authorization_policy" "kms_policy" {
-  count                       = var.skip_iam_authorization_policy ? 0 : 1
+  count                       = var.kms_encryption_enabled == false || var.skip_iam_authorization_policy ? 0 : 1
   source_service_name         = "databases-for-mongodb"
   source_resource_group_id    = var.resource_group_id
   target_service_name         = local.kms_service
@@ -31,20 +40,35 @@ resource "ibm_iam_authorization_policy" "kms_policy" {
 }
 
 resource "ibm_database" "mongodb" {
-  depends_on        = [ibm_iam_authorization_policy.kms_policy]
-  name              = var.instance_name
-  location          = var.region
-  plan              = var.plan
-  service           = "databases-for-mongodb"
-  version           = var.mongodb_version
-  resource_group_id = var.resource_group_id
-  tags              = var.tags
-  service_endpoints = var.endpoints
-
+  depends_on                = [ibm_iam_authorization_policy.kms_policy]
+  name                      = var.instance_name
+  location                  = var.region
+  plan                      = var.plan
+  service                   = "databases-for-mongodb"
+  version                   = var.mongodb_version
+  resource_group_id         = var.resource_group_id
+  tags                      = var.tags
+  service_endpoints         = var.endpoints
+  plan_validation           = var.plan_validation
+  configuration             = var.configuration != null ? jsonencode(var.configuration) : null
   key_protect_key           = var.kms_key_crn
-  backup_encryption_key_crn = local.kp_backup_crn
+  backup_encryption_key_crn = local.backup_encryption_key_crn
 
-  configuration = var.configuration != null ? jsonencode(var.configuration) : null
+  group {
+    group_id = "member"
+    memory {
+      allocation_mb = var.memory_mb
+    }
+    disk {
+      allocation_mb = var.disk_mb
+    }
+    cpu {
+      allocation_count = var.cpu_count
+    }
+    members {
+      allocation_count = var.members
+    }
+  }
 
   ## This for_each block is NOT a loop to attach to multiple auto_scaling blocks.
   ## This block is only used to conditionally add auto_scaling block depending on var.auto_scaling
@@ -80,40 +104,17 @@ resource "ibm_database" "mongodb" {
     }
   }
 
-  group {
-    group_id = "member"
-    memory {
-      allocation_mb = var.memory_mb
-    }
-    disk {
-      allocation_mb = var.disk_mb
-    }
-    cpu {
-      allocation_count = var.cpu_count
-    }
-    members {
-      allocation_count = var.members
-    }
-  }
-
-  dynamic "allowlist" {
-    for_each = { for ipaddress in var.allowlist : ipaddress.address => ipaddress }
-    content {
-      address     = allowlist.value.address
-      description = allowlist.value.description
-    }
-  }
-
-  timeouts {
-    create = "120m"
-  }
-
   lifecycle {
     ignore_changes = [
+      # Ignore changes to these because a change will destroy and recreate the instance
       version,
       key_protect_key,
       backup_encryption_key_crn,
     ]
+  }
+
+  timeouts {
+    create = "120m" # Extending provisioning time to 120 minutes
   }
 }
 
@@ -154,4 +155,36 @@ module "cbr_rule" {
       }
     ]
   }]
+}
+
+##############################################################################
+# Service Credentials
+##############################################################################
+
+resource "ibm_resource_key" "service_credentials" {
+  for_each             = var.service_credential_names
+  name                 = each.key
+  role                 = each.value
+  resource_instance_id = ibm_database.mongodb.id
+  tags                 = var.tags
+}
+
+locals {
+  # used for output only
+  service_credentials_json = length(var.service_credential_names) > 0 ? {
+    for service_credential in ibm_resource_key.service_credentials :
+    service_credential["name"] => service_credential["credentials_json"]
+  } : null
+
+  service_credentials_object = length(var.service_credential_names) > 0 ? {
+    hostname    = ibm_resource_key.service_credentials[keys(var.service_credential_names)[0]].credentials["connection.mongodb.hosts.0.hostname"]
+    certificate = ibm_resource_key.service_credentials[keys(var.service_credential_names)[0]].credentials["connection.mongodb.certificate.certificate_base64"]
+    credentials = {
+      for service_credential in ibm_resource_key.service_credentials :
+      service_credential["name"] => {
+        username = service_credential.credentials["connection.mongodb.authentication.username"]
+        password = service_credential.credentials["connection.mongodb.authentication.password"]
+      }
+    }
+  } : null
 }
