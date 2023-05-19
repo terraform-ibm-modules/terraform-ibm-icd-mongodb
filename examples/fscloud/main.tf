@@ -61,6 +61,7 @@ module "mongodb" {
   existing_kms_instance_guid = var.existing_kms_instance_guid
   mongodb_version            = var.mongodb_version
   service_credential_names   = var.service_credential_names
+  auto_scaling               = var.auto_scaling
   cbr_rules = [
     {
       description      = "${var.prefix}-mongodb access only from vpc"
