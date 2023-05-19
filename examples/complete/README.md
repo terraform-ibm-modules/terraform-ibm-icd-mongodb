@@ -1,4 +1,4 @@
-# Complete example with encryption and CBR rules
+# Complete example with BYOK encryption and CBR rules
 
 An end-to-end example that uses the IBM Cloud Terraform provider to create the following infrastructure:
 
