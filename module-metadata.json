@@ -373,7 +373,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 42
+        "line": 39
       }
     },
     "ibm_iam_authorization_policy.kms_policy": {
@@ -390,7 +390,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 33
+        "line": 30
       }
     },
     "ibm_resource_key.service_credentials": {
@@ -406,7 +406,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 158
+        "line": 155
       }
     }
   },
@@ -485,7 +485,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 119
+        "line": 116
       }
     }
   }
