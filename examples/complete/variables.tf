@@ -41,6 +41,6 @@ variable "service_credential_names" {
     "mongodb_admin" : "Administrator",
     "mongodb_operator" : "Operator",
     "mongodb_viewer" : "Viewer",
-    "mongodb_viewer" : "Editor",
+    "mongodb_editor" : "Editor",
   }
 }
