@@ -8,7 +8,7 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 ## Usage
-> WARNING: **This module does not support major version upgrade or updates to encryption and backup encryption keys**: To upgrade version create a new postgresql instance with the updated version and follow the [Upgrading to a new major version](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-upgrading).
+> WARNING: **This module does not support major version upgrade or updates to encryption and backup encryption keys**: To upgrade version create a new mongodb instance with the updated version and follow the [Upgrading to a new major version](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-upgrading).
 
 > NOTE: Currently the database encryption for backups supports only Key Protect keys, not Hyper Protect Crypto keys. If enabling KMS encryption and no value is passed for 'backup_encryption_key_crn', the value of 'kms_key_crn' is used. If this value is a HPCS key, the module will default the backup encryption to use randomly generated keys due to this current limitation. More info: https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-hpcs
 
