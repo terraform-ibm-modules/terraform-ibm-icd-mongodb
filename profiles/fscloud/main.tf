@@ -16,6 +16,8 @@ module "mongodb" {
   plan                          = var.plan
   members                       = var.members
   memory_mb                     = var.memory_mb
+  admin_pass                    = var.admin_pass
+  users                         = var.users
   disk_mb                       = var.disk_mb
   cpu_count                     = var.cpu_count
   auto_scaling                  = var.auto_scaling

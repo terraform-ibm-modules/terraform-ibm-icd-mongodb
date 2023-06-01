@@ -2,6 +2,8 @@
 package test
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"log"
 	"os"
 	"testing"
@@ -62,6 +64,11 @@ func TestRunFSCloudExample(t *testing.T) {
 func TestRunCompleteUpgradeExample(t *testing.T) {
 	t.Parallel()
 
+	// Generate a 10 char long random string for the admin_pass
+	randomBytes := make([]byte, 10)
+	_, err := rand.Read(randomBytes)
+	randomPass := base64.URLEncoding.EncodeToString(randomBytes)[:10]
+
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:            t,
 		TerraformDir:       "examples/complete",
@@ -70,6 +77,14 @@ func TestRunCompleteUpgradeExample(t *testing.T) {
 		ResourceGroup:      resourceGroup,
 		TerraformVars: map[string]interface{}{
 			"mongodb_version": "4.4", // Always lock to the lowest supported MongoDB version
+			"users": []map[string]interface{}{
+				{
+					"name":     "testuser",
+					"password": randomPass, // pragma: allowlist secret
+					"type":     "database",
+				},
+			},
+			"admin_pass": randomPass,
 		},
 	})
 

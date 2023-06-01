@@ -1,13 +1,26 @@
 {
   "path": ".",
   "variables": {
+    "admin_pass": {
+      "name": "admin_pass",
+      "type": "string",
+      "description": "The password for the database administrator. If the admin password is null then the admin user ID cannot be accessed. More users can be specified in a user block. The admin password must be in the range of 10-32 characters.",
+      "sensitive": true,
+      "source": [
+        "ibm_database.mongodb.adminpassword"
+      ],
+      "pos": {
+        "filename": "variables.tf",
+        "line": 122
+      }
+    },
     "auto_scaling": {
       "name": "auto_scaling",
       "type": "object({\n    disk = object({\n      capacity_enabled             = optional(bool, false)\n      free_space_less_than_percent = optional(number, 10)\n      io_above_percent             = optional(number, 90)\n      io_enabled                   = optional(bool, false)\n      io_over_period               = optional(string, \"15m\")\n      rate_increase_percent        = optional(number, 10)\n      rate_limit_mb_per_member     = optional(number, 3670016)\n      rate_period_seconds          = optional(number, 900)\n      rate_units                   = optional(string, \"mb\")\n    })\n    memory = object({\n      io_above_percent         = optional(number, 90)\n      io_enabled               = optional(bool, false)\n      io_over_period           = optional(string, \"15m\")\n      rate_increase_percent    = optional(number, 10)\n      rate_limit_mb_per_member = optional(number, 114688)\n      rate_period_seconds      = optional(number, 900)\n      rate_units               = optional(string, \"mb\")\n    })\n  })",
       "description": "Optional rules to allow the database to increase resources in response to usage. Only a single autoscaling block is allowed. Make sure you understand the effects of autoscaling, especially for production environments. See https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-autoscaling\u0026interface=cli#autoscaling-considerations in the IBM Cloud Docs.",
       "pos": {
         "filename": "variables.tf",
-        "line": 122
+        "line": 141
       }
     },
     "backup_encryption_key_crn": {
@@ -16,7 +29,7 @@
       "description": "The CRN of a Key Protect key that you want to use for encrypting the disk that holds deployment backups. Only used if var.kms_encryption_enabled is set to true. BYOK for backups is available only in US regions us-south and us-east, and in eu-de. Only keys in the us-south and eu-de are durable to region failures. To ensure that your backups are available even if a region failure occurs, use a key from us-south or eu-de. Hyper Protect Crypto Services for IBM Cloud Databases backups is not currently supported. If no value is passed here, the value passed for the 'kms_key_crn' variable is used. And if a HPCS value is passed for var.kms_key_crn, the database backup encryption uses the default encryption keys.",
       "pos": {
         "filename": "variables.tf",
-        "line": 173
+        "line": 192
       }
     },
     "cbr_rules": {
@@ -33,7 +46,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 199
+        "line": 218
       }
     },
     "configuration": {
@@ -73,7 +86,9 @@
       "type": "string",
       "description": "Specify whether you want to enable the public, private, or both service endpoints. Supported values are 'public', 'private', or 'public-and-private'.",
       "default": "private",
+      "required": true,
       "source": [
+        "data.ibm_database_connection.database_connection.endpoint_type",
         "ibm_database.mongodb.service_endpoints"
       ],
       "pos": {
@@ -91,7 +106,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 189
+        "line": 208
       },
       "immutable": true,
       "computed": true
@@ -119,7 +134,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 153
+        "line": 172
       }
     },
     "kms_key_crn": {
@@ -131,7 +146,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 159
+        "line": 178
       },
       "immutable": true
     },
@@ -253,7 +268,7 @@
       "default": false,
       "pos": {
         "filename": "variables.tf",
-        "line": 183
+        "line": 202
       }
     },
     "tags": {
@@ -268,6 +283,22 @@
       "pos": {
         "filename": "variables.tf",
         "line": 66
+      }
+    },
+    "users": {
+      "name": "users",
+      "type": "list(object({\n    name     = string\n    password = string # pragma: allowlist secret\n    type     = string # \"type\" is required to generate the connection string for the outputs.\n    role     = optional(string)\n  }))",
+      "description": "A list of users that you want to create on the database. Multiple blocks are allowed. The user password must be in the range of 10-32 characters. Be warned that in most case using IAM service credentials (via the var.service_credential_names) is sufficient to control access to the MongoDB instance. This blocks creates native MongoDB database users, more info on that can be found here https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-user-management\u0026interface=ui",
+      "default": [],
+      "sensitive": true,
+      "source": [
+        "data.ibm_database_connection.database_connection.count",
+        "data.ibm_database_connection.database_connection.user_id",
+        "data.ibm_database_connection.database_connection.user_type"
+      ],
+      "pos": {
+        "filename": "variables.tf",
+        "line": 129
       }
     }
   },
@@ -300,6 +331,14 @@
       },
       "type": "TypeString"
     },
+    "hostname": {
+      "name": "hostname",
+      "description": "Database hostname. Only contains value when var.service_credential_names or var.users are set.",
+      "pos": {
+        "filename": "outputs.tf",
+        "line": 42
+      }
+    },
     "id": {
       "name": "id",
       "description": "MongoDB instance ID",
@@ -307,6 +346,14 @@
       "pos": {
         "filename": "outputs.tf",
         "line": 5
+      }
+    },
+    "port": {
+      "name": "port",
+      "description": "Database port. Only contains value when var.service_credential_names or var.users are set.",
+      "pos": {
+        "filename": "outputs.tf",
+        "line": 47
       }
     },
     "service_credentials_json": {
@@ -357,6 +404,7 @@
       "type": "ibm_database",
       "name": "mongodb",
       "attributes": {
+        "adminpassword": "admin_pass",
         "configuration": "configuration",
         "key_protect_key": "kms_key_crn",
         "location": "region",
@@ -406,11 +454,30 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 155
+        "line": 166
       }
     }
   },
-  "data_resources": {},
+  "data_resources": {
+    "data.ibm_database_connection.database_connection": {
+      "mode": "data",
+      "type": "ibm_database_connection",
+      "name": "database_connection",
+      "attributes": {
+        "count": "users",
+        "endpoint_type": "endpoints",
+        "user_id": "users",
+        "user_type": "users"
+      },
+      "provider": {
+        "name": "ibm"
+      },
+      "pos": {
+        "filename": "main.tf",
+        "line": 195
+      }
+    }
+  },
   "module_calls": {
     "cbr_rule": {
       "name": "cbr_rule",
@@ -485,7 +552,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 116
+        "line": 127
       }
     }
   }
