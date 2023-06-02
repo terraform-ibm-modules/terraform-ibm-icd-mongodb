@@ -28,3 +28,13 @@ output "service_credentials_object" {
   value       = module.mongodb.service_credentials_object
   sensitive   = true
 }
+
+output "hostname" {
+  description = "Postgresql instance hostname"
+  value       = module.mongodb.hostname
+}
+
+output "port" {
+  description = "Postgresql instance port"
+  value       = module.mongodb.port
+}
