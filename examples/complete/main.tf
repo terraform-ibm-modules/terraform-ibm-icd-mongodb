@@ -72,6 +72,8 @@ module "mongodb" {
   mongodb_version            = var.mongodb_version
   instance_name              = "${var.prefix}-mongodb"
   kms_encryption_enabled     = true
+  admin_pass                 = var.admin_pass
+  users                      = var.users
   existing_kms_instance_guid = module.key_protect_all_inclusive.key_protect_guid
   region                     = var.region
   kms_key_crn                = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
