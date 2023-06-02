@@ -44,12 +44,23 @@ resource "ibm_database" "mongodb" {
   service                   = "databases-for-mongodb"
   version                   = var.mongodb_version
   resource_group_id         = var.resource_group_id
+  adminpassword             = var.admin_pass
   tags                      = var.tags
   service_endpoints         = var.endpoints
   plan_validation           = var.plan_validation
   configuration             = var.configuration != null ? jsonencode(var.configuration) : null
   key_protect_key           = var.kms_key_crn
   backup_encryption_key_crn = local.backup_encryption_key_crn
+
+  dynamic "users" {
+    for_each = nonsensitive(var.users != null ? var.users : [])
+    content {
+      name     = users.value.name
+      password = users.value.password
+      type     = users.value.type
+      role     = (users.value.role != "" ? users.value.role : null)
+    }
+  }
 
   group {
     group_id = "member"
@@ -170,6 +181,7 @@ locals {
   service_credentials_object = length(var.service_credential_names) > 0 ? {
     hostname    = ibm_resource_key.service_credentials[keys(var.service_credential_names)[0]].credentials["connection.mongodb.hosts.0.hostname"]
     certificate = ibm_resource_key.service_credentials[keys(var.service_credential_names)[0]].credentials["connection.mongodb.certificate.certificate_base64"]
+    port        = ibm_resource_key.service_credentials[keys(var.service_credential_names)[0]].credentials["connection.mongodb.hosts.0.port"]
     credentials = {
       for service_credential in ibm_resource_key.service_credentials :
       service_credential["name"] => {
@@ -178,4 +190,12 @@ locals {
       }
     }
   } : null
+}
+
+data "ibm_database_connection" "database_connection" {
+  count         = length(var.users) > 0 ? 1 : 0
+  endpoint_type = var.endpoints
+  deployment_id = ibm_database.mongodb.id
+  user_id       = var.users[0].name
+  user_type     = var.users[0].type
 }
