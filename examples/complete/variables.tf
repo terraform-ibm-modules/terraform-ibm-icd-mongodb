@@ -28,6 +28,12 @@ variable "resource_tags" {
   default     = []
 }
 
+variable "access_tags" {
+  type        = list(string)
+  description = "A list of access tags to apply to the MongoDB instance created by the module, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial for more details"
+  default     = []
+}
+
 variable "mongodb_version" {
   type        = string
   description = "Version of the MongoDB instance. If no value is passed, the current preferred version of IBM Cloud Databases is used."
