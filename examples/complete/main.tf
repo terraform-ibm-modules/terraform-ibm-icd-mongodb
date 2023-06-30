@@ -77,6 +77,7 @@ module "mongodb" {
   existing_kms_instance_guid = module.key_protect_all_inclusive.key_protect_guid
   region                     = var.region
   kms_key_crn                = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
+  access_tags                = var.access_tags
   tags                       = var.resource_tags
   service_credential_names   = var.service_credential_names
   cbr_rules = [

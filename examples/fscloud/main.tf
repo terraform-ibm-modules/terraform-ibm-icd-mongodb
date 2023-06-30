@@ -57,6 +57,7 @@ module "mongodb" {
   instance_name              = "${var.prefix}-mongodb"
   region                     = var.region
   tags                       = var.resource_tags
+  access_tags                = var.access_tags
   kms_key_crn                = var.kms_key_crn
   existing_kms_instance_guid = var.existing_kms_instance_guid
   mongodb_version            = var.mongodb_version
