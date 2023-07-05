@@ -52,7 +52,7 @@ module "cbr_zone" {
 ##############################################################################
 
 module "mongodb" {
-  source                     = "../../profiles/fscloud"
+  source                     = "../../modules/fscloud"
   resource_group_id          = module.resource_group.resource_group_id
   instance_name              = "${var.prefix}-mongodb"
   region                     = var.region
