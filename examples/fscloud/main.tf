@@ -39,7 +39,7 @@ resource "ibm_is_subnet" "testacc_subnet" {
 ##############################################################################
 module "cbr_zone" {
   source           = "terraform-ibm-modules/cbr/ibm//cbr-zone-module"
-  version          = "1.2.0"
+  version          = "1.2.1"
   name             = "${var.prefix}-VPC-network-zone"
   zone_description = "CBR Network zone containing VPC"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
@@ -59,6 +59,7 @@ module "mongodb" {
   instance_name              = "${var.prefix}-mongodb"
   region                     = var.region
   tags                       = var.resource_tags
+  access_tags                = var.access_tags
   kms_key_crn                = var.kms_key_crn
   existing_kms_instance_guid = var.existing_kms_instance_guid
   mongodb_version            = var.mongodb_version

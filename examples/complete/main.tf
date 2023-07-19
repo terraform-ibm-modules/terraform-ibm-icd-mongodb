@@ -55,7 +55,7 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 ##############################################################################
 module "cbr_zone" {
   source           = "terraform-ibm-modules/cbr/ibm//cbr-zone-module"
-  version          = "1.2.0"
+  version          = "1.2.1"
   name             = "${var.prefix}-VPC-network-zone"
   zone_description = "CBR Network zone containing VPC"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
@@ -80,6 +80,7 @@ module "mongodb" {
   existing_kms_instance_guid = module.key_protect_all_inclusive.key_protect_guid
   region                     = var.region
   kms_key_crn                = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
+  access_tags                = var.access_tags
   tags                       = var.resource_tags
   service_credential_names   = var.service_credential_names
   cbr_rules = [

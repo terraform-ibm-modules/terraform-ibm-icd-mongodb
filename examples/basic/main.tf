@@ -19,5 +19,6 @@ module "mongodb" {
   resource_group_id = module.resource_group.resource_group_id
   instance_name     = "${var.prefix}-mongodb"
   region            = var.region
+  access_tags       = var.access_tags
   tags              = var.resource_tags
 }
