@@ -30,11 +30,11 @@ output "service_credentials_object" {
 }
 
 output "hostname" {
-  description = "Postgresql instance hostname"
+  description = "MongoDB instance hostname"
   value       = module.mongodb.hostname
 }
 
 output "port" {
-  description = "Postgresql instance port"
+  description = "MongoDB instance port"
   value       = module.mongodb.port
 }
