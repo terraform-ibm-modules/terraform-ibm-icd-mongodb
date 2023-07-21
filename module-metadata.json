@@ -475,7 +475,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 173
+        "line": 174
       }
     },
     "ibm_resource_tag.mongodb_tag": {
@@ -511,14 +511,15 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 202
+        "line": 203
       }
     }
   },
   "module_calls": {
     "cbr_rule": {
       "name": "cbr_rule",
-      "source": "git::https://github.com/terraform-ibm-modules/terraform-ibm-cbr//cbr-rule-module?ref=v1.2.1",
+      "source": "terraform-ibm-modules/cbr/ibm//cbr-rule-module",
+      "version": "1.2.1",
       "attributes": {
         "count": "cbr_rules",
         "enforcement_mode": "cbr_rules",
