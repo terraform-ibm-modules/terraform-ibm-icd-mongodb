@@ -78,7 +78,7 @@ variable "resource_group_id" {
 
 variable "tags" {
   type        = list(any)
-  description = "Optional list of tags to be added to the MongoDB instance and the associated service credentials (if creating)."
+  description = "Optional list of tags to be added to the MongoDB instance."
   default     = []
 }
 
