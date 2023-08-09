@@ -416,6 +416,12 @@
       "version_constraints": [
         "\u003e= 1.54.0, \u003c 2.0.0"
       ]
+    },
+    "time": {
+      "source": "hashicorp/time",
+      "version_constraints": [
+        "\u003e= 0.9.1"
+      ]
     }
   },
   "managed_resources": {
@@ -441,7 +447,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 39
+        "line": 46
       }
     },
     "ibm_iam_authorization_policy.kms_policy": {
@@ -473,7 +479,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 174
+        "line": 181
       }
     },
     "ibm_resource_tag.mongodb_tag": {
@@ -489,7 +495,19 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 123
+        "line": 130
+      }
+    },
+    "time_sleep.wait_for_authorization_policy": {
+      "mode": "managed",
+      "type": "time_sleep",
+      "name": "wait_for_authorization_policy",
+      "provider": {
+        "name": "time"
+      },
+      "pos": {
+        "filename": "main.tf",
+        "line": 40
       }
     }
   },
@@ -509,7 +527,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 202
+        "line": 209
       }
     }
   },
@@ -588,7 +606,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 134
+        "line": 141
       }
     }
   }
