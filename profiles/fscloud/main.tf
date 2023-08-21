@@ -22,4 +22,5 @@ module "mongodb" {
   disk_mb                       = var.disk_mb
   cpu_count                     = var.cpu_count
   auto_scaling                  = var.auto_scaling
+  service_credential_names      = var.service_credential_names
 }
