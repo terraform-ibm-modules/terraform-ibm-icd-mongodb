@@ -123,7 +123,7 @@ resource "ibm_database" "mongodb" {
   }
 
   timeouts {
-    create = "120m" # Extending provisioning time to 120 minutes
+    create = "150m" # Extending provisioning time to 120 minutes
   }
 }
 
