@@ -24,4 +24,4 @@ repository:
   # and update the description to the current repo description.
   description: "Module that provisions IBM Cloud Databases for MongoDB"
 
-  topics: core-team, terraform, ibm-cloud, terraform-module, mongodb
+  topics: core-team, terraform, ibm-cloud, terraform-module, mongodb, supported, graduated
