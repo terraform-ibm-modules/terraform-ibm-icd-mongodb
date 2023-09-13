@@ -34,6 +34,14 @@ resource "ibm_iam_authorization_policy" "kms_policy" {
   target_service_name         = local.kms_service
   target_resource_instance_id = var.existing_kms_instance_guid
   roles                       = ["Reader"]
+  description                 = "Allow all MongoDB instances in the resource group ${var.resource_group_id} to read from the ${local.kms_service} instance GUID ${var.existing_kms_instance_guid}"
+}
+
+# workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
+resource "time_sleep" "wait_for_authorization_policy" {
+  depends_on = [ibm_iam_authorization_policy.kms_policy]
+
+  create_duration = "30s"
 }
 
 resource "ibm_database" "mongodb" {
@@ -133,8 +141,8 @@ resource "ibm_resource_tag" "mongodb_tag" {
 
 module "cbr_rule" {
   count            = length(var.cbr_rules) > 0 ? length(var.cbr_rules) : 0
-  source           = "terraform-ibm-modules/cbr/ibm//cbr-rule-module"
-  version          = "1.3.2"
+  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module"
+  version          = "1.9.0"
   rule_description = var.cbr_rules[count.index].description
   enforcement_mode = var.cbr_rules[count.index].enforcement_mode
   rule_contexts    = var.cbr_rules[count.index].rule_contexts
@@ -176,7 +184,6 @@ resource "ibm_resource_key" "service_credentials" {
   name                 = each.key
   role                 = each.value
   resource_instance_id = ibm_database.mongodb.id
-  tags                 = var.tags
 }
 
 locals {
