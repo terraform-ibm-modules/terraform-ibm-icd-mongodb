@@ -56,7 +56,7 @@ resource "ibm_database" "mongodb" {
   tags                      = var.tags
   service_endpoints         = var.endpoints
   plan_validation           = var.plan_validation
-  configuration             = var.configuration != null ? jsonencode(var.configuration) : null
+  configuration             = var.configuration != null ? jsonencode({ for k, v in var.configuration : k => v if v != null }) : null
   key_protect_key           = var.kms_key_crn
   backup_encryption_key_crn = local.backup_encryption_key_crn
 
