@@ -45,17 +45,17 @@ resource "time_sleep" "wait_for_authorization_policy" {
 }
 
 resource "ibm_database" "mongodb" {
-  depends_on                = [ibm_iam_authorization_policy.kms_policy]
-  name                      = var.instance_name
-  location                  = var.region
-  plan                      = var.plan
-  service                   = "databases-for-mongodb"
-  version                   = var.mongodb_version
-  resource_group_id         = var.resource_group_id
-  adminpassword             = var.admin_pass
-  tags                      = var.tags
-  service_endpoints         = var.endpoints
-  plan_validation           = var.plan_validation
+  depends_on        = [ibm_iam_authorization_policy.kms_policy]
+  name              = var.instance_name
+  location          = var.region
+  plan              = var.plan
+  service           = "databases-for-mongodb"
+  version           = var.mongodb_version
+  resource_group_id = var.resource_group_id
+  adminpassword     = var.admin_pass
+  tags              = var.tags
+  service_endpoints = var.endpoints
+  plan_validation   = var.plan_validation
   # remove elements with null values: see https://github.com/terraform-ibm-modules/terraform-ibm-icd-postgresql/issues/273
   configuration             = var.configuration != null ? jsonencode({ for k, v in var.configuration : k => v if v != null }) : null
   key_protect_key           = var.kms_key_crn
