@@ -83,6 +83,9 @@ module "mongodb" {
   access_tags                = var.access_tags
   tags                       = var.resource_tags
   service_credential_names   = var.service_credential_names
+  configuration = {
+    max_connections = 250
+  }
   cbr_rules = [
     {
       description      = "${var.prefix}-mongodb access only from vpc"
