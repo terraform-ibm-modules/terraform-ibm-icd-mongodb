@@ -45,18 +45,6 @@ variable "access_tags" {
   }
 }
 
-variable "configuration" {
-  description = "Database Configuration."
-  type = object({
-    maxmemory                   = optional(number)
-    maxmemory-policy            = optional(string)
-    appendonly                  = optional(string)
-    maxmemory-samples           = optional(number)
-    stop-writes-on-bgsave-error = optional(string)
-  })
-  default = null
-}
-
 variable "mongodb_version" {
   type        = string
   description = "The version of the MongoDB to provision. If no value passed, the current ICD preferred version is used."

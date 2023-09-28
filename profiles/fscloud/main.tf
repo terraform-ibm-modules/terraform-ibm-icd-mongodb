@@ -13,7 +13,6 @@ module "mongodb" {
   cbr_rules                     = var.cbr_rules
   access_tags                   = var.access_tags
   tags                          = var.tags
-  configuration                 = var.configuration
   plan                          = var.plan
   members                       = var.members
   memory_mb                     = var.memory_mb

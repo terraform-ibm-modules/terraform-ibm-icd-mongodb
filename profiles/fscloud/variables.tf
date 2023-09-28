@@ -25,18 +25,6 @@ variable "region" {
   default     = "us-south"
 }
 
-variable "configuration" {
-  description = "Database Configuration."
-  type = object({
-    maxmemory                   = optional(number)
-    maxmemory-policy            = optional(string)
-    appendonly                  = optional(string)
-    maxmemory-samples           = optional(number)
-    stop-writes-on-bgsave-error = optional(string)
-  })
-  default = null
-}
-
 variable "plan" {
   type        = string
   description = "The name of the service plan that you choose for your MongoDB instance"

@@ -32,7 +32,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 135
+        "line": 123
       }
     },
     "auto_scaling": {
@@ -41,7 +41,7 @@
       "description": "Optional rules to allow the database to increase resources in response to usage. Only a single autoscaling block is allowed. Make sure you understand the effects of autoscaling, especially for production environments. See https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-autoscaling\u0026interface=cli#autoscaling-considerations in the IBM Cloud Docs.",
       "pos": {
         "filename": "variables.tf",
-        "line": 154
+        "line": 142
       }
     },
     "backup_encryption_key_crn": {
@@ -50,7 +50,7 @@
       "description": "The CRN of a Key Protect key that you want to use for encrypting the disk that holds deployment backups. Only used if var.kms_encryption_enabled is set to true. BYOK for backups is available only in US regions us-south and us-east, and in eu-de. Only keys in the us-south and eu-de are durable to region failures. To ensure that your backups are available even if a region failure occurs, use a key from us-south or eu-de. Hyper Protect Crypto Services for IBM Cloud Databases backups is not currently supported. If no value is passed here, the value passed for the 'kms_key_crn' variable is used. And if a HPCS value is passed for var.kms_key_crn, the database backup encryption uses the default encryption keys.",
       "pos": {
         "filename": "variables.tf",
-        "line": 205
+        "line": 193
       }
     },
     "cbr_rules": {
@@ -67,19 +67,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 231
-      }
-    },
-    "configuration": {
-      "name": "configuration",
-      "type": "object({\n    maxmemory                   = optional(number)\n    maxmemory-policy            = optional(string)\n    appendonly                  = optional(string)\n    maxmemory-samples           = optional(number)\n    stop-writes-on-bgsave-error = optional(string)\n  })",
-      "description": "Database Configuration.",
-      "source": [
-        "ibm_database.mongodb.configuration"
-      ],
-      "pos": {
-        "filename": "variables.tf",
-        "line": 48
+        "line": 219
       }
     },
     "cpu_count": {
@@ -89,7 +77,7 @@
       "default": 0,
       "pos": {
         "filename": "variables.tf",
-        "line": 110
+        "line": 98
       }
     },
     "disk_mb": {
@@ -99,7 +87,7 @@
       "default": 10240,
       "pos": {
         "filename": "variables.tf",
-        "line": 103
+        "line": 91
       }
     },
     "endpoints": {
@@ -114,7 +102,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 85
+        "line": 73
       },
       "options": "public, private, public-and-private"
     },
@@ -127,7 +115,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 221
+        "line": 209
       },
       "immutable": true,
       "computed": true
@@ -155,7 +143,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 185
+        "line": 173
       }
     },
     "kms_key_crn": {
@@ -167,7 +155,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 191
+        "line": 179
       },
       "immutable": true
     },
@@ -178,7 +166,7 @@
       "default": 3,
       "pos": {
         "filename": "variables.tf",
-        "line": 117
+        "line": 105
       }
     },
     "memory_mb": {
@@ -188,7 +176,7 @@
       "default": 1024,
       "pos": {
         "filename": "variables.tf",
-        "line": 96
+        "line": 84
       }
     },
     "mongodb_version": {
@@ -200,7 +188,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 60
+        "line": 48
       },
       "immutable": true,
       "computed": true
@@ -261,7 +249,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 74
+        "line": 62
       },
       "cloud_data_type": "resource_group",
       "immutable": true,
@@ -280,7 +268,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 124
+        "line": 112
       }
     },
     "skip_iam_authorization_policy": {
@@ -290,7 +278,7 @@
       "default": false,
       "pos": {
         "filename": "variables.tf",
-        "line": 215
+        "line": 203
       }
     },
     "tags": {
@@ -303,7 +291,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 79
+        "line": 67
       }
     },
     "users": {
@@ -319,7 +307,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 142
+        "line": 130
       }
     }
   },
@@ -432,7 +420,6 @@
       "name": "mongodb",
       "attributes": {
         "adminpassword": "admin_pass",
-        "configuration": "configuration",
         "key_protect_key": "kms_key_crn",
         "location": "region",
         "name": "instance_name",
@@ -481,7 +468,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 183
+        "line": 181
       }
     },
     "ibm_resource_tag.mongodb_tag": {
@@ -497,7 +484,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 132
+        "line": 130
       }
     },
     "time_sleep.wait_for_authorization_policy": {
@@ -529,7 +516,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 211
+        "line": 209
       }
     }
   },
@@ -608,7 +595,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 143
+        "line": 141
       }
     }
   }
