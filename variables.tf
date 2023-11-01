@@ -13,12 +13,6 @@ variable "region" {
   default     = "us-south"
 }
 
-variable "plan_validation" {
-  type        = bool
-  description = "Enable or disable validating the database parameters for MongoDB during the plan phase."
-  default     = true
-}
-
 variable "plan" {
   type        = string
   description = "The name of the service plan that you choose for your MongoDB instance"
