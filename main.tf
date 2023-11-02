@@ -57,7 +57,6 @@ resource "ibm_database" "mongodb" {
   adminpassword             = var.admin_pass
   tags                      = var.tags
   service_endpoints         = var.endpoints
-  plan_validation           = var.plan_validation
   key_protect_key           = var.kms_key_crn
   backup_encryption_key_crn = local.backup_encryption_key_crn
 
