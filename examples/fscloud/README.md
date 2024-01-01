@@ -1,6 +1,6 @@
 # Financial Services Cloud profile example with autoscaling enabled
 
-An end-to-end example that uses the [Profile for IBM Cloud Framework for Financial Services](../../profiles/fscloud/) to deploy an instance of IBM Cloud Databases for MongoDB.
+An end-to-end example that uses the [Profile for IBM Cloud Framework for Financial Services](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/tree/main/modules/fscloud) to deploy an instance of IBM Cloud Databases for MongoDB.
 
 The example uses the IBM Cloud Terraform provider to create the following infrastructure:
 
