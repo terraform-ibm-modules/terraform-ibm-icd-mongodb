@@ -40,7 +40,16 @@ module "key_protect_all_inclusive" {
   region                    = var.region
   key_protect_instance_name = "${var.prefix}-kp"
   resource_tags             = var.resource_tags
-  key_map                   = { "icd" = ["${var.prefix}-mongodb"] }
+  keys = [
+    {
+      key_ring_name = "icd"
+      keys = [
+        {
+          key_name = "${var.prefix}-mongodb"
+        }
+      ]
+    }
+  ]
 }
 
 ##############################################################################
@@ -77,7 +86,7 @@ module "mongodb" {
   kms_encryption_enabled     = true
   admin_pass                 = var.admin_pass
   users                      = var.users
-  existing_kms_instance_guid = module.key_protect_all_inclusive.key_protect_guid
+  existing_kms_instance_guid = module.key_protect_all_inclusive.kms_guid
   region                     = var.region
   kms_key_crn                = module.key_protect_all_inclusive.keys["icd.${var.prefix}-mongodb"].crn
   access_tags                = var.access_tags
