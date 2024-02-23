@@ -41,7 +41,7 @@ variable "access_tags" {
 
 variable "mongodb_version" {
   type        = string
-  description = "The version of the MongoDB to provision. If no value passed, the current ICD preferred version is used."
+  description = "The version of the MongoDB to provision. If no value passed, the current ICD preferred version is used. For our version policy, see https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-versioning-policy for more details"
   default     = null
   validation {
     condition = anytrue([
