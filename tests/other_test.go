@@ -44,7 +44,7 @@ func testPlanICDVersions(t *testing.T, version string) {
 func TestPlanICDVersions(t *testing.T) {
 	t.Parallel()
 
-	// This test will run a terraform plan on available stable versions of enterprisedb
+	// This test will run a terraform plan on available stable versions of mongodb
 	versions, _ := sharedInfoSvc.GetAvailableIcdVersions("mongodb")
 	for _, version := range versions {
 		t.Run(version, func(t *testing.T) { testPlanICDVersions(t, version) })
