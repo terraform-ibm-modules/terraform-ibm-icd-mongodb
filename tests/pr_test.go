@@ -59,7 +59,7 @@ func TestRunFSCloudExample(t *testing.T) {
 			"access_tags":                permanentResources["accessTags"],
 			"existing_kms_instance_guid": permanentResources["hpcs_south"],
 			"kms_key_crn":                permanentResources["hpcs_south_root_key_crn"],
-			"mongodb_version":            "5.0", // Always lock this test into the latest supported MongoDB version
+			"mongodb_version":            "6.0", // Always lock this test into the latest supported MongoDB version
 		},
 		CloudInfoService: sharedInfoSvc,
 	})
@@ -91,7 +91,7 @@ func TestRunCompleteUpgradeExample(t *testing.T) {
 		BestRegionYAMLPath: regionSelectionPath,
 		ResourceGroup:      resourceGroup,
 		TerraformVars: map[string]interface{}{
-			"mongodb_version": "4.4", // Always lock to the lowest supported MongoDB version
+			"mongodb_version": "5.0", // Always lock to the lowest supported MongoDB version
 			"users": []map[string]interface{}{
 				{
 					"name":     "testuser",

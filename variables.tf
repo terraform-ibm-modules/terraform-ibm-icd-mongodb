@@ -41,15 +41,15 @@ variable "access_tags" {
 
 variable "mongodb_version" {
   type        = string
-  description = "The version of the MongoDB to provision. If no value passed, the current ICD preferred version is used."
+  description = "The version of the MongoDB to provision. If no value passed, the current ICD preferred version is used. For our version policy, see https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-versioning-policy for more details"
   default     = null
   validation {
     condition = anytrue([
       var.mongodb_version == null,
+      var.mongodb_version == "6.0",
       var.mongodb_version == "5.0",
-      var.mongodb_version == "4.4",
     ])
-    error_message = "Version must be 4.4 or 5.0. If no value is passed, the current preferred version of IBM Cloud Databases is used."
+    error_message = "Version must be 5.0 or 6.0. If no value is passed, the current preferred version of IBM Cloud Databases is used."
   }
 }
 
