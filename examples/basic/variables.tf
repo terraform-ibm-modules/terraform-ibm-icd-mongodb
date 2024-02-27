@@ -28,6 +28,12 @@ variable "access_tags" {
   default     = []
 }
 
+variable "mongodb_version" {
+  type        = string
+  description = "Version of the MongoDB instance. If no value is passed, the current preferred version of IBM Cloud Databases is used."
+  default     = null
+}
+
 variable "resource_tags" {
   type        = list(string)
   description = "Optional list of tags to be added to created resources"
