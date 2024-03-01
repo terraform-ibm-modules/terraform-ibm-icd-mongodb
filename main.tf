@@ -47,7 +47,7 @@ resource "time_sleep" "wait_for_authorization_policy" {
 }
 
 resource "ibm_database" "mongodb" {
-  depends_on                = [ibm_iam_authorization_policy.kms_policy]
+  depends_on                = [time_sleep.wait_for_authorization_policy]
   name                      = var.instance_name
   location                  = var.region
   plan                      = var.plan
