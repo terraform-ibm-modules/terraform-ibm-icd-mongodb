@@ -15,7 +15,7 @@ module "resource_group" {
 ##############################################################################
 
 module "mongo_db" {
-  count = var.mongo_db_backup_crn != null ? 0 : 1
+  count             = var.mongo_db_backup_crn != null ? 0 : 1
   source            = "../.."
   resource_group_id = module.resource_group.resource_group_id
   instance_name     = "${var.prefix}-mongodb"
