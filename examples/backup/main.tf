@@ -32,7 +32,6 @@ data "ibm_database_backups" "backup_database" {
 
 # New mongo db instance pointing to the backup instance
 module "restored_mongo_db" {
-  count             = var.mongo_db_backup_crn != null ? 0 : 1
   source            = "../.."
   resource_group_id = module.resource_group.resource_group_id
   instance_name     = "${var.prefix}-mongodb"
