@@ -39,7 +39,6 @@ You need the following permissions to run this module.
 <!-- BEGIN EXAMPLES HOOK -->
 ## Examples
 
-- [ Restore from backup example](examples/backup)
 - [ Basic example](examples/basic)
 - [ Complete example with BYOK encryption and CBR rules](examples/complete)
 - [ Financial Services Cloud profile example with autoscaling enabled](examples/fscloud)
