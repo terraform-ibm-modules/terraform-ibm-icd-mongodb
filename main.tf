@@ -210,7 +210,7 @@ locals {
 
 data "ibm_database_connection" "database_connection" {
   count         = length(var.users) > 0 ? 1 : 0
-  endpoint_type = var.endpoints
+  endpoint_type = var.endpoints == "public-and-private" ? "public" : var.endpoints
   deployment_id = ibm_database.mongodb.id
   user_id       = var.users[0].name
   user_type     = var.users[0].type
