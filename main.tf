@@ -209,7 +209,7 @@ locals {
 }
 
 data "ibm_database_connection" "database_connection" {
-  endpoint_type = var.endpoints
+  endpoint_type = var.endpoints == "public-and-private" ? "public" : var.endpoints
   deployment_id = ibm_database.mongodb.id
   user_id       = ibm_database.mongodb.adminuser
   user_type     = "database"
