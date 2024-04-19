@@ -14,7 +14,7 @@ The IBM Cloud Framework for Financial Services mandates the application of an in
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, <1.7.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >=1.61.0, <2.0.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >=1.64.2, <2.0.0 |
 
 ### Modules
 
@@ -55,12 +55,14 @@ No resources.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_adminuser"></a> [adminuser](#output\_adminuser) | Database admin user name |
 | <a name="output_cbr_rule_ids"></a> [cbr\_rule\_ids](#output\_cbr\_rule\_ids) | CBR rule ids created to restrict MongoDB |
+| <a name="output_certificate_base64"></a> [certificate\_base64](#output\_certificate\_base64) | Database connection certificate |
 | <a name="output_crn"></a> [crn](#output\_crn) | MongoDB instance crn |
 | <a name="output_guid"></a> [guid](#output\_guid) | MongoDB instance guid |
-| <a name="output_hostname"></a> [hostname](#output\_hostname) | MongoDB instance hostname |
+| <a name="output_hostname"></a> [hostname](#output\_hostname) | Database connection hostname |
 | <a name="output_id"></a> [id](#output\_id) | MongoDB instance id |
-| <a name="output_port"></a> [port](#output\_port) | MongoDB instance port |
+| <a name="output_port"></a> [port](#output\_port) | Database connection port |
 | <a name="output_service_credentials_json"></a> [service\_credentials\_json](#output\_service\_credentials\_json) | Service credentials json map |
 | <a name="output_service_credentials_object"></a> [service\_credentials\_object](#output\_service\_credentials\_object) | Service credentials object |
 | <a name="output_version"></a> [version](#output\_version) | MongoDB instance version |
