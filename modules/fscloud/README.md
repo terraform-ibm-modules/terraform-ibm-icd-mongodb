@@ -40,6 +40,7 @@ No resources.
 | <a name="input_existing_kms_instance_guid"></a> [existing\_kms\_instance\_guid](#input\_existing\_kms\_instance\_guid) | The GUID of the Hyper Protect Crypto Services instance. | `string` | n/a | yes |
 | <a name="input_instance_name"></a> [instance\_name](#input\_instance\_name) | Name of the mongodb instance | `string` | n/a | yes |
 | <a name="input_kms_key_crn"></a> [kms\_key\_crn](#input\_kms\_key\_crn) | The root key CRN of the Hyper Protect Crypto Service (HPCS) to use for disk encryption. | `string` | n/a | yes |
+| <a name="input_member_host_flavor"></a> [member\_host\_flavor](#input\_member\_host\_flavor) | Allocated host flavor per member. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/database#host_flavor). | `string` | `null` | no |
 | <a name="input_members"></a> [members](#input\_members) | Allocated number of members | `number` | `3` | no |
 | <a name="input_memory_mb"></a> [memory\_mb](#input\_memory\_mb) | Allocated memory per member. For more information, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member | `number` | `14336` | no |
 | <a name="input_mongodb_version"></a> [mongodb\_version](#input\_mongodb\_version) | Version of the MongoDB instance. If no value is passed, the current preferred version of IBM Cloud Databases is used. | `string` | `null` | no |
