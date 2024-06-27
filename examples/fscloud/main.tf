@@ -65,6 +65,8 @@ module "mongodb" {
   mongodb_version            = var.mongodb_version
   service_credential_names   = var.service_credential_names
   auto_scaling               = var.auto_scaling
+  backup_encryption_key_crn  = var.backup_encryption_key_crn
+  backup_crn                 = var.backup_crn
   cbr_rules = [
     {
       description      = "${var.prefix}-mongodb access only from vpc"
