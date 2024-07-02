@@ -94,6 +94,7 @@ module "mongodb" {
   access_tags                = var.access_tags
   tags                       = var.resource_tags
   service_credential_names   = var.service_credential_names
+  member_host_flavor         = "multitenant"
   cbr_rules = [
     {
       description      = "${var.prefix}-mongodb access only from vpc"

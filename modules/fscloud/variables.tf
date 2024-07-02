@@ -59,6 +59,12 @@ variable "cpu_count" {
   # Validation is done in terraform plan phase by IBM provider, so no need to add any extra validation here
 }
 
+variable "member_host_flavor" {
+  type        = string
+  description = "Allocated host flavor per member. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/database#host_flavor)."
+  default     = null
+}
+
 variable "members" {
   type        = number
   description = "Allocated number of members"
