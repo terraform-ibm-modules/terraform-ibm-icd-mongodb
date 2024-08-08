@@ -173,6 +173,7 @@ resource "ibm_database" "mongodb" {
       version,
       key_protect_key,
       backup_encryption_key_crn,
+      connectionstrings, # https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5546
     ]
   }
 
