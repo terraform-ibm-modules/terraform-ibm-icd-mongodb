@@ -2,9 +2,29 @@
 # Input Variables
 ##############################################################################
 
+variable "resource_group_id" {
+  type        = string
+  description = "The resource group ID where the MongoDB instance will be created."
+}
+
 variable "instance_name" {
   type        = string
   description = "The name to give the MongoDB instance."
+}
+
+variable "mongodb_version" {
+  type        = string
+  description = "The version of the MongoDB to provision. If no value passed, the current ICD preferred version is used. For our version policy, see https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-versioning-policy for more details"
+  default     = null
+
+  validation {
+    condition = anytrue([
+      var.mongodb_version == null,
+      var.mongodb_version == "6.0",
+      var.mongodb_version == "5.0",
+    ])
+    error_message = "Version must be 5.0 or 6.0. If no value is passed, the current preferred version of IBM Cloud Databases is used."
+  }
 }
 
 variable "region" {
@@ -17,6 +37,7 @@ variable "plan" {
   type        = string
   description = "The name of the service plan that you choose for your MongoDB instance"
   default     = "standard"
+
   validation {
     condition = anytrue([
       var.plan == "standard",
@@ -26,73 +47,28 @@ variable "plan" {
   }
 }
 
-variable "access_tags" {
-  type        = list(string)
-  description = "A list of access tags to apply to the MongoDB instance created by the module, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial for more details"
-  default     = []
+##############################################################################
+# ICD hosting model properties
+##############################################################################
 
-  validation {
-    condition = alltrue([
-      for tag in var.access_tags : can(regex("[\\w\\-_\\.]+:[\\w\\-_\\.]+", tag)) && length(tag) <= 128
-    ])
-    error_message = "Tags must match the regular expression \"[\\w\\-_\\.]+:[\\w\\-_\\.]+\", see https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#limits for more details"
-  }
-}
-
-variable "mongodb_version" {
-  type        = string
-  description = "The version of the MongoDB to provision. If no value passed, the current ICD preferred version is used. For our version policy, see https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-versioning-policy for more details"
-  default     = null
-  validation {
-    condition = anytrue([
-      var.mongodb_version == null,
-      var.mongodb_version == "6.0",
-      var.mongodb_version == "5.0",
-    ])
-    error_message = "Version must be 5.0 or 6.0. If no value is passed, the current preferred version of IBM Cloud Databases is used."
-  }
-}
-
-variable "resource_group_id" {
-  type        = string
-  description = "The resource group ID where the MongoDB instance will be created."
-}
-
-variable "tags" {
-  type        = list(any)
-  description = "Optional list of tags to be added to the MongoDB instance."
-  default     = []
-}
-
-variable "endpoints" {
-  type        = string
-  description = "Specify whether you want to enable the public, private, or both service endpoints. Supported values are 'public', 'private', or 'public-and-private'."
-  default     = "private"
-
-  validation {
-    condition     = can(regex("public|private|public-and-private", var.endpoints))
-    error_message = "Valid values are (public, private, or public-and-private)."
-  }
-}
-
-variable "memory_mb" {
+variable "members" {
   type        = number
-  description = "Allocated memory per member. For more information, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
-  default     = 4096
-  # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
-}
-
-variable "disk_mb" {
-  type        = number
-  description = "Allocated disk per member. For more information, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
-  default     = 10240
+  description = "Allocated number of members"
+  default     = 3
   # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
 
 variable "cpu_count" {
   type        = number
-  description = "Allocated dedicated CPU per member. For shared CPU, set to 0. For more information, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member"
+  description = "Allocated dedicated CPU per member. For shared CPU, set to 0. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
   default     = 0
+  # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
+}
+
+variable "disk_mb" {
+  type        = number
+  description = "Allocated disk per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
+  default     = 10240
   # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
 
@@ -103,22 +79,11 @@ variable "member_host_flavor" {
   # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
 
-variable "members" {
+variable "memory_mb" {
   type        = number
-  description = "Allocated number of members"
-  default     = 3
+  description = "Allocated memory per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
+  default     = 4096
   # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
-}
-
-variable "service_credential_names" {
-  description = "Map of name, role for service credentials that you want to create for the database"
-  type        = map(string)
-  default     = {}
-
-  validation {
-    condition     = alltrue([for name, role in var.service_credential_names : contains(["Administrator", "Operator", "Viewer", "Editor"], role)])
-    error_message = "Valid values for service credential roles are 'Administrator', 'Operator', 'Viewer', and `Editor`"
-  }
 }
 
 variable "admin_pass" {
@@ -135,10 +100,55 @@ variable "users" {
     type     = string # "type" is required to generate the connection string for the outputs.
     role     = optional(string)
   }))
+  description = "A list of users that you want to create on the database. Multiple blocks are allowed. The user password must be in the range of 10-32 characters. Be warned that in most case using IAM service credentials (via the var.service_credential_names) is sufficient to control access to the MongoDB instance. This blocks creates native MongoDB database users, more info on that can be found here https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-user-management&interface=ui"
   default     = []
   sensitive   = true
-  description = "A list of users that you want to create on the database. Multiple blocks are allowed. The user password must be in the range of 10-32 characters. Be warned that in most case using IAM service credentials (via the var.service_credential_names) is sufficient to control access to the MongoDB instance. This blocks creates native MongoDB database users, more info on that can be found here https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-user-management&interface=ui"
 }
+
+variable "service_credential_names" {
+  type        = map(string)
+  description = "Map of name, role for service credentials that you want to create for the database"
+  default     = {}
+
+  validation {
+    condition     = alltrue([for name, role in var.service_credential_names : contains(["Administrator", "Operator", "Viewer", "Editor"], role)])
+    error_message = "Valid values for service credential roles are 'Administrator', 'Operator', 'Viewer', and `Editor`"
+  }
+}
+
+variable "endpoints" {
+  type        = string
+  description = "Specify whether you want to enable the public, private, or both service endpoints. Supported values are 'public', 'private', or 'public-and-private'."
+  default     = "private"
+
+  validation {
+    condition     = can(regex("public|private|public-and-private", var.endpoints))
+    error_message = "Valid values are (public, private, or public-and-private)."
+  }
+}
+
+variable "tags" {
+  type        = list(any)
+  description = "Optional list of tags to be added to the MongoDB instance."
+  default     = []
+}
+
+variable "access_tags" {
+  type        = list(string)
+  description = "A list of access tags to apply to the MongoDB instance created by the module, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial for more details"
+  default     = []
+
+  validation {
+    condition = alltrue([
+      for tag in var.access_tags : can(regex("[\\w\\-_\\.]+:[\\w\\-_\\.]+", tag)) && length(tag) <= 128
+    ])
+    error_message = "Tags must match the regular expression \"[\\w\\-_\\.]+:[\\w\\-_\\.]+\", see https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#limits for more details"
+  }
+}
+
+##############################################################
+# Auto Scaling
+##############################################################
 
 variable "auto_scaling" {
   type = object({
@@ -177,34 +187,36 @@ variable "kms_encryption_enabled" {
   default     = false
 }
 
+variable "use_default_backup_encryption_key" {
+  type        = bool
+  description = "Set to true to use default ICD randomly generated keys."
+  default     = false
+}
+
 variable "kms_key_crn" {
   type        = string
   description = "The root key CRN of a Key Management Services like Key Protect or Hyper Protect Crypto Services (HPCS) that you want to use for disk encryption. Only used if var.kms_encryption_enabled is set to true."
   default     = null
+
   validation {
     condition = anytrue([
       var.kms_key_crn == null,
       can(regex(".*kms.*", var.kms_key_crn)),
       can(regex(".*hs-crypto.*", var.kms_key_crn)),
     ])
-    error_message = "Value must be the root key CRN from either the Key Protect or Hyper Protect Crypto Service (HPCS)"
+    error_message = "Value must be the root key CRN from either the Key Protect or Hyper Protect Crypto Services (HPCS)"
   }
 }
 
 variable "backup_encryption_key_crn" {
   type        = string
-  description = "The CRN of a KMS (Key Protect or Hyper Protect Crypto Service) key to use for encrypting the disk that holds deployment backups. Only used if var.kms_encryption_enabled is set to true. There are limitation per region on the type of KMS service (Key Protect or Hyper Protect Crypto Services) and region for those services. See https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok and https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-hpcs#use-hpcs-backups"
+  description = "The CRN of a KMS (Key Protect or Hyper Protect Crypto Services) key to use for encrypting the disk that holds deployment backups. Only used if var.kms_encryption_enabled is set to true. There are limitation per region on the type of KMS service (Key Protect or Hyper Protect Crypto Services) and region for those services. See https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok and https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-hpcs#use-hpcs-backups"
   default     = null
+
   validation {
     condition     = var.backup_encryption_key_crn == null ? true : length(regexall("^crn:v1:bluemix:public:kms:(us-south|us-east|eu-de):a/[[:xdigit:]]{32}:[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}:key:[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}$|^crn:v1:bluemix:public:hs-crypto:[a-z-]+:a/[[:xdigit:]]{32}:[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}:key:[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}$", var.backup_encryption_key_crn)) > 0
-    error_message = "Valid values for backup_encryption_key_crn is null, a Hyper Protect Crypto Service key CRN or a Key Protect key CRN from us-south, us-east or eu-de"
+    error_message = "Valid values for backup_encryption_key_crn is null, a Hyper Protect Crypto Services key CRN or a Key Protect key CRN from us-south, us-east or eu-de"
   }
-}
-
-variable "use_default_backup_encryption_key" {
-  type        = bool
-  description = "Set to true to use default ICD randomly generated keys."
-  default     = false
 }
 
 variable "skip_iam_authorization_policy" {
@@ -214,8 +226,8 @@ variable "skip_iam_authorization_policy" {
 }
 
 variable "existing_kms_instance_guid" {
-  description = "The GUID of the Hyper Protect Crypto Services or Key Protect instance in which the key specified in var.kms_key_crn and var.backup_encryption_key_crn is coming from. Required only if var.kms_encryption_enabled is set to true, var.skip_iam_authorization_policy is set to false, and you pass a value for var.kms_key_crn, var.backup_encryption_key_crn, or both."
   type        = string
+  description = "The GUID of the Hyper Protect Crypto Services or Key Protect instance in which the key specified in var.kms_key_crn and var.backup_encryption_key_crn is coming from. Required only if var.kms_encryption_enabled is set to true, var.skip_iam_authorization_policy is set to false, and you pass a value for var.kms_key_crn, var.backup_encryption_key_crn, or both."
   default     = null
 }
 
@@ -247,6 +259,7 @@ variable "backup_crn" {
   type        = string
   description = "The CRN of a backup resource to restore from. The backup is created by a database deployment with the same service ID. The backup is loaded after provisioning and the new deployment starts up that uses that data. A backup CRN is in the format crn:v1:<…>:backup:. If omitted, the database is provisioned empty."
   default     = null
+
   validation {
     condition = anytrue([
       var.backup_crn == null,
