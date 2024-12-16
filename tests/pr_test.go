@@ -94,7 +94,7 @@ func TestRunCompleteUpgradeExample(t *testing.T) {
 		BestRegionYAMLPath: regionSelectionPath,
 		ResourceGroup:      resourceGroup,
 		TerraformVars: map[string]interface{}{
-			"mongodb_version": "5.0", // Always lock to the lowest supported MongoDB version
+			"mongodb_version": "6.0", // Always lock to the lowest supported MongoDB version
 			"users": []map[string]interface{}{
 				{
 					"name":     "testuser",
