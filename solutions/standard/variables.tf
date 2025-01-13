@@ -42,6 +42,20 @@ variable "mongodb_version" {
   default     = null
 }
 
+variable "plan" {
+  type        = string
+  description = "The name of the service plan that you choose for your MongoDB instance"
+  default     = "standard"
+
+  validation {
+    condition = anytrue([
+      var.plan == "standard",
+      var.plan == "enterprise",
+    ])
+    error_message = "Only supported plans are standard or enterprise"
+  }
+}
+
 ##############################################################################
 # ICD hosting model properties
 ##############################################################################
@@ -49,7 +63,7 @@ variable "mongodb_version" {
 variable "members" {
   type        = number
   description = "The number of members that are allocated. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)."
-  default     = 2
+  default     = 3
 }
 
 variable "member_memory_mb" {
@@ -67,7 +81,7 @@ variable "member_cpu_count" {
 variable "member_disk_mb" {
   type        = number
   description = "The disk that is allocated per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)."
-  default     = 5120
+  default     = 10240
 }
 
 variable "member_host_flavor" {
@@ -292,6 +306,6 @@ variable "service_credential_secrets" {
 
 variable "skip_mongodb_sm_auth_policy" {
   type        = bool
-  default     = false
   description = "Whether an IAM authorization policy is created for Secrets Manager instance to create a service credential secrets for Databases for MongoDB. If set to false, the Secrets Manager instance passed by the user is granted the Key Manager access to the MongoDB instance created by the Deployable Architecture. Set to `true` to use an existing policy. The value of this is ignored if any value for 'existing_secrets_manager_instance_crn' is not passed."
+  default     = false
 }

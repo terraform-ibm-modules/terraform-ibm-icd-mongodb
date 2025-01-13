@@ -249,6 +249,7 @@ module "mongodb" {
   depends_on                        = [time_sleep.wait_for_authorization_policy, time_sleep.wait_for_backup_kms_authorization_policy]
   resource_group_id                 = module.resource_group.resource_group_id
   instance_name                     = var.prefix != null ? "${var.prefix}-${var.name}" : var.name
+  plan                              = var.plan
   region                            = var.region
   mongodb_version                   = var.mongodb_version
   skip_iam_authorization_policy     = var.skip_mongodb_kms_auth_policy
