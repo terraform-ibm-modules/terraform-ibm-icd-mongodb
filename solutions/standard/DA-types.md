@@ -70,7 +70,7 @@ The following example includes all the configuration options for four service cr
   {
     "secret_group_name": "sg-1"
     "existing_secret_group": true
-    "service_credentials": [
+    "service_credentials": [                                             # pragma: allowlist secret
       {
         "secret_name": "cred-1"
         "service_credentials_source_service_role":  "Writer"
@@ -89,7 +89,7 @@ The following example includes all the configuration options for four service cr
   },
   {
     "secret_group_name": "sg-2"
-    "service_credentials": [
+    "service_credentials": [                                              # pragma: allowlist secret
       {
         "secret_name": "cred-3"
         "service_credentials_source_service_role": "Editor"
@@ -127,12 +127,12 @@ If you can't use the IAM-enabled `service_credential_names` input variable for a
 [
   {
     "name": "es_admin",
-    "password": "securepassword123",
+    "password": "securepassword123",  # pragma: allowlist secret
     "type": "database",
   },
   {
     "name": "es_reader",
-    "password": "readpassword123",
+    "password": "readpassword123",  # pragma: allowlist secret
     "type": "ops_manager"
   }
 ]
