@@ -116,7 +116,7 @@ func TestRunStandardSolutionSchematics(t *testing.T) {
 
 	// if error producing tar patterns (very unexpected) fail test immediately
 	require.NoError(t, recurseErr, "Schematic Test had unexpected error traversing directory tree")
-	prefix := "redis-st-da"
+	prefix := "mongodb-st-da"
 	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
 		Testing:                t,
 		TarIncludePatterns:     tarIncludePatterns,
@@ -160,7 +160,7 @@ func TestRunStandardSolutionSchematics(t *testing.T) {
 		{Name: "access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 		{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
-		{Name: "redis_version", Value: "7.2", DataType: "string"}, // Always lock this test into the latest supported Redis version
+		{Name: "mongodb_version", Value: "6.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
 		{Name: "resource_group_name", Value: options.Prefix, DataType: "string"},
 		{Name: "existing_secrets_manager_instance_crn", Value: permanentResources["secretsManagerCRN"], DataType: "string"},
 		{Name: "service_credential_secrets", Value: serviceCredentialSecrets, DataType: "list(object)"},
@@ -177,7 +177,7 @@ func TestRunStandardUpgradeSolution(t *testing.T) {
 		Testing:            t,
 		TerraformDir:       standardSolutionTerraformDir,
 		BestRegionYAMLPath: regionSelectionPath,
-		Prefix:             "redis-st-da-upg",
+		Prefix:             "mongodb-st-da-upg",
 		ResourceGroup:      resourceGroup,
 	})
 
