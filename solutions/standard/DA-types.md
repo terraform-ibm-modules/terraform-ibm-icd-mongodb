@@ -142,7 +142,7 @@ If you can't use the IAM-enabled `service_credential_names` input variable for a
 The Autoscaling variable sets the rules for how database increase resources in response to usage. Make sure you understand the effects of autoscaling, especially for production environments. For more information, see [Autoscaling](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-autoscaling&interface=ui#autoscaling-consider).
 
 - Variable name: `auto_scaling`
-- Type: An object with `disk` and `memory` configurations
+- Type: An object with `disk` and `memory` configurations.
 
 ### Disk options for auto_scaling
 
