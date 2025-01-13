@@ -77,7 +77,7 @@ variable "member_host_flavor" {
 }
 
 variable "service_credential_names" {
-  description = "Map of name, role for service credentials that you want to create for the database. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-MongoDB/blob/main/solutions/standard/DA-types.md#svc-credential-name)"
+  description = "Map of name, role for service credentials that you want to create for the database. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/blob/main/solutions/standard/DA-types.md#svc-credential-name)"
   type        = map(string)
   default     = {}
 }
@@ -98,7 +98,7 @@ variable "users" {
   }))
   default     = []
   sensitive   = true
-  description = "A list of users that you want to create on the database. Users block is supported by MongoDB version >= 6.0. Multiple blocks are allowed. The user password must be in the range of 10-32 characters. Be warned that in most case using IAM service credentials (via the var.service_credential_names) is sufficient to control access to the MongoDB instance. This blocks creates native MongoDB database users. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-MongoDB/blob/main/solutions/standard/DA-types.md#users)"
+  description = "A list of users that you want to create on the database. Users block is supported by MongoDB version >= 6.0. Multiple blocks are allowed. The user password must be in the range of 10-32 characters. Be warned that in most case using IAM service credentials (via the var.service_credential_names) is sufficient to control access to the MongoDB instance. This blocks creates native MongoDB database users. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/blob/main/solutions/standard/DA-types.md#users)"
 }
 
 variable "tags" {
@@ -233,7 +233,7 @@ variable "auto_scaling" {
       rate_units               = optional(string, "mb")
     })
   })
-  description = "Optional rules to allow the database to increase resources in response to usage. Only a single autoscaling block is allowed. Make sure you understand the effects of autoscaling, especially for production environments. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-MongoDB/blob/main/solutions/standard/DA-types.md#autoscaling)"
+  description = "Optional rules to allow the database to increase resources in response to usage. Only a single autoscaling block is allowed. Make sure you understand the effects of autoscaling, especially for production environments. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/blob/main/solutions/standard/DA-types.md#autoscaling)"
   default     = null
 }
 
@@ -275,7 +275,7 @@ variable "service_credential_secrets" {
     }))
   }))
   default     = []
-  description = "Service credential secrets configuration for Databases for MongoDB. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-MongoDB/tree/main/solutions/standard/DA-types.md#service-credential-secrets)."
+  description = "Service credential secrets configuration for Databases for MongoDB. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/tree/main/solutions/standard/DA-types.md#service-credential-secrets)."
 
   validation {
     condition = alltrue([
