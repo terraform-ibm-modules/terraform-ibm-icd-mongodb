@@ -182,30 +182,18 @@
               ]
             },
             {
-              "key": "pg_version",
+              "key": "mongodb_version",
               "required": true,
               "options": [
                 {
-                  "displayname": "13",
-                  "value": "13"
-                },
-                {
-                  "displayname": "14",
-                  "value": "14"
-                },
-                {
-                  "displayname": "15",
-                  "value": "15"
-                },
-                {
-                  "displayname": "16",
-                  "value": "16"
-                },
-                {
-                  "displayname": "17",
-                  "value": "17"
+                  "displayname": "6",
+                  "value": "6"
                 }
+
               ]
+            },
+            {
+              "key": "plan"
             },
             {
               "key": "members"
@@ -223,9 +211,6 @@
               "key": "member_host_flavor"
             },
             {
-              "key": "configuration"
-            },
-            {
               "key": "service_credential_names"
             },
             {
@@ -235,7 +220,7 @@
               "key": "users"
             },
             {
-              "key": "resource_tags"
+              "key": "tags"
             },
             {
               "key": "access_tags"
@@ -244,30 +229,19 @@
               "key": "use_ibm_owned_encryption_key"
             },
             {
-              "key": "ibmcloud_kms_api_key"
-            },
-            {
-              "key": "existing_kms_instance_crn",
-              "required": true
+              "key": "existing_kms_instance_crn"
             },
             {
               "key": "existing_kms_key_crn"
             },
             {
-              "key": "kms_endpoint_type",
-              "options": [
-                {
-                  "displayname": "public",
-                  "value": "public"
-                },
-                {
-                  "displayname": "private",
-                  "value": "private"
-                }
-              ]
+              "key": "kms_endpoint_type"
             },
             {
-              "key": "skip_iam_authorization_policy"
+              "key": "skip_mongodb_kms_auth_policy"
+            },
+            {
+              "key": "ibmcloud_kms_api_key"
             },
             {
               "key": "key_ring_name"
@@ -276,10 +250,28 @@
               "key": "key_name"
             },
             {
+              "key": "existing_backup_kms_key_crn"
+            },
+            {
+              "key": "use_default_backup_encryption_key"
+            },
+            {
               "key": "auto_scaling"
             },
             {
               "key": "backup_crn"
+            },
+            {
+              "key": "existing_secrets_manager_instance_crn"
+            },
+            {
+              "key": "existing_secrets_manager_endpoint_type"
+            },
+            {
+              "key": "service_credential_secrets"
+            },
+            {
+              "key": "skip_mongodb_sm_auth_policy"
             }
           ]
         }

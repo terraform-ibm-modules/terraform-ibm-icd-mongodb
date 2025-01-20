@@ -1,10 +1,10 @@
 ---
 apiVersion: v1
 offerings:
-  - name: deploy-arch-ibm-icd-elasticsearch
+  - name: deploy-arch-ibm-icd-mongodb
     kind: solution
     catalog_id: 7df1e4ca-d54c-4fd0-82ce-3d13247308cd
-    offering_id:
+    offering_id: 39b67380-7bc8-407f-832c-d610afa17d53
     variations:
       - name: standard
         mark_ready: true
