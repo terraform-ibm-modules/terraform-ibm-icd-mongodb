@@ -205,6 +205,14 @@ variable "kms_key_crn" {
     ])
     error_message = "Value must be the KMS key CRN from a Key Protect or Hyper Protect Crypto Services instance."
   }
+  validation {
+    condition     = !(var.use_ibm_owned_encryption_key && var.kms_key_crn != null)
+    error_message = "When passing a value for 'kms_key_crn', you must set 'use_ibm_owned_encryption_key' to false. Otherwise, unset 'kms_key_crn' to use default encryption."
+  }
+  validation {
+    condition     = !(var.use_ibm_owned_encryption_key == false && var.kms_key_crn == null)
+    error_message = "When setting 'use_ibm_owned_encryption_key' to false, a value must be passed for 'kms_key_crn'."
+  }
 }
 
 variable "use_same_kms_key_for_backups" {
@@ -225,6 +233,15 @@ variable "backup_encryption_key_crn" {
       can(regex(".*hs-crypto.*", var.backup_encryption_key_crn)),
     ])
     error_message = "Value must be the KMS key CRN from a Key Protect or Hyper Protect Crypto Services instance in one of the supported backup regions."
+  }
+  validation {
+    condition     = !(var.use_ibm_owned_encryption_key && var.backup_encryption_key_crn != null)
+    error_message = "When passing a value for 'backup_encryption_key_crn', you must set 'use_ibm_owned_encryption_key' to false. Otherwise, unset 'backup_encryption_key_crn' to use default encryption."
+  }
+
+  validation {
+    condition     = !(!var.use_ibm_owned_encryption_key && var.backup_encryption_key_crn != null && (var.use_default_backup_encryption_key || var.use_same_kms_key_for_backups))
+    error_message = "When passing a value for 'backup_encryption_key_crn', you cannot set 'use_default_backup_encryption_key' to true or 'use_same_kms_key_for_backups' to true."
   }
 }
 
