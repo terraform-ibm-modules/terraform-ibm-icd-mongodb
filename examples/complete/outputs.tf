@@ -17,6 +17,11 @@ output "guid" {
   value       = module.mongodb.guid
 }
 
+output "crn" {
+  description = "MongoDB instance crn"
+  value       = module.icd_mongodb.crn
+}
+
 output "service_credentials_json" {
   description = "Service credentials json map"
   value       = module.mongodb.service_credentials_json

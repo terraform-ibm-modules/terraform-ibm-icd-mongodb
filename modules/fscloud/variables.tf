@@ -7,7 +7,7 @@ variable "resource_group_id" {
   description = "The resource group ID where the MongoDB instance will be created."
 }
 
-variable "instance_name" {
+variable "name" {
   type        = string
   description = "Name of the mongodb instance"
 }
@@ -46,7 +46,7 @@ variable "cpu_count" {
   default     = 6
 }
 
-variable "disk_mb" {
+variable "member_disk_mb" {
   type        = number
   description = "Allocated disk per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
   default     = 20480
@@ -58,7 +58,7 @@ variable "member_host_flavor" {
   default     = null
 }
 
-variable "memory_mb" {
+variable "member_memory_mb" {
   type        = number
   description = "Allocated memory per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
   default     = 14336
@@ -99,6 +99,18 @@ variable "access_tags" {
   type        = list(string)
   description = "A list of access tags to apply to the MongoDB instance created by the module, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial for more details"
   default     = []
+}
+
+variable "configuration" {
+  type = object({
+    maxmemory                   = optional(number)
+    maxmemory-policy            = optional(string)
+    appendonly                  = optional(string)
+    maxmemory-samples           = optional(number)
+    stop-writes-on-bgsave-error = optional(string)
+  })
+  description = "Database Configuration."
+  default     = null
 }
 
 ##############################################################

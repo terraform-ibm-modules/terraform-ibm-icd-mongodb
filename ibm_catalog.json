@@ -216,10 +216,25 @@
               "key": "member_host_flavor"
             },
             {
+              "key": "configuration"
+            },
+            {
               "key": "service_credential_names"
             },
             {
               "key": "admin_pass"
+            },
+            {
+              "key": "admin_pass_sm_secret_group"
+            },
+            {
+              "key": "admin_pass_sm_secret_name"
+            },
+            {
+              "key": "existing_db_instance_crn"
+            },
+            {
+              "key": "use_existing_admin_pass_sm_secret_group"
             },
             {
               "key": "users"

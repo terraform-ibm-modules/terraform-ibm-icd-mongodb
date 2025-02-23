@@ -28,7 +28,7 @@ locals {
 #######################################################################################################################
 
 locals {
-  create_new_kms_key    = !var.use_ibm_owned_encryption_key && var.existing_kms_key_crn == null ? true : false # no need to create any KMS resources if passing an existing key, or using IBM owned keys
+  create_new_kms_key    = !var.use_ibm_owned_encryption_key && var.existing_kms_key_crn == null ? 1 : 0 # no need to create any KMS resources if passing an existing key, or using IBM owned keys
   mongodb_key_name      = var.prefix != null ? "${var.prefix}-${var.key_name}" : var.key_name
   mongodb_key_ring_name = var.prefix != null ? "${var.prefix}-${var.key_ring_name}" : var.key_ring_name
 }
@@ -233,6 +233,10 @@ locals {
   # if - replace first char with J
   # elseif _ replace first char with K
   # else use asis
+  generated_admin_password = startswith(random_password.admin_password[0].result, "-") ? "J${substr(random_password.admin_password[0].result, 1, -1)}" : startswith(random_password.admin_password[0].result, "_") ? "K${substr(random_password.admin_password[0].result, 1, -1)}" : random_password.admin_password[0].result
+
+
+  # admin password to use
   admin_pass = var.admin_pass == null ? (startswith(random_password.admin_password[0].result, "-") ? "J${substr(random_password.admin_password[0].result, 1, -1)}" : startswith(random_password.admin_password[0].result, "_") ? "K${substr(random_password.admin_password[0].result, 1, -1)}" : random_password.admin_password[0].result) : var.admin_pass
 }
 
@@ -240,12 +244,55 @@ locals {
 # MongoDB
 #######################################################################################################################
 
+# Look up existing instance details if user passes one
+module "mongodb_instance_crn_parser" {
+  count   = var.existing_db_instance_crn != null ? 1 : 0
+  source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
+  version = "1.1.0"
+  crn     = var.existing_db_instance_crn
+}
+
+# Existing instance local vars
+locals {
+  existing_mongodb_guid   = var.existing_db_instance_crn != null ? module.mongodb_instance_crn_parser[0].service_instance : null
+  existing_mongodb_region = var.existing_db_instance_crn != null ? module.mongodb_instance_crn_parser[0].region : null
+
+  # Validate the region input matches region detected in existing instance CRN (approach based on https://github.com/hashicorp/terraform/issues/25609#issuecomment-1057614400)
+  # tflint-ignore: terraform_unused_declarations
+  validate_existing_instance_region = var.existing_db_instance_crn != null && var.region != local.existing_mongodb_region ? tobool("The region detected in the 'existing_db_instance_crn' value must match the value of the 'region' input variable when passing an existing instance.") : true
+}
+
+# Do a data lookup on the resource GUID to get more info that is needed for the 'ibm_database' data lookup below
+data "ibm_resource_instance" "existing_instance_resource" {
+  count      = var.existing_db_instance_crn != null ? 1 : 0
+  identifier = local.existing_redis_guid
+}
+
+# Lookup details of existing instance
+data "ibm_database" "existing_db_instance" {
+  count             = var.existing_db_instance_crn != null ? 1 : 0
+  name              = data.ibm_resource_instance.existing_instance_resource[0].name
+  resource_group_id = data.ibm_resource_instance.existing_instance_resource[0].resource_group_id
+  location          = var.region
+  service           = "databases-for-redis"
+}
+
+# Lookup existing instance connection details
+data "ibm_database_connection" "existing_connection" {
+  count         = var.existing_db_instance_crn != null ? 1 : 0
+  endpoint_type = "private"
+  deployment_id = data.ibm_database.existing_db_instance[0].id
+  user_id       = data.ibm_database.existing_db_instance[0].adminuser
+  user_type     = "database"
+}
+
 # Create new instance
 module "mongodb" {
+  count                             = var.existing_db_instance_crn != null ? 0 : 1
   source                            = "../../modules/fscloud"
   depends_on                        = [time_sleep.wait_for_authorization_policy, time_sleep.wait_for_backup_kms_authorization_policy]
   resource_group_id                 = module.resource_group.resource_group_id
-  instance_name                     = var.prefix != null ? "${var.prefix}-${var.name}" : var.name
+  name                              = var.prefix != null ? "${var.prefix}-${var.name}" : var.name
   plan                              = var.plan
   region                            = var.region
   mongodb_version                   = var.mongodb_version
@@ -261,17 +308,48 @@ module "mongodb" {
   users                             = var.users
   members                           = var.members
   member_host_flavor                = var.member_host_flavor
-  memory_mb                         = var.member_memory_mb
-  disk_mb                           = var.member_disk_mb
+  member_memory_mb                  = var.member_memory_mb
+  member_disk_mb                    = var.member_disk_mb
   cpu_count                         = var.member_cpu_count
   auto_scaling                      = var.auto_scaling
   service_credential_names          = var.service_credential_names
   backup_crn                        = var.backup_crn
+  configuration                     = var.configuration
 }
 
 locals {
+  mongodb_guid     = var.existing_db_instance_crn != null ? data.ibm_database.existing_db_instance[0].guid : module.mongodb[0].guid
+  mongodb_id       = var.existing_db_instance_crn != null ? data.ibm_database.existing_db_instance[0].id : module.mongodb[0].id
+  mongodb_version  = var.existing_db_instance_crn != null ? data.ibm_database.existing_db_instance[0].version : module.mongodb[0].version
+  mongodb_crn      = var.existing_db_instance_crn != null ? var.existing_db_instance_crn : module.mongodb[0].crn
+  mongodb_hostname = var.existing_db_instance_crn != null ? data.ibm_database_connection.existing_connection[0].https[0].hosts[0].hostname : module.mongodb[0].hostname
+  mongodb_port     = var.existing_db_instance_crn != null ? data.ibm_database_connection.existing_connection[0].https[0].hosts[0].port : module.mongodb[0].port
+}
+
+#######################################################################################################################
+# Secrets management
+#######################################################################################################################
+
+locals {
+  ## Variable validation (approach based on https://github.com/hashicorp/terraform/issues/25609#issuecomment-1057614400)
+  # tflint-ignore: terraform_unused_declarations
+  validate_sm_crn = length(local.service_credential_secrets) > 0 && var.existing_secrets_manager_instance_crn == null ? tobool("`existing_secrets_manager_instance_crn` is required when adding service credentials to a secrets manager secret.") : false
+  # tflint-ignore: terraform_unused_declarations
+  validate_sm_sg = var.existing_secrets_manager_instance_crn != null && var.admin_pass_sm_secret_group == null ? tobool("`admin_pass_sm_secret_group` is required when `existing_secrets_manager_instance_crn` is set.") : false
+  # tflint-ignore: terraform_unused_declarations
+  validate_sm_sn = var.existing_secrets_manager_instance_crn != null && var.admin_pass_sm_secret_name == null ? tobool("`admin_pass_sm_secret_name` is required when `existing_secrets_manager_instance_crn` is set.") : false
+
   create_sm_auth_policy = var.skip_mongodb_sm_auth_policy || var.existing_secrets_manager_instance_crn == null ? 0 : 1
 }
+
+# Parse the Secrets Manager CRN
+module "sm_instance_crn_parser" {
+  count   = var.existing_secrets_manager_instance_crn != null ? 1 : 0
+  source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
+  version = "1.1.0"
+  crn     = var.existing_secrets_manager_instance_crn
+}
+
 
 # create a service authorization between Secrets Manager and the target service (Databases for MongoDB)
 resource "ibm_iam_authorization_policy" "secrets_manager_key_manager" {
@@ -314,12 +392,23 @@ locals {
     }
   ]
 
-  existing_secrets_manager_instance_crn_split = var.existing_secrets_manager_instance_crn != null ? split(":", var.existing_secrets_manager_instance_crn) : null
-  existing_secrets_manager_instance_guid      = var.existing_secrets_manager_instance_crn != null ? element(local.existing_secrets_manager_instance_crn_split, length(local.existing_secrets_manager_instance_crn_split) - 3) : null
-  existing_secrets_manager_instance_region    = var.existing_secrets_manager_instance_crn != null ? element(local.existing_secrets_manager_instance_crn_split, length(local.existing_secrets_manager_instance_crn_split) - 5) : null
+  # Build the structure of the arbitrary credential type secret for admin password
+  admin_pass_secret = [{
+    secret_group_name     = (var.prefix != null && var.prefix != "") && var.admin_pass_sm_secret_group != null ? "${var.prefix}-${var.admin_pass_sm_secret_group}" : var.admin_pass_sm_secret_group
+    existing_secret_group = var.use_existing_admin_pass_sm_secret_group
+    secrets = [{
+      secret_name             = (var.prefix != null && var.prefix != "") && var.admin_pass_sm_secret_name != null ? "${var.prefix}-${var.admin_pass_sm_secret_name}" : var.admin_pass_sm_secret_name
+      secret_type             = "arbitrary"
+      secret_payload_password = local.admin_pass
+      }
+    ]
+  }]
 
-  # tflint-ignore: terraform_unused_declarations
-  validate_sm_crn = length(local.service_credential_secrets) > 0 && var.existing_secrets_manager_instance_crn == null ? tobool("`existing_secrets_manager_instance_crn` is required when adding service credentials to a secrets manager secret.") : false
+  # Concatinate into 1 secrets object
+  secrets = concat(local.service_credential_secrets, local.admin_pass_secret)
+  # Parse Secrets Manager details from the CRN
+  existing_secrets_manager_instance_guid   = var.existing_secrets_manager_instance_crn != null ? module.sm_instance_crn_parser[0].service_instance : null
+  existing_secrets_manager_instance_region = var.existing_secrets_manager_instance_crn != null ? module.sm_instance_crn_parser[0].region : null
 }
 
 module "secrets_manager_service_credentials" {
