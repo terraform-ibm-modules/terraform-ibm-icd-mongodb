@@ -28,6 +28,9 @@ locals {
 
   # Determine if host_flavor is used
   host_flavor_set = var.member_host_flavor != null ? true : false
+
+  # maxmemory configuration should 80% of the deployment's memory.
+  calculate_config_maxmemory = tonumber(format("%.0f", var.member_memory_mb * 0.8))
 }
 
 ########################################################################################################################
@@ -171,7 +174,7 @@ resource "time_sleep" "wait_for_backup_kms_authorization_policy" {
 # MongoDB instance
 ########################################################################################################################
 
-resource "ibm_database" "mongodb" {
+resource "ibm_database" "mongodb_database" {
   depends_on                = [time_sleep.wait_for_authorization_policy, time_sleep.wait_for_backup_kms_authorization_policy]
   name                      = var.name
   location                  = var.region
@@ -185,6 +188,14 @@ resource "ibm_database" "mongodb" {
   key_protect_key           = var.kms_key_crn
   backup_encryption_key_crn = local.backup_encryption_key_crn
   backup_id                 = var.backup_crn
+
+  configuration = var.configuration == null ? null : jsonencode({
+    maxmemory                   = var.configuration.maxmemory != null ? var.configuration.maxmemory : local.calculate_config_maxmemory
+    maxmemory-policy            = var.configuration.maxmemory-policy != null ? var.configuration.maxmemory-policy : "noeviction"
+    appendonly                  = var.configuration.appendonly != null ? var.configuration.appendonly : "yes"
+    maxmemory-samples           = var.configuration.maxmemory-samples != null ? var.configuration.maxmemory-samples : 5
+    stop-writes-on-bgsave-error = var.configuration.stop-writes-on-bgsave-error != null ? var.configuration.stop-writes-on-bgsave-error : "yes"
+  })
 
   dynamic "users" {
     for_each = nonsensitive(var.users != null ? var.users : [])
@@ -303,9 +314,9 @@ resource "ibm_database" "mongodb" {
   }
 }
 
-resource "ibm_resource_tag" "mongodb_tag" {
+resource "ibm_resource_tag" "access_tag" {
   count       = length(var.access_tags) == 0 ? 0 : 1
-  resource_id = ibm_database.mongodb.resource_crn
+  resource_id = ibm_database.mongodb_database.resource_crn
   tags        = var.access_tags
   tag_type    = "access"
 }
@@ -330,7 +341,7 @@ module "cbr_rule" {
       },
       {
         name     = "serviceInstance"
-        value    = ibm_database.mongodb.guid
+        value    = ibm_database.mongodb_database.id
         operator = "stringEquals"
       },
       {
@@ -358,7 +369,7 @@ resource "ibm_resource_key" "service_credentials" {
   for_each             = var.service_credential_names
   name                 = each.key
   role                 = each.value
-  resource_instance_id = ibm_database.mongodb.id
+  resource_instance_id = ibm_database.mongodb_database.id
 }
 
 locals {
@@ -383,8 +394,8 @@ locals {
 }
 
 data "ibm_database_connection" "database_connection" {
-  endpoint_type = var.endpoints == "public-and-private" ? "public" : var.endpoints
-  deployment_id = ibm_database.mongodb.id
-  user_id       = ibm_database.mongodb.adminuser
+  endpoint_type = var.service_endpoints == "public-and-private" ? "public" : var.service_endpoints
+  deployment_id = ibm_database.mongodb_database.id
+  user_id       = ibm_database.mongodb_database.adminuser
   user_type     = "database"
 }

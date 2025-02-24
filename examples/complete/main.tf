@@ -18,10 +18,28 @@ locals {
 ##############################################################################
 
 module "resource_group" {
-  source = "https://github.com/terraform-ibm-modules/terraform-ibm-resource-group?ref=v1.1.6"
+  source = "terraform-ibm-modules/resource-group/ibm"
   # if an existing resource group is not set (null) create a new one using prefix
+  version                      = "1.1.6"
   resource_group_name          = var.resource_group == null ? "${var.prefix}-resource-group" : null
   existing_resource_group_name = var.resource_group
+}
+
+##############################################################################
+# VPC
+##############################################################################
+resource "ibm_is_vpc" "example_vpc" {
+  name           = "${var.prefix}-vpc"
+  resource_group = module.resource_group.resource_group_id
+  tags           = var.resource_tags
+}
+
+resource "ibm_is_subnet" "testacc_subnet" {
+  name                     = "${var.prefix}-subnet"
+  vpc                      = ibm_is_vpc.example_vpc.id
+  zone                     = "${var.region}-1"
+  total_ipv4_address_count = 256
+  resource_group           = module.resource_group.resource_group_id
 }
 
 ##############################################################################
@@ -60,7 +78,29 @@ module "key_protect_all_inclusive" {
 }
 
 ##############################################################################
-#  MongoDB
+# Get Cloud Account ID
+##############################################################################
+
+data "ibm_iam_account_settings" "iam_account_settings" {
+}
+
+##############################################################################
+# Create CBR Zone
+##############################################################################
+module "cbr_zone" {
+  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
+  version          = "1.29.0"
+  name             = "${var.prefix}-VPC-network-zone"
+  zone_description = "CBR Network zone containing VPC"
+  account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+  addresses = [{
+    type  = "vpc", # to bind a specific vpc to the zone
+    value = ibm_is_vpc.example_vpc.crn,
+  }]
+}
+
+##############################################################################
+#  MongoDB Instance
 ##############################################################################
 
 module "icd_mongodb" {

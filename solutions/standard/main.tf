@@ -265,7 +265,7 @@ locals {
 # Do a data lookup on the resource GUID to get more info that is needed for the 'ibm_database' data lookup below
 data "ibm_resource_instance" "existing_instance_resource" {
   count      = var.existing_db_instance_crn != null ? 1 : 0
-  identifier = local.existing_redis_guid
+  identifier = local.existing_mongodb_guid
 }
 
 # Lookup details of existing instance
@@ -310,7 +310,7 @@ module "mongodb" {
   member_host_flavor                = var.member_host_flavor
   member_memory_mb                  = var.member_memory_mb
   member_disk_mb                    = var.member_disk_mb
-  cpu_count                         = var.member_cpu_count
+  member_cpu_count                  = var.member_cpu_count
   auto_scaling                      = var.auto_scaling
   service_credential_names          = var.service_credential_names
   backup_crn                        = var.backup_crn
@@ -357,7 +357,7 @@ resource "ibm_iam_authorization_policy" "secrets_manager_key_manager" {
   source_service_name         = "secrets-manager"
   source_resource_instance_id = local.existing_secrets_manager_instance_guid
   target_service_name         = "databases-for-mongodb"
-  target_resource_instance_id = module.mongodb.guid
+  target_resource_instance_id = local.mongodb_guid
   roles                       = ["Key Manager"]
   description                 = "Allow Secrets Manager with instance id ${local.existing_secrets_manager_instance_guid} to manage key for the databases-for-mongodb instance"
 }

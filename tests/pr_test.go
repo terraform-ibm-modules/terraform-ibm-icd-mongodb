@@ -2,9 +2,9 @@
 package test
 
 import (
-	"math/rand"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"strings"
 	"testing"
@@ -21,7 +21,6 @@ import (
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testschematic"
 )
 
-const completeExampleTerraformDir = "examples/complete"
 const fscloudExampleTerraformDir = "examples/fscloud"
 const standardSolutionTerraformDir = "solutions/standard"
 const latestVersion = "7.0"
@@ -92,7 +91,7 @@ func TestRunStandardSolutionSchematics(t *testing.T) {
 		},
 	}
 
-		options.TerraformVars = []testschematic.TestSchematicTerraformVar{
+	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 		{Name: "access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
@@ -117,11 +116,11 @@ func TestRunStandardUpgradeSolution(t *testing.T) {
 	t.Parallel()
 
 	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
-		Testing:            t,
-		TerraformDir:       standardSolutionTerraformDir,
-		BestRegionYAMLPath: regionSelectionPath,
-		Prefix:             "mongodb-st-da-upg",
-		ResourceGroup:      resourceGroup,
+		Testing:                    t,
+		TerraformDir:               standardSolutionTerraformDir,
+		BestRegionYAMLPath:         regionSelectionPath,
+		Prefix:                     "mongodb-st-da-upg",
+		ResourceGroup:              resourceGroup,
 		CheckApplyResultForUpgrade: true,
 	})
 
@@ -157,10 +156,10 @@ func TestRunExistingInstance(t *testing.T) {
 	existingTerraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		TerraformDir: tempTerraformDir + "/examples/basic",
 		Vars: map[string]interface{}{
-			"prefix":                prefix,
-			"region":                region,
-			"mongodb_version": latestVersion,
-			"service_endpoints":     "public-and-private",
+			"prefix":            prefix,
+			"region":            region,
+			"mongodb_version":   latestVersion,
+			"service_endpoints": "public-and-private",
 		},
 		// Set Upgrade to true to ensure latest version of providers and modules are used by terratest.
 		// This is the same as setting the -upgrade=true flag with terraform.
@@ -228,7 +227,7 @@ func TestRunStandardSolutionIBMKeys(t *testing.T) {
 	})
 
 	options.TerraformVars = map[string]interface{}{
-		"mongodb_version":        "7.0",
+		"mongodb_version":              "7.0",
 		"provider_visibility":          "public",
 		"resource_group_name":          options.Prefix,
 		"use_ibm_owned_encryption_key": true,

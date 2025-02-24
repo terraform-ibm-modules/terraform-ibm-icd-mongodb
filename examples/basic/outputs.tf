@@ -7,7 +7,7 @@ output "id" {
 }
 
 output "mongodb_crn" {
-  description = "Elasticsearch CRN"
+  description = "Mongodb CRN"
   value       = module.database.crn
 }
 

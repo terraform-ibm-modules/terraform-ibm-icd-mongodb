@@ -21,8 +21,9 @@ variable "mongodb_version" {
     condition = anytrue([
       var.mongodb_version == null,
       var.mongodb_version == "6.0",
+      var.mongodb_version == "7.0",
     ])
-    error_message = "Version must be 6.0. If no value is passed, the current preferred version of IBM Cloud Databases is used."
+    error_message = "Version must be either 6.0 or 7.0. If no value is passed, the current preferred version of IBM Cloud Databases is used."
   }
 }
 
@@ -67,7 +68,7 @@ variable "member_cpu_count" {
 variable "member_disk_mb" {
   type        = number
   description = "The disk that is allocated per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
-  default     = 5120
+  default     = 10240
   # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
 
@@ -143,6 +144,18 @@ variable "access_tags" {
     ])
     error_message = "Tags must match the regular expression \"[\\w\\-_\\.]+:[\\w\\-_\\.]+\", see https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#limits for more details"
   }
+}
+
+variable "configuration" {
+  type = object({
+    maxmemory                   = optional(number)
+    maxmemory-policy            = optional(string)
+    appendonly                  = optional(string)
+    maxmemory-samples           = optional(number)
+    stop-writes-on-bgsave-error = optional(string)
+  })
+  description = "Database Configuration. Default values will get picked up if not all the values are passed."
+  default     = null
 }
 
 ##############################################################

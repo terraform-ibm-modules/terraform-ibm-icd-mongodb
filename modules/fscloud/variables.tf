@@ -40,7 +40,7 @@ variable "members" {
   default     = 3
 }
 
-variable "cpu_count" {
+variable "member_cpu_count" {
   type        = number
   description = "Allocated dedicated CPU per member. For shared CPU, set to 0. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
   default     = 6
