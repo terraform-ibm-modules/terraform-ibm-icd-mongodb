@@ -37,7 +37,7 @@ module "kms" {
   providers = {
     ibm = ibm.kms
   }
-  count                       = local.create_new_kms_key ? 1 : 0
+  count                       = local.create_new_kms_key
   source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
   version                     = "4.19.7"
   create_key_protect_instance = false
@@ -237,7 +237,7 @@ locals {
 
 
   # admin password to use
-  admin_pass = var.admin_pass == null ? (startswith(random_password.admin_password[0].result, "-") ? "J${substr(random_password.admin_password[0].result, 1, -1)}" : startswith(random_password.admin_password[0].result, "_") ? "K${substr(random_password.admin_password[0].result, 1, -1)}" : random_password.admin_password[0].result) : var.admin_pass
+  admin_pass = var.admin_pass == null ? local.generated_admin_password : var.admin_pass
 }
 
 #######################################################################################################################
@@ -419,5 +419,5 @@ module "secrets_manager_service_credentials" {
   existing_sm_instance_guid   = local.existing_secrets_manager_instance_guid
   existing_sm_instance_region = local.existing_secrets_manager_instance_region
   endpoint_type               = var.existing_secrets_manager_endpoint_type
-  secrets                     = local.service_credential_secrets
+  secrets                     = local.secrets
 }
