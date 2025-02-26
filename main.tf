@@ -28,9 +28,6 @@ locals {
 
   # Determine if host_flavor is used
   host_flavor_set = var.member_host_flavor != null ? true : false
-
-  # maxmemory configuration should 80% of the deployment's memory.
-  calculate_config_maxmemory = tonumber(format("%.0f", var.member_memory_mb * 0.8))
 }
 
 ########################################################################################################################

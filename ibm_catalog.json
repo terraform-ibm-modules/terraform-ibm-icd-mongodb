@@ -216,9 +216,6 @@
               "key": "member_host_flavor"
             },
             {
-              "key": "configuration"
-            },
-            {
               "key": "service_credential_names"
             },
             {
