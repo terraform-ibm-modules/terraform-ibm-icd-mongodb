@@ -101,24 +101,6 @@ variable "member_host_flavor" {
   }
 }
 
-variable "configuration" {
-  description = "Database Configuration for MongoDb instance. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/blob/main/solutions/standard/DA-types.md#configuration)."
-  type = object({
-    maxmemory                   = optional(number)
-    maxmemory-policy            = optional(string)
-    appendonly                  = optional(string)
-    maxmemory-samples           = optional(number)
-    stop-writes-on-bgsave-error = optional(string)
-  })
-  default = {
-    maxmemory : 80,
-    maxmemory-policy : "noeviction",
-    appendonly : "yes",
-    maxmemory-samples : 5,
-    stop-writes-on-bgsave-error : "yes"
-  }
-}
-
 variable "service_credential_names" {
   description = "Map of name, role for service credentials that you want to create for the database. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/blob/main/solutions/standard/DA-types.md#svc-credential-name)"
   type        = map(string)

@@ -189,14 +189,6 @@ resource "ibm_database" "mongodb_database" {
   backup_encryption_key_crn = local.backup_encryption_key_crn
   backup_id                 = var.backup_crn
 
-  configuration = var.configuration == null ? null : jsonencode({
-    maxmemory                   = var.configuration.maxmemory != null ? var.configuration.maxmemory : local.calculate_config_maxmemory
-    maxmemory-policy            = var.configuration.maxmemory-policy != null ? var.configuration.maxmemory-policy : "noeviction"
-    appendonly                  = var.configuration.appendonly != null ? var.configuration.appendonly : "yes"
-    maxmemory-samples           = var.configuration.maxmemory-samples != null ? var.configuration.maxmemory-samples : 5
-    stop-writes-on-bgsave-error = var.configuration.stop-writes-on-bgsave-error != null ? var.configuration.stop-writes-on-bgsave-error : "yes"
-  })
-
   dynamic "users" {
     for_each = nonsensitive(var.users != null ? var.users : [])
     content {

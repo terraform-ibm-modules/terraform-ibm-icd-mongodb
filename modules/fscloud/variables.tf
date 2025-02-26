@@ -101,18 +101,6 @@ variable "access_tags" {
   default     = []
 }
 
-variable "configuration" {
-  type = object({
-    maxmemory                   = optional(number)
-    maxmemory-policy            = optional(string)
-    appendonly                  = optional(string)
-    maxmemory-samples           = optional(number)
-    stop-writes-on-bgsave-error = optional(string)
-  })
-  description = "Database Configuration."
-  default     = null
-}
-
 ##############################################################
 # Auto Scaling
 ##############################################################

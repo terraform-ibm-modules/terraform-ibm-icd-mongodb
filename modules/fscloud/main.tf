@@ -16,7 +16,6 @@ module "mongodb" {
   cbr_rules                         = var.cbr_rules
   access_tags                       = var.access_tags
   tags                              = var.tags
-  configuration                     = var.configuration
   members                           = var.members
   member_memory_mb                  = var.member_memory_mb
   admin_pass                        = var.admin_pass

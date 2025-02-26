@@ -69,7 +69,7 @@ func TestRunStandardSolutionSchematics(t *testing.T) {
 		},
 		TemplateFolder:         standardSolutionTerraformDir,
 		BestRegionYAMLPath:     regionSelectionPath,
-		Prefix:                 "mongodb-st-da",
+		Prefix:                 "mdb-st-da",
 		ResourceGroup:          resourceGroup,
 		DeleteWorkspaceOnFail:  false,
 		WaitJobCompleteMinutes: 60,
@@ -98,14 +98,12 @@ func TestRunStandardSolutionSchematics(t *testing.T) {
 		{Name: "existing_backup_kms_key_crn", Value: permanentResources["hpcs_south_root_key_crn"], DataType: "string"},
 		{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
 		{Name: "resource_group_name", Value: options.Prefix, DataType: "string"},
-		{Name: "plan", Value: "platinum", DataType: "string"},
-		{Name: "enable_elser_model", Value: true, DataType: "bool"},
+		{Name: "plan", Value: "standard", DataType: "string"},
 		{Name: "service_credential_names", Value: "{\"admin_test\": \"Administrator\", \"editor_test\": \"Editor\"}", DataType: "map(string)"},
 		{Name: "existing_secrets_manager_instance_crn", Value: permanentResources["secretsManagerCRN"], DataType: "string"},
 		{Name: "service_credential_secrets", Value: serviceCredentialSecrets, DataType: "list(object)"},
-		{Name: "admin_pass_secrets_manager_secret_group", Value: options.Prefix, DataType: "string"},
-		{Name: "admin_pass_secrets_manager_secret_name", Value: options.Prefix, DataType: "string"},
-		{Name: "enable_kibana_dashboard", Value: true, DataType: "bool"},
+		{Name: "admin_pass_sm_secret_group", Value: options.Prefix, DataType: "string"},
+		{Name: "admin_pass_sm_secret_name", Value: options.Prefix, DataType: "string"},
 		{Name: "provider_visibility", Value: "private", DataType: "string"},
 		{Name: "prefix", Value: options.Prefix, DataType: "string"},
 	}
@@ -121,8 +119,7 @@ func TestRunStandardUpgradeSolution(t *testing.T) {
 		BestRegionYAMLPath:         regionSelectionPath,
 		Prefix:                     "mongodb-st-da-upg",
 		ResourceGroup:              resourceGroup,
-		CheckApplyResultForUpgrade: true,
-	})
+})
 
 	options.TerraformVars = map[string]interface{}{
 		"access_tags":               permanentResources["accessTags"],

@@ -314,7 +314,6 @@ module "mongodb" {
   auto_scaling                      = var.auto_scaling
   service_credential_names          = var.service_credential_names
   backup_crn                        = var.backup_crn
-  configuration                     = var.configuration
 }
 
 locals {
@@ -385,7 +384,7 @@ locals {
           service_credentials_ttl                     = secret.service_credentials_ttl
           service_credential_secret_description       = secret.service_credential_secret_description
           service_credentials_source_service_role_crn = secret.service_credentials_source_service_role_crn
-          service_credentials_source_service_crn      = module.mongodb.crn
+          service_credentials_source_service_crn      = local.mongodb_crn
           secret_type                                 = "service_credentials" #checkov:skip=CKV_SECRET_6
         }
       ]
