@@ -324,8 +324,8 @@ locals {
   mongodb_id       = var.existing_db_instance_crn != null ? data.ibm_database.existing_db_instance[0].id : module.mongodb[0].id
   mongodb_version  = var.existing_db_instance_crn != null ? data.ibm_database.existing_db_instance[0].version : module.mongodb[0].version
   mongodb_crn      = var.existing_db_instance_crn != null ? var.existing_db_instance_crn : module.mongodb[0].crn
-  mongodb_hostname = var.existing_db_instance_crn != null ? data.ibm_database_connection.existing_connection[0].https[0].hosts[0].hostname : module.mongodb[0].hostname
-  mongodb_port     = var.existing_db_instance_crn != null ? data.ibm_database_connection.existing_connection[0].https[0].hosts[0].port : module.mongodb[0].port
+  mongodb_hostname = var.existing_db_instance_crn != null ? data.ibm_database_connection.existing_connection[0].mongodb[0].hosts[0].hostname : module.mongodb[0].hostname
+  mongodb_port     = var.existing_db_instance_crn != null ? data.ibm_database_connection.existing_connection[0].mongodb[0].hosts[0].port : module.mongodb[0].port
 }
 
 #######################################################################################################################
