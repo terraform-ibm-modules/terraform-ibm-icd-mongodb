@@ -29,7 +29,7 @@ locals {
 #######################################################################################################################
 
 locals {
-  create_new_kms_key    = !var.use_ibm_owned_encryption_key && var.existing_kms_key_crn == null ? 1 : 0 # no need to create any KMS resources if passing an existing key, or using IBM owned keys
+  create_new_kms_key    = var.existing_db_instance_crn == null && !var.use_ibm_owned_encryption_key && var.existing_kms_key_crn == null ? 1 : 0 # no need to create any KMS resources if passing an existing key, or using IBM owned keys
   mongodb_key_name      = var.prefix != null ? "${var.prefix}-${var.key_name}" : var.key_name
   mongodb_key_ring_name = var.prefix != null ? "${var.prefix}-${var.key_ring_name}" : var.key_ring_name
 }
