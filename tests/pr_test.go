@@ -168,7 +168,7 @@ func TestRunExistingInstance(t *testing.T) {
 	if existErr != nil {
 		assert.True(t, existErr == nil, "Init and Apply of temp existing resource failed")
 	} else {
-		logger.Log(t, "existing_mongodb_instance_crn: ", terraform.Output(t, existingTerraformOptions, "mongodb_crn"))
+		logger.Log(t, "existing_db_instance_crn: ", terraform.Output(t, existingTerraformOptions, "mongodb_crn"))
 		options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
 			Testing: t,
 			TarIncludePatterns: []string{
@@ -188,7 +188,7 @@ func TestRunExistingInstance(t *testing.T) {
 
 		options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 			{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
-			{Name: "existing_mongodb_instance_crn", Value: terraform.Output(t, existingTerraformOptions, "mongodb_crn"), DataType: "string"},
+			{Name: "existing_db_instance_crn", Value: terraform.Output(t, existingTerraformOptions, "mongodb_crn"), DataType: "string"},
 			{Name: "resource_group_name", Value: fmt.Sprintf("%s-resource-group", prefix), DataType: "string"},
 			{Name: "region", Value: region, DataType: "string"},
 			{Name: "use_existing_resource_group", Value: true, DataType: "bool"},

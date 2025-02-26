@@ -1,0 +1,506 @@
+cd tests && go test -run TestRunExistingInstance -count=1 -v -timeout 600m
+=== RUN   TestRunExistingInstance
+=== PAUSE TestRunExistingInstance
+=== CONT  TestRunExistingInstance
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 pr_test.go:152: Tempdir:  /var/folders/7h/xm7wtf_j44j8zpcwyyz23kbc0000gn/T/mongodb-t-8w1nlj-64fjeu3759816593/terraform-ibm-icd-mongodb
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 retry.go:91: terraform [workspace list]
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: Running command terraform with args [workspace list]
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: * default
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 retry.go:91: terraform [workspace new mongodb-t-8w1nlj]
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: Running command terraform with args [workspace new mongodb-t-8w1nlj]
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: [0m[32m[1mCreated and switched to workspace "mongodb-t-8w1nlj"![0m[32m
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: You're now on a new, empty workspace. Workspaces isolate their state,
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: so if you run "terraform plan" Terraform will not see any existing state
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: for this configuration.[0m
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 retry.go:91: terraform [workspace show]
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: Running command terraform with args [workspace show]
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: mongodb-t-8w1nlj
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 retry.go:91: terraform [init -upgrade=true]
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: Running command terraform with args [init -upgrade=true]
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: [0m[1mInitializing the backend...[0m
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: [0m[1mUpgrading modules...[0m
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: - database in ../..
+TestRunExistingInstance 2025-02-26T23:21:32+05:30 logger.go:67: Downloading registry.terraform.io/terraform-ibm-modules/common-utilities/ibm 1.1.0 for database.backup_key_crn_parser...
+TestRunExistingInstance 2025-02-26T23:21:35+05:30 logger.go:67: - database.backup_key_crn_parser in .terraform/modules/database.backup_key_crn_parser/modules/crn-parser
+TestRunExistingInstance 2025-02-26T23:21:35+05:30 logger.go:67: Downloading registry.terraform.io/terraform-ibm-modules/cbr/ibm 1.29.0 for database.cbr_rule...
+TestRunExistingInstance 2025-02-26T23:21:38+05:30 logger.go:67: - database.cbr_rule in .terraform/modules/database.cbr_rule/modules/cbr-rule-module
+TestRunExistingInstance 2025-02-26T23:21:38+05:30 logger.go:67: Downloading registry.terraform.io/terraform-ibm-modules/common-utilities/ibm 1.1.0 for database.kms_key_crn_parser...
+TestRunExistingInstance 2025-02-26T23:21:38+05:30 logger.go:67: - database.kms_key_crn_parser in .terraform/modules/database.kms_key_crn_parser/modules/crn-parser
+TestRunExistingInstance 2025-02-26T23:21:38+05:30 logger.go:67: Downloading registry.terraform.io/terraform-ibm-modules/resource-group/ibm 1.1.6 for resource_group...
+TestRunExistingInstance 2025-02-26T23:21:41+05:30 logger.go:67: - resource_group in .terraform/modules/resource_group
+TestRunExistingInstance 2025-02-26T23:21:41+05:30 logger.go:67: [0m[1mInitializing provider plugins...[0m
+TestRunExistingInstance 2025-02-26T23:21:41+05:30 logger.go:67: - Finding hashicorp/time versions matching ">= 0.9.1, < 1.0.0"...
+TestRunExistingInstance 2025-02-26T23:21:41+05:30 logger.go:67: - Finding ibm-cloud/ibm versions matching ">= 1.49.0, >= 1.70.0, 1.70.0, < 2.0.0"...
+TestRunExistingInstance 2025-02-26T23:21:41+05:30 logger.go:67: - Installing hashicorp/time v0.12.1...
+TestRunExistingInstance 2025-02-26T23:21:41+05:30 logger.go:67: - Installed hashicorp/time v0.12.1 (signed by HashiCorp)
+TestRunExistingInstance 2025-02-26T23:21:45+05:30 logger.go:67: - Installing ibm-cloud/ibm v1.70.0...
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: - Installed ibm-cloud/ibm v1.70.0 (self-signed, key ID [0m[1mAAD3B791C49CC253[0m[0m)
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: Partner and community providers are signed by their developers.
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: If you'd like to know more about provider signing, you can read about it here:
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: https://www.terraform.io/docs/cli/plugins/signing.html
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: Terraform has created a lock file [1m.terraform.lock.hcl[0m to record the provider
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: selections it made above. Include this file in your version control repository
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: so that Terraform can guarantee to make the same selections by default when
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: you run "terraform init" in the future.[0m
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: [0m[1m[32mTerraform has been successfully initialized![0m[32m[0m
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: [0m[32m
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: You may now begin working with Terraform. Try running "terraform plan" to see
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: any changes that are required for your infrastructure. All Terraform commands
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: should now work.
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: If you ever set or change modules or backend configuration for Terraform,
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: rerun this command to reinitialize your working directory. If you forget, other
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: commands will detect it and remind you to do so if necessary.[0m
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 retry.go:91: terraform [apply -input=false -auto-approve -var service_endpoints=public-and-private -var prefix=mongodb-t-8w1nlj -var region=eu-de -var mongodb_version=7.0 -lock=false]
+TestRunExistingInstance 2025-02-26T23:21:50+05:30 logger.go:67: Running command terraform with args [apply -input=false -auto-approve -var service_endpoints=public-and-private -var prefix=mongodb-t-8w1nlj -var region=eu-de -var mongodb_version=7.0 -lock=false]
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: Terraform used the selected providers to generate the following execution
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: plan. Resource actions are indicated with the following symbols:
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:   [32m+[0m create[0m
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:  [36m<=[0m read (data resources)[0m
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: Terraform will perform the following actions:
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [1m  # module.database.data.ibm_database_connection.database_connection[0m will be read during apply
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:   # (config refers to values not yet known)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [0m [36m<=[0m[0m data "ibm_database_connection" "database_connection" {
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m amqps         = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m analytics     = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m bi_connector  = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m cli           = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m deployment_id = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m emp           = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m endpoint_type = "public"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m grpc          = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m https         = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m id            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m mongodb       = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m mqtts         = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m mysql         = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m ops_manager   = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m postgres      = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m rediss        = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m secure        = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m stomp_ssl     = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m user_id       = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m user_type     = "database"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:     }
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [1m  # module.database.ibm_database.mongodb_database[0m will be created
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [0m  [32m+[0m[0m resource "ibm_database" "mongodb_database" {
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m adminuser               = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m configuration_schema    = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m deletion_protection     = false
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m groups                  = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m guid                    = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m id                      = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m location                = "eu-de"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m name                    = "mongodb-t-8w1nlj-data-store"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m plan                    = "standard"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_controller_url = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_crn            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_group_id       = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_group_name     = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_name           = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_status         = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m service                 = "databases-for-mongodb"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m service_endpoints       = "public-and-private"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m status                  = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m tags                    = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m version                 = "7.0"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m auto_scaling (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m group {
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:           [32m+[0m[0m group_id = "member"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:           [32m+[0m[0m cpu {
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:               [32m+[0m[0m allocation_count = 0
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:             }
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:           [32m+[0m[0m disk {
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:               [32m+[0m[0m allocation_mb = 10240
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:             }
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:           [32m+[0m[0m host_flavor {
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:               [32m+[0m[0m id = "multitenant"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:             }
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:           [32m+[0m[0m members {
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:               [32m+[0m[0m allocation_count = 3
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:             }
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:           [32m+[0m[0m memory {
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:               [32m+[0m[0m allocation_mb = 4096
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:             }
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:         }
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m timeouts {
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:           [32m+[0m[0m create = "120m"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:           [32m+[0m[0m delete = "15m"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:           [32m+[0m[0m update = "120m"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:         }
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:     }
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [1m  # module.database.ibm_resource_key.service_credentials["mongodb_admin"][0m will be created
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [0m  [32m+[0m[0m resource "ibm_resource_key" "service_credentials" {
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m account_id            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m created_at            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m created_by            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m credentials           = (sensitive value)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m credentials_json      = (sensitive value)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m crn                   = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m deleted_at            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m deleted_by            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m guid                  = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m iam_compatible        = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m id                    = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m name                  = "mongodb_admin"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m onetime_credentials   = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_group_id     = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_instance_id  = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_instance_url = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m role                  = "Administrator"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m source_crn            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m state                 = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m status                = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m updated_at            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m updated_by            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m url                   = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:     }
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [1m  # module.database.ibm_resource_key.service_credentials["mongodb_editor"][0m will be created
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [0m  [32m+[0m[0m resource "ibm_resource_key" "service_credentials" {
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m account_id            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m created_at            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m created_by            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m credentials           = (sensitive value)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m credentials_json      = (sensitive value)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m crn                   = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m deleted_at            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m deleted_by            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m guid                  = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m iam_compatible        = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m id                    = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m name                  = "mongodb_editor"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m onetime_credentials   = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_group_id     = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_instance_id  = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_instance_url = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m role                  = "Editor"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m source_crn            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m state                 = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m status                = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m updated_at            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m updated_by            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m url                   = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:     }
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [1m  # module.database.ibm_resource_key.service_credentials["mongodb_operator"][0m will be created
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [0m  [32m+[0m[0m resource "ibm_resource_key" "service_credentials" {
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m account_id            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m created_at            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m created_by            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m credentials           = (sensitive value)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m credentials_json      = (sensitive value)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m crn                   = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m deleted_at            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m deleted_by            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m guid                  = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m iam_compatible        = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m id                    = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m name                  = "mongodb_operator"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m onetime_credentials   = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_group_id     = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_instance_id  = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_instance_url = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m role                  = "Operator"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m source_crn            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m state                 = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m status                = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m updated_at            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m updated_by            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m url                   = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:     }
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [1m  # module.database.ibm_resource_key.service_credentials["mongodb_viewer"][0m will be created
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [0m  [32m+[0m[0m resource "ibm_resource_key" "service_credentials" {
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m account_id            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m created_at            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m created_by            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m credentials           = (sensitive value)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m credentials_json      = (sensitive value)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m crn                   = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m deleted_at            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m deleted_by            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m guid                  = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m iam_compatible        = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m id                    = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m name                  = "mongodb_viewer"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m onetime_credentials   = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_group_id     = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_instance_id  = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_instance_url = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m role                  = "Viewer"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m source_crn            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m state                 = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m status                = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m updated_at            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m updated_by            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m url                   = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:     }
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [1m  # module.resource_group.ibm_resource_group.resource_group[0][0m will be created
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [0m  [32m+[0m[0m resource "ibm_resource_group" "resource_group" {
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m created_at          = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m crn                 = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m default             = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m id                  = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m name                = "mongodb-t-8w1nlj-resource-group"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m payment_methods_url = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m quota_id            = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m quota_url           = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m resource_linkages   = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m state               = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m teams_url           = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:       [32m+[0m[0m updated_at          = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:     }
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [1mPlan:[0m 6 to add, 0 to change, 0 to destroy.
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [0m
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: Changes to Outputs:
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:   [32m+[0m[0m adminuser          = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:   [32m+[0m[0m certificate_base64 = (sensitive value)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:   [32m+[0m[0m hostname           = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:   [32m+[0m[0m id                 = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:   [32m+[0m[0m mongodb_crn        = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:   [32m+[0m[0m port               = (known after apply)
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67:   [32m+[0m[0m version            = "7.0"
+TestRunExistingInstance 2025-02-26T23:21:56+05:30 logger.go:67: [0m[1mmodule.resource_group.ibm_resource_group.resource_group[0]: Creating...[0m[0m
+TestRunExistingInstance 2025-02-26T23:21:59+05:30 logger.go:67: [0m[1mmodule.resource_group.ibm_resource_group.resource_group[0]: Creation complete after 2s [id=10038bac098945e9a9f827453c1a560e][0m
+TestRunExistingInstance 2025-02-26T23:22:00+05:30 logger.go:67: [0m[1mmodule.database.ibm_database.mongodb_database: Creating...[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m╷[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m[1m[31mError: [0m[0m[1m[ERROR] Error creating database instance: Please contact the Service Provider for this error. [400, Bad Request] We were unable to complete your request: Multiple service endpoints are not supported for mongodb in eu-de. Try again with valid values or contact support if the issue persists. {
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m    "StatusCode": 422,
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m    "Headers": {
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "Cache-Control": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "max-age=0, no-cache, no-store"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "Content-Length": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "604"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "Content-Type": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "application/json; charset=utf-8"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "Date": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "Wed, 26 Feb 2025 17:52:07 GMT"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "Expires": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "Wed, 26 Feb 2025 17:52:07 GMT"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "Pragma": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "no-cache"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "Request-Id": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "626c-663bff3aeb544601"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "Retry-After": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "0"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "Server": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "istio-envoy"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "Set-Cookie": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "ak_bmsc=6677C7022E30C7163850EA45FF3C97C9~000000000000000000000000000000~YAAQDjkgF223WQGVAQAA3StjQxp2IYDaiUR2LWwi4B7tOmsBBduny/JObBynDxV82ZA4dZJP8kYGtrxreSjkN7vmcd3woZ9oabDJTGRg+sSQGjqTDoApEYT4oZC2BUJDeV2E9aNTJACFcXRjMUacOSfUaVmn7kYGDlNy6wzg+fXmF5WtMV6tWBxsE2XiXlDEIqRU4fhNj5BBXNdHCsuJCyIb7jlZc3jK8/GJOEcHYQ8XZmY7Jb0BiI3AAoDRjsaDdcAIPKoWxC+801EV+0RMmdgJDOEjie4+c0ZfeGsnjVK9jKl5a9Pkf3sD1SaZojSXCnzvXI/H37Dam1yAIgiG3CdvOPRIxiiWUBQjfqm1EmZ534OaUIj4Kxkt0iubSbaqc8I1s2AsVq3mQnYIwzA=; Domain=.cloud.ibm.com; Path=/; Expires=Wed, 26 Feb 2025 19:52:02 GMT; Max-Age=7195"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "Strict-Transport-Security": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "max-age=31536000;includeSubDomains"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "Transaction-Id": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "626c-72b1e26e001edc5a"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "X-Content-Type-Options": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "nosniff"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "X-Correlation-Id": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "626c-72b1e26e001edc5a"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "X-Envoy-Upstream-Service-Time": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "5113"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "X-Op-Completion-Time": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            ""
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "X-Ratelimit-Limit": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "100"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "X-Ratelimit-Remaining": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "99"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ],
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "X-Ratelimit-Reset": [
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m            "0"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        ]
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m    },
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m    "Result": {
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "details": "{\"error\":\"BadRequest\",\"description\":\"We were unable to complete your request: Multiple service endpoints are not supported for mongodb in eu-de. Try again with valid values or contact support if the issue persists.\"}",
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "error_code": "RC-ServiceBrokerErrorResponse",
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "message": "Please contact the Service Provider for this error. [400, Bad Request] We were unable to complete your request: Multiple service endpoints are not supported for mongodb in eu-de. Try again with valid values or contact support if the issue persists.",
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "status_code": 422,
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m        "transaction_id": "626c-72b1e26e001edc5a"
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m    },
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m    "RawResult": null
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m}
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m[0m
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m[0m  with module.database.ibm_database.mongodb_database,
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m  on ../../main.tf line 174, in resource "ibm_database" "mongodb_database":
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m 174: resource "ibm_database" "mongodb_database" [4m{[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m│[0m [0m
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: [31m╵[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 retry.go:99: Returning due to fatal error: FatalError{Underlying: error while running command: exit status 1; [31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1m[ERROR] Error creating database instance: Please contact the Service Provider for this error. [400, Bad Request] We were unable to complete your request: Multiple service endpoints are not supported for mongodb in eu-de. Try again with valid values or contact support if the issue persists. {
+[31m│[0m [0m    "StatusCode": 422,
+[31m│[0m [0m    "Headers": {
+[31m│[0m [0m        "Cache-Control": [
+[31m│[0m [0m            "max-age=0, no-cache, no-store"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "Content-Length": [
+[31m│[0m [0m            "604"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "Content-Type": [
+[31m│[0m [0m            "application/json; charset=utf-8"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "Date": [
+[31m│[0m [0m            "Wed, 26 Feb 2025 17:52:07 GMT"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "Expires": [
+[31m│[0m [0m            "Wed, 26 Feb 2025 17:52:07 GMT"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "Pragma": [
+[31m│[0m [0m            "no-cache"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "Request-Id": [
+[31m│[0m [0m            "626c-663bff3aeb544601"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "Retry-After": [
+[31m│[0m [0m            "0"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "Server": [
+[31m│[0m [0m            "istio-envoy"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "Set-Cookie": [
+[31m│[0m [0m            "ak_bmsc=6677C7022E30C7163850EA45FF3C97C9~000000000000000000000000000000~YAAQDjkgF223WQGVAQAA3StjQxp2IYDaiUR2LWwi4B7tOmsBBduny/JObBynDxV82ZA4dZJP8kYGtrxreSjkN7vmcd3woZ9oabDJTGRg+sSQGjqTDoApEYT4oZC2BUJDeV2E9aNTJACFcXRjMUacOSfUaVmn7kYGDlNy6wzg+fXmF5WtMV6tWBxsE2XiXlDEIqRU4fhNj5BBXNdHCsuJCyIb7jlZc3jK8/GJOEcHYQ8XZmY7Jb0BiI3AAoDRjsaDdcAIPKoWxC+801EV+0RMmdgJDOEjie4+c0ZfeGsnjVK9jKl5a9Pkf3sD1SaZojSXCnzvXI/H37Dam1yAIgiG3CdvOPRIxiiWUBQjfqm1EmZ534OaUIj4Kxkt0iubSbaqc8I1s2AsVq3mQnYIwzA=; Domain=.cloud.ibm.com; Path=/; Expires=Wed, 26 Feb 2025 19:52:02 GMT; Max-Age=7195"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "Strict-Transport-Security": [
+[31m│[0m [0m            "max-age=31536000;includeSubDomains"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "Transaction-Id": [
+[31m│[0m [0m            "626c-72b1e26e001edc5a"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "X-Content-Type-Options": [
+[31m│[0m [0m            "nosniff"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "X-Correlation-Id": [
+[31m│[0m [0m            "626c-72b1e26e001edc5a"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "X-Envoy-Upstream-Service-Time": [
+[31m│[0m [0m            "5113"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "X-Op-Completion-Time": [
+[31m│[0m [0m            ""
+[31m│[0m [0m        ],
+[31m│[0m [0m        "X-Ratelimit-Limit": [
+[31m│[0m [0m            "100"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "X-Ratelimit-Remaining": [
+[31m│[0m [0m            "99"
+[31m│[0m [0m        ],
+[31m│[0m [0m        "X-Ratelimit-Reset": [
+[31m│[0m [0m            "0"
+[31m│[0m [0m        ]
+[31m│[0m [0m    },
+[31m│[0m [0m    "Result": {
+[31m│[0m [0m        "details": "{\"error\":\"BadRequest\",\"description\":\"We were unable to complete your request: Multiple service endpoints are not supported for mongodb in eu-de. Try again with valid values or contact support if the issue persists.\"}",
+[31m│[0m [0m        "error_code": "RC-ServiceBrokerErrorResponse",
+[31m│[0m [0m        "message": "Please contact the Service Provider for this error. [400, Bad Request] We were unable to complete your request: Multiple service endpoints are not supported for mongodb in eu-de. Try again with valid values or contact support if the issue persists.",
+[31m│[0m [0m        "status_code": 422,
+[31m│[0m [0m        "transaction_id": "626c-72b1e26e001edc5a"
+[31m│[0m [0m    },
+[31m│[0m [0m    "RawResult": null
+[31m│[0m [0m}
+[31m│[0m [0m[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.database.ibm_database.mongodb_database,
+[31m│[0m [0m  on ../../main.tf line 174, in resource "ibm_database" "mongodb_database":
+[31m│[0m [0m 174: resource "ibm_database" "mongodb_database" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m}
+    pr_test.go:169: 
+        	Error Trace:	/Users/aatreyeemukherjee/Work/terraform-ibm-icd-mongodb/tests/pr_test.go:169
+        	Error:      	Should be true
+        	Test:       	TestRunExistingInstance
+        	Messages:   	Init and Apply of temp existing resource failed
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 pr_test.go:206: START: Destroy (existing resources)
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 retry.go:91: terraform [destroy -auto-approve -input=false -var region=eu-de -var mongodb_version=7.0 -var service_endpoints=public-and-private -var prefix=mongodb-t-8w1nlj -lock=false]
+TestRunExistingInstance 2025-02-26T23:22:07+05:30 logger.go:67: Running command terraform with args [destroy -auto-approve -input=false -var region=eu-de -var mongodb_version=7.0 -var service_endpoints=public-and-private -var prefix=mongodb-t-8w1nlj -lock=false]
+TestRunExistingInstance 2025-02-26T23:22:09+05:30 logger.go:67: [0m[1mmodule.resource_group.ibm_resource_group.resource_group[0]: Refreshing state... [id=10038bac098945e9a9f827453c1a560e][0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67: Terraform used the selected providers to generate the following execution
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67: plan. Resource actions are indicated with the following symbols:
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67:   [31m-[0m destroy[0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67: Terraform will perform the following actions:
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67: [1m  # module.resource_group.ibm_resource_group.resource_group[0][0m will be [1m[31mdestroyed[0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67: [0m  [31m-[0m[0m resource "ibm_resource_group" "resource_group" {
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67:       [31m-[0m[0m created_at        = "2025-02-26T17:51:57.768Z" [90m-> null[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67:       [31m-[0m[0m crn               = "crn:v1:bluemix:public:resource-controller::a/abac0df06b644a9cabc6e44f55b3880e::resource-group:10038bac098945e9a9f827453c1a560e" [90m-> null[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67:       [31m-[0m[0m default           = false [90m-> null[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67:       [31m-[0m[0m id                = "10038bac098945e9a9f827453c1a560e" [90m-> null[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67:       [31m-[0m[0m name              = "mongodb-t-8w1nlj-resource-group" [90m-> null[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67:       [31m-[0m[0m quota_id          = "a3d7b8d01e261c24677937c29ab33f3c" [90m-> null[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67:       [31m-[0m[0m quota_url         = "/v2/quota_definitions/a3d7b8d01e261c24677937c29ab33f3c" [90m-> null[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67:       [31m-[0m[0m resource_linkages = [] [90m-> null[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67:       [31m-[0m[0m state             = "ACTIVE" [90m-> null[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67:       [31m-[0m[0m updated_at        = "2025-02-26T17:51:57.769Z" [90m-> null[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67:     }
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67: [1mPlan:[0m 0 to add, 0 to change, 1 to destroy.
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67: [0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67: Changes to Outputs:
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67:   [31m-[0m[0m version = "7.0" [90m-> null[0m[0m
+TestRunExistingInstance 2025-02-26T23:22:13+05:30 logger.go:67: [0m[1mmodule.resource_group.ibm_resource_group.resource_group[0]: Destroying... [id=10038bac098945e9a9f827453c1a560e][0m[0m
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: [0m[1mmodule.resource_group.ibm_resource_group.resource_group[0]: Destruction complete after 2s[0m
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: [0m[1m[32m
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: Destroy complete! Resources: 1 destroyed.
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: [0m
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 retry.go:91: terraform [workspace show]
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: Running command terraform with args [workspace show]
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: mongodb-t-8w1nlj
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 retry.go:91: terraform [workspace list]
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: Running command terraform with args [workspace list]
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67:   default
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: * mongodb-t-8w1nlj
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 retry.go:91: terraform [workspace list]
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: Running command terraform with args [workspace list]
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67:   default
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: * mongodb-t-8w1nlj
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: 
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 retry.go:91: terraform [workspace select default]
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: Running command terraform with args [workspace select default]
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: [0m[32mSwitched to workspace "default".[0m
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 retry.go:91: terraform [workspace show]
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: Running command terraform with args [workspace show]
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: default
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 retry.go:91: terraform [workspace delete mongodb-t-8w1nlj]
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: Running command terraform with args [workspace delete mongodb-t-8w1nlj]
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 logger.go:67: [0m[32mDeleted workspace "mongodb-t-8w1nlj"![0m
+TestRunExistingInstance 2025-02-26T23:22:16+05:30 pr_test.go:209: END: Destroy (existing resources)
+--- FAIL: TestRunExistingInstance (44.17s)
+FAIL
+exit status 1
+FAIL	github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb	45.234s
