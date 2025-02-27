@@ -171,7 +171,7 @@ resource "time_sleep" "wait_for_backup_kms_authorization_policy" {
 # MongoDB instance
 ########################################################################################################################
 
-resource "ibm_database" "mongodb_database" {
+resource "ibm_database" "mongodb" {
   depends_on                = [time_sleep.wait_for_authorization_policy, time_sleep.wait_for_backup_kms_authorization_policy]
   name                      = var.name
   location                  = var.region
@@ -303,9 +303,9 @@ resource "ibm_database" "mongodb_database" {
   }
 }
 
-resource "ibm_resource_tag" "access_tag" {
+resource "ibm_resource_tag" "mongodb_tag" {
   count       = length(var.access_tags) == 0 ? 0 : 1
-  resource_id = ibm_database.mongodb_database.resource_crn
+  resource_id = ibm_database.mongodb.resource_crn
   tags        = var.access_tags
   tag_type    = "access"
 }
@@ -330,7 +330,7 @@ module "cbr_rule" {
       },
       {
         name     = "serviceInstance"
-        value    = ibm_database.mongodb_database.id
+        value    = ibm_database.mongodb.id
         operator = "stringEquals"
       },
       {
@@ -358,7 +358,7 @@ resource "ibm_resource_key" "service_credentials" {
   for_each             = var.service_credential_names
   name                 = each.key
   role                 = each.value
-  resource_instance_id = ibm_database.mongodb_database.id
+  resource_instance_id = ibm_database.mongodb.id
 }
 
 locals {
@@ -384,7 +384,7 @@ locals {
 
 data "ibm_database_connection" "database_connection" {
   endpoint_type = var.service_endpoints == "public-and-private" ? "public" : var.service_endpoints
-  deployment_id = ibm_database.mongodb_database.id
-  user_id       = ibm_database.mongodb_database.adminuser
+  deployment_id = ibm_database.mongodb.id
+  user_id       = ibm_database.mongodb.adminuser
   user_type     = "database"
 }

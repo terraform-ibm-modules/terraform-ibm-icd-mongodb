@@ -4,22 +4,22 @@
 
 output "id" {
   description = "MongoDB instance ID"
-  value       = ibm_database.mongodb_database.id
+  value       = ibm_database.mongodb.id
 }
 
 output "guid" {
   description = "MongoDB instance guid"
-  value       = ibm_database.mongodb_database.guid
+  value       = ibm_database.mongodb.guid
 }
 
 output "version" {
   description = "MongoDB instance version"
-  value       = ibm_database.mongodb_database.version
+  value       = ibm_database.mongodb.version
 }
 
 output "crn" {
   description = "MongoDB instance crn"
-  value       = ibm_database.mongodb_database.resource_crn
+  value       = ibm_database.mongodb.resource_crn
 }
 
 output "cbr_rule_ids" {
@@ -41,7 +41,7 @@ output "service_credentials_object" {
 
 output "adminuser" {
   description = "Database admin user name"
-  value       = ibm_database.mongodb_database.adminuser
+  value       = ibm_database.mongodb.adminuser
 }
 
 output "hostname" {
