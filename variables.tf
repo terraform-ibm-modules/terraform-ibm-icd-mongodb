@@ -7,7 +7,7 @@ variable "resource_group_id" {
   description = "The resource group ID where the MongoDB instance will be created."
 }
 
-variable "instance_name" {
+variable "name" {
   type        = string
   description = "The name to give the MongoDB instance."
 }
@@ -21,8 +21,9 @@ variable "mongodb_version" {
     condition = anytrue([
       var.mongodb_version == null,
       var.mongodb_version == "6.0",
+      var.mongodb_version == "7.0",
     ])
-    error_message = "Version must be 6.0. If no value is passed, the current preferred version of IBM Cloud Databases is used."
+    error_message = "Version must be either 6.0 or 7.0. If no value is passed, the current preferred version of IBM Cloud Databases is used."
   }
 }
 
@@ -52,21 +53,21 @@ variable "plan" {
 
 variable "members" {
   type        = number
-  description = "Allocated number of members"
+  description = "The number of members that are allocated. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)"
   default     = 3
   # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
 
-variable "cpu_count" {
+variable "member_cpu_count" {
   type        = number
   description = "Allocated dedicated CPU per member. For shared CPU, set to 0. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
   default     = 0
   # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
 
-variable "disk_mb" {
+variable "member_disk_mb" {
   type        = number
-  description = "Allocated disk per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
+  description = "The disk that is allocated per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
   default     = 10240
   # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
@@ -78,7 +79,7 @@ variable "member_host_flavor" {
   # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
 
-variable "memory_mb" {
+variable "member_memory_mb" {
   type        = number
   description = "Allocated memory per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
   default     = 4096
@@ -115,14 +116,14 @@ variable "service_credential_names" {
   }
 }
 
-variable "endpoints" {
+variable "service_endpoints" {
   type        = string
-  description = "Specify whether you want to enable the public, private, or both service endpoints. Supported values are 'public', 'private', or 'public-and-private'."
-  default     = "private"
+  description = "The type of endpoint of the database instance. Possible values: `public`, `private`, `public-and-private`."
+  default     = "public"
 
   validation {
-    condition     = can(regex("public|private|public-and-private", var.endpoints))
-    error_message = "Valid values are (public, private, or public-and-private)."
+    condition     = can(regex("public|public-and-private|private", var.service_endpoints))
+    error_message = "Valid values for service_endpoints are 'public', 'public-and-private', and 'private'"
   }
 }
 
@@ -144,6 +145,7 @@ variable "access_tags" {
     error_message = "Tags must match the regular expression \"[\\w\\-_\\.]+:[\\w\\-_\\.]+\", see https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#limits for more details"
   }
 }
+
 
 ##############################################################
 # Auto Scaling

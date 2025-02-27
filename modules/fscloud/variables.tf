@@ -7,7 +7,7 @@ variable "resource_group_id" {
   description = "The resource group ID where the MongoDB instance will be created."
 }
 
-variable "instance_name" {
+variable "name" {
   type        = string
   description = "Name of the mongodb instance"
 }
@@ -40,13 +40,13 @@ variable "members" {
   default     = 3
 }
 
-variable "cpu_count" {
+variable "member_cpu_count" {
   type        = number
   description = "Allocated dedicated CPU per member. For shared CPU, set to 0. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
   default     = 6
 }
 
-variable "disk_mb" {
+variable "member_disk_mb" {
   type        = number
   description = "Allocated disk per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
   default     = 20480
@@ -58,7 +58,7 @@ variable "member_host_flavor" {
   default     = null
 }
 
-variable "memory_mb" {
+variable "member_memory_mb" {
   type        = number
   description = "Allocated memory per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
   default     = 14336
