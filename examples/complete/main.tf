@@ -3,8 +3,8 @@
 ##############################################################################
 
 locals {
-  sm_guid   = var.existing_sm_instance_guid == null ? module.secrets_manager[0].secrets_manager_guid : var.existing_sm_instance_guid
-  sm_region = var.existing_sm_instance_region == null ? var.region : var.existing_sm_instance_region
+  secret_manager_guid   = var.existing_secret_manager_instance_guid == null ? module.secrets_manager[0].secrets_manager_guid : var.existing_secret_manager_instance_guid
+  secret_manager_region = var.existing_secret_manager_instance_region == null ? var.region : var.existing_secret_manager_instance_region
   service_credential_names = {
     "es_admin" : "Administrator",
     "es_operator" : "Operator",
@@ -131,7 +131,7 @@ module "icd_mongodb" {
 
 # Create Secrets Manager Instance (if not using existing one)
 module "secrets_manager" {
-  count                = var.existing_sm_instance_guid == null ? 1 : 0
+  count                = var.existing_secret_manager_instance_guid == null ? 1 : 0
   source               = "terraform-ibm-modules/secrets-manager/ibm"
   version              = "1.23.6"
   resource_group_id    = module.resource_group.resource_group_id
@@ -146,8 +146,8 @@ module "secrets_manager" {
 module "secrets_manager_secrets_group" {
   source               = "terraform-ibm-modules/secrets-manager-secret-group/ibm"
   version              = "1.2.2"
-  region               = local.sm_region
-  secrets_manager_guid = local.sm_guid
+  region               = local.secret_manager_region
+  secrets_manager_guid = local.secret_manager_guid
   #tfsec:ignore:general-secrets-no-plaintext-exposure
   secret_group_name        = "${var.prefix}-es-secrets"
   secret_group_description = "service secret-group" #tfsec:ignore:general-secrets-no-plaintext-exposure
@@ -158,8 +158,8 @@ module "secrets_manager_service_credentials_user_pass" {
   source                  = "terraform-ibm-modules/secrets-manager-secret/ibm"
   version                 = "1.6.0"
   for_each                = local.service_credential_names
-  region                  = local.sm_region
-  secrets_manager_guid    = local.sm_guid
+  region                  = local.secret_manager_region
+  secrets_manager_guid    = local.secret_manager_guid
   secret_group_id         = module.secrets_manager_secrets_group.secret_group_id
   secret_name             = "${var.prefix}-${each.key}-credentials"
   secret_description      = "MongoDB Service Credentials for ${each.key}"
@@ -172,8 +172,8 @@ module "secrets_manager_service_credentials_user_pass" {
 module "secrets_manager_service_credentials_cert" {
   source                    = "terraform-ibm-modules/secrets-manager-secret/ibm"
   version                   = "1.6.0"
-  region                    = local.sm_region
-  secrets_manager_guid      = local.sm_guid
+  region                    = local.secret_manager_region
+  secrets_manager_guid      = local.secret_manager_guid
   secret_group_id           = module.secrets_manager_secrets_group.secret_group_id
   secret_name               = "${var.prefix}-es-cert"
   secret_description        = "MongoDB Service Credential Certificate"
