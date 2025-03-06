@@ -47,5 +47,3 @@ variable "pitr_time" {
   type        = string
   description = "The timestamp in UTC format (%Y-%m-%dT%H:%M:%SZ) for any time in the last 7 days that you want to restore to. If empty string (\"\") is passed, earliest_in_time_recovery_time will be used as pitr_time. To retrieve the timestamp, run the command (ibmcloud cdb MongoDB earliest-pitr-timestamp <deployment name or CRN>). For more info on Point-in-time Recovery, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pitr&interface=ui"
 }
-
-

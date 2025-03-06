@@ -16,14 +16,14 @@ module "mongodb_db_pitr" {
   resource_group_id  = module.resource_group.resource_group_id
   name               = "${var.prefix}-mongodb-pitr"
   region             = var.region
-  plan="enterprise"
-  tags      = var.resource_tags
+  plan               = "enterprise"
+  tags               = var.resource_tags
   access_tags        = var.access_tags
   member_host_flavor = "multitenant"
-  member_memory_mb=14336
+  member_memory_mb   = 14336
   member_disk_mb     = 20480
   member_cpu_count   = 6
-  mongodb_version         = var.mongodb_version
+  mongodb_version    = var.mongodb_version
   pitr_id            = var.pitr_id
-  pitr_time        = var.pitr_time == "" ? " " : var.pitr_time
+  pitr_time          = var.pitr_time == "" ? " " : var.pitr_time
 }
