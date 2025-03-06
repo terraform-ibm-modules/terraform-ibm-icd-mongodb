@@ -56,7 +56,7 @@ variable "plan" {
   }
 }
 
-variable "existing_db_instance_crn" {
+variable "existing_mongodb_instance_crn" {
   type        = string
   default     = null
   description = "The CRN of an existing Databases for MongoDB instance. If no value is specified, a new instance is created."

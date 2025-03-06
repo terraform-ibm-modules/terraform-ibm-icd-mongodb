@@ -49,6 +49,7 @@ You need the following permissions to run this module.
 - [ Basic example](examples/basic)
 - [ Complete example with BYOK encryption and CBR rules](examples/complete)
 - [ Financial Services Cloud profile example with autoscaling enabled](examples/fscloud)
+- [ Point in time recovery example (PITR)](examples/pitr)
 <!-- END EXAMPLES HOOK -->
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
@@ -98,6 +99,8 @@ You need the following permissions to run this module.
 | <a name="input_members"></a> [members](#input\_members) | The number of members that are allocated. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling) | `number` | `3` | no |
 | <a name="input_mongodb_version"></a> [mongodb\_version](#input\_mongodb\_version) | The version of the MongoDB to provision. If no value passed, the current ICD preferred version is used. For our version policy, see https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-versioning-policy for more details | `string` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name to give the MongoDB instance. | `string` | n/a | yes |
+| <a name="input_pitr_id"></a> [pitr\_id](#input\_pitr\_id) | (Optional) The ID of the source deployment MongoDB instance that you want to recover back to. The MongoDB instance is expected to be in an up and in running state. | `string` | `null` | no |
+| <a name="input_pitr_time"></a> [pitr\_time](#input\_pitr\_time) | (Optional) The timestamp in UTC format (%Y-%m-%dT%H:%M:%SZ) for any time in the last 7 days that you want to restore to. If empty string ("") is passed, earliest\_point\_in\_time\_recovery\_time will be used as pitr\_time. To retrieve the timestamp, run the command (ibmcloud cdb MongoDB earliest-pitr-timestamp <deployment name or CRN>). For more info on Point-in-time Recovery, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pitr&interface=ui | `string` | `null` | no |
 | <a name="input_plan"></a> [plan](#input\_plan) | The name of the service plan that you choose for your MongoDB instance | `string` | `"standard"` | no |
 | <a name="input_region"></a> [region](#input\_region) | The region where you want to deploy your instance. | `string` | `"us-south"` | no |
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | The resource group ID where the MongoDB instance will be created. | `string` | n/a | yes |
