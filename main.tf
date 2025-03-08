@@ -223,7 +223,7 @@ resource "ibm_database" "mongodb" {
 
   ## This block is for if host_flavor IS set to "multitenant"
   dynamic "group" {
-    for_each = local.host_flavor_set && var.member_host_flavor == "multitenant" && !local.recovery_mode == null ? [1] : []
+    for_each = local.host_flavor_set && var.member_host_flavor == "multitenant" && !local.recovery_mode ? [1] : []
     content {
       group_id = "member" # Only member type is allowed for IBM Cloud Databases
       host_flavor {
@@ -246,7 +246,7 @@ resource "ibm_database" "mongodb" {
 
   ## This block is for if host_flavor IS NOT set
   dynamic "group" {
-    for_each = !local.host_flavor_set && !local.recovery_mode == null ? [1] : []
+    for_each = !local.host_flavor_set && !local.recovery_mode ? [1] : []
     content {
       group_id = "member" # Only member type is allowed for IBM Cloud Databases
       memory {
