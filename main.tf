@@ -394,8 +394,3 @@ data "ibm_database_connection" "database_connection" {
   user_id       = ibm_database.mongodb.adminuser
   user_type     = "database"
 }
-
-# data "ibm_database_point_in_time_recovery" "source_db_earliest_pitr_time" {
-#   count         = var.pitr_time != " " ? 0 : 1
-#   deployment_id = var.pitr_id
-# }

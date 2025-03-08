@@ -59,8 +59,3 @@ output "certificate_base64" {
   value       = data.ibm_database_connection.database_connection.mongodb[0].certificate[0].certificate_base64
   sensitive   = true
 }
-
-# output "pitr_time" {
-#   description = "MongoDB instance id"
-#   value       = var.pitr_time != "" ? var.pitr_time : data.ibm_database_point_in_time_recovery.source_db_earliest_pitr_time[0].earliest_point_in_time_recovery_time
-# }
