@@ -2,12 +2,12 @@
 # Outputs
 ##############################################################################
 
-output "restored_mongo_db_id" {
+output "restored_icd_mongodb_id" {
   description = "Restored MongoDB instance id"
-  value       = module.restored_mongo_db.id
+  value       = module.restored_icd_mongodb.id
 }
 
-output "restored_mongo_db_version" {
+output "restored_icd_mongodb_version" {
   description = "Restored MongoDB instance version"
-  value       = module.restored_mongo_db.version
+  value       = module.restored_icd_mongodb.version
 }

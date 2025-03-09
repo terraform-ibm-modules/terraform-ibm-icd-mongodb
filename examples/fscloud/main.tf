@@ -56,7 +56,7 @@ module "cbr_zone" {
 module "mongodb" {
   source                    = "../../modules/fscloud"
   resource_group_id         = module.resource_group.resource_group_id
-  instance_name             = "${var.prefix}-mongodb"
+  name                      = "${var.prefix}-mongodb"
   region                    = var.region
   tags                      = var.resource_tags
   access_tags               = var.access_tags
@@ -70,15 +70,7 @@ module "mongodb" {
     "mongodb_viewer" : "Viewer",
     "mongodb_editor" : "Editor",
   }
-  auto_scaling = {
-    disk = {
-      capacity_enabled : true,
-      io_enabled : true
-    }
-    memory = {
-      io_enabled : true,
-    }
-  }
+  auto_scaling       = var.auto_scaling
   member_host_flavor = "b3c.4x16.encrypted"
   cbr_rules = [
     {

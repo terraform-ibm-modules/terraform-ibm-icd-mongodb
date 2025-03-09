@@ -12,9 +12,17 @@ locals {
   validate_backup_key = !var.use_ibm_owned_encryption_key && var.backup_encryption_key_crn != null && (var.use_default_backup_encryption_key || var.use_same_kms_key_for_backups) ? tobool("When passing a value for 'backup_encryption_key_crn' you cannot set 'use_default_backup_encryption_key' to true or 'use_ibm_owned_encryption_key' to false.") : true
   # tflint-ignore: terraform_unused_declarations
   validate_backup_key_2 = !var.use_ibm_owned_encryption_key && var.backup_encryption_key_crn == null && !var.use_same_kms_key_for_backups ? tobool("When 'use_same_kms_key_for_backups' is set to false, a value needs to be passed for 'backup_encryption_key_crn'.") : true
+  # tflint-ignore: terraform_unused_declarations
+  validate_pitr_vars = (var.pitr_id != null && var.pitr_time == null) || (var.pitr_time != null && var.pitr_id == null) ? tobool("To use Point-In-Time Recovery (PITR), values for both var.pitr_id and var.pitr_time need to be set. Otherwise, unset both of these.") : true
+  # Determine if restore, from backup or point in time recovery
+  recovery_mode = var.backup_crn != null || var.pitr_id != null
+}
 
-  # If no value passed for 'backup_encryption_key_crn' use the value of 'kms_key_crn' and perform validation of 'kms_key_crn' to check if region is supported by backup encryption key.
+########################################################################################################################
+# Locals
+########################################################################################################################
 
+locals {
   # If 'use_ibm_owned_encryption_key' is true or 'use_default_backup_encryption_key' is true, default to null.
   # If no value is passed for 'backup_encryption_key_crn', then default to use 'kms_key_crn'.
   backup_encryption_key_crn = var.use_ibm_owned_encryption_key || var.use_default_backup_encryption_key ? null : (var.backup_encryption_key_crn != null ? var.backup_encryption_key_crn : var.kms_key_crn)
@@ -113,9 +121,8 @@ resource "ibm_iam_authorization_policy" "kms_policy" {
 
 # workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
 resource "time_sleep" "wait_for_authorization_policy" {
-  count      = local.create_kms_auth_policy
-  depends_on = [ibm_iam_authorization_policy.kms_policy]
-
+  count           = local.create_kms_auth_policy
+  depends_on      = [ibm_iam_authorization_policy.kms_policy]
   create_duration = "30s"
 }
 
@@ -169,19 +176,21 @@ resource "time_sleep" "wait_for_backup_kms_authorization_policy" {
 ########################################################################################################################
 
 resource "ibm_database" "mongodb" {
-  depends_on                = [time_sleep.wait_for_authorization_policy]
-  name                      = var.instance_name
-  location                  = var.region
-  plan                      = var.plan
-  service                   = "databases-for-mongodb"
-  version                   = var.mongodb_version
-  resource_group_id         = var.resource_group_id
-  adminpassword             = var.admin_pass
-  tags                      = var.tags
-  service_endpoints         = var.endpoints
-  key_protect_key           = var.kms_key_crn
-  backup_encryption_key_crn = local.backup_encryption_key_crn
-  backup_id                 = var.backup_crn
+  depends_on                           = [time_sleep.wait_for_authorization_policy, time_sleep.wait_for_backup_kms_authorization_policy]
+  name                                 = var.name
+  location                             = var.region
+  plan                                 = var.plan
+  service                              = "databases-for-mongodb"
+  version                              = var.mongodb_version
+  resource_group_id                    = var.resource_group_id
+  adminpassword                        = var.admin_pass
+  tags                                 = var.tags
+  service_endpoints                    = var.service_endpoints
+  key_protect_key                      = var.kms_key_crn
+  backup_encryption_key_crn            = local.backup_encryption_key_crn
+  backup_id                            = var.backup_crn
+  point_in_time_recovery_deployment_id = var.pitr_id
+  point_in_time_recovery_time          = var.pitr_time
 
   dynamic "users" {
     for_each = nonsensitive(var.users != null ? var.users : [])
@@ -197,14 +206,14 @@ resource "ibm_database" "mongodb" {
   ## This is used to conditionally add one, OR, the other group block depending on var.local.host_flavor_set
   ## This block is for if host_flavor IS set to specific pre-defined host sizes and not set to "multitenant"
   dynamic "group" {
-    for_each = local.host_flavor_set && var.member_host_flavor != "multitenant" && var.backup_crn == null ? [1] : []
+    for_each = local.host_flavor_set && var.member_host_flavor != "multitenant" && !local.recovery_mode ? [1] : []
     content {
       group_id = "member" # Only member type is allowed for IBM Cloud Databases
       host_flavor {
         id = var.member_host_flavor
       }
       disk {
-        allocation_mb = var.disk_mb
+        allocation_mb = var.member_disk_mb
       }
       members {
         allocation_count = var.members
@@ -214,20 +223,20 @@ resource "ibm_database" "mongodb" {
 
   ## This block is for if host_flavor IS set to "multitenant"
   dynamic "group" {
-    for_each = local.host_flavor_set && var.member_host_flavor == "multitenant" && var.backup_crn == null ? [1] : []
+    for_each = local.host_flavor_set && var.member_host_flavor == "multitenant" && !local.recovery_mode ? [1] : []
     content {
       group_id = "member" # Only member type is allowed for IBM Cloud Databases
       host_flavor {
         id = var.member_host_flavor
       }
       disk {
-        allocation_mb = var.disk_mb
+        allocation_mb = var.member_disk_mb
       }
       memory {
-        allocation_mb = var.memory_mb
+        allocation_mb = var.member_memory_mb
       }
       cpu {
-        allocation_count = var.cpu_count
+        allocation_count = var.member_cpu_count
       }
       members {
         allocation_count = var.members
@@ -237,17 +246,17 @@ resource "ibm_database" "mongodb" {
 
   ## This block is for if host_flavor IS NOT set
   dynamic "group" {
-    for_each = !local.host_flavor_set && var.backup_crn == null ? [1] : []
+    for_each = !local.host_flavor_set && !local.recovery_mode ? [1] : []
     content {
       group_id = "member" # Only member type is allowed for IBM Cloud Databases
       memory {
-        allocation_mb = var.memory_mb
+        allocation_mb = var.member_memory_mb
       }
       disk {
-        allocation_mb = var.disk_mb
+        allocation_mb = var.member_disk_mb
       }
       cpu {
-        allocation_count = var.cpu_count
+        allocation_count = var.member_cpu_count
       }
       members {
         allocation_count = var.members
@@ -327,7 +336,7 @@ module "cbr_rule" {
       },
       {
         name     = "serviceInstance"
-        value    = ibm_database.mongodb.guid
+        value    = ibm_database.mongodb.id
         operator = "stringEquals"
       },
       {
@@ -380,7 +389,7 @@ locals {
 }
 
 data "ibm_database_connection" "database_connection" {
-  endpoint_type = var.endpoints == "public-and-private" ? "public" : var.endpoints
+  endpoint_type = var.service_endpoints == "public-and-private" ? "public" : var.service_endpoints
   deployment_id = ibm_database.mongodb.id
   user_id       = ibm_database.mongodb.adminuser
   user_type     = "database"

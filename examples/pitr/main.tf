@@ -1,4 +1,4 @@
-##############################################################################
+#############################################################################
 # Resource Group
 ##############################################################################
 
@@ -10,19 +10,20 @@ module "resource_group" {
   existing_resource_group_name = var.resource_group
 }
 
-data "ibm_database_backups" "backup_database" {
-  deployment_id = var.existing_database_crn
-}
-
-# New mongo db instance pointing to the backup instance
-module "restored_icd_mongodb" {
+# New ICD mongodb database instance pointing to a PITR time
+module "mongodb_db_pitr" {
   source             = "../.."
   resource_group_id  = module.resource_group.resource_group_id
-  name               = "${var.prefix}-mongodb-restored"
+  name               = "${var.prefix}-mongodb-pitr"
   region             = var.region
-  mongodb_version    = var.mongodb_version
-  access_tags        = var.access_tags
+  plan               = "enterprise"
   tags               = var.resource_tags
+  access_tags        = var.access_tags
   member_host_flavor = "multitenant"
-  backup_crn         = data.ibm_database_backups.backup_database.backups[0].backup_id
+  member_memory_mb   = 14336
+  member_disk_mb     = 20480
+  member_cpu_count   = 6
+  mongodb_version    = var.mongodb_version
+  pitr_id            = var.pitr_id
+  pitr_time          = var.pitr_time == "" ? " " : var.pitr_time
 }
