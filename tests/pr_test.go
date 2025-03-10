@@ -162,7 +162,7 @@ func TestRunStandardSolutionSchematics(t *testing.T) {
 		{Name: "access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 		{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
-		{Name: "mongodb_version", Value: "6.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
+		{Name: "mongodb_version", Value: "7.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
 		{Name: "resource_group_name", Value: options.Prefix, DataType: "string"},
 		{Name: "existing_secrets_manager_instance_crn", Value: permanentResources["secretsManagerCRN"], DataType: "string"},
 		{Name: "service_credential_secrets", Value: serviceCredentialSecrets, DataType: "list(object)"},
@@ -251,7 +251,7 @@ func TestPlanValidation(t *testing.T) {
 	options.TerraformOptions.Vars = map[string]interface{}{
 		"prefix":              options.Prefix,
 		"region":              "us-south",
-		"mongodb_version":     "6.0",
+		"mongodb_version":     "7.0",
 		"provider_visibility": "public",
 		"resource_group_name": options.Prefix,
 	}
