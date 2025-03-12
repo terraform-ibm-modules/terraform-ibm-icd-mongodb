@@ -90,7 +90,7 @@ func TestRunFSCloudExample(t *testing.T) {
 		TerraformVars: map[string]interface{}{
 			"access_tags":     permanentResources["accessTags"],
 			"kms_key_crn":     permanentResources["hpcs_south_root_key_crn"],
-			"mongodb_version": "6.0", // Always lock this test into the latest supported MongoDB version
+			"mongodb_version": "7.0", // Always lock this test into the latest supported MongoDB version
 		},
 		CloudInfoService: sharedInfoSvc,
 	})
