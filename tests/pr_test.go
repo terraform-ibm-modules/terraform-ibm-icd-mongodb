@@ -97,6 +97,7 @@ func TestRunStandardSolutionSchematics(t *testing.T) {
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 		{Name: "existing_backup_kms_key_crn", Value: permanentResources["hpcs_south_root_key_crn"], DataType: "string"},
 		{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
+		{Name: "mongodb_version", Value: "7.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
 		{Name: "resource_group_name", Value: options.Prefix, DataType: "string"},
 		{Name: "plan", Value: "standard", DataType: "string"},
 		{Name: "service_credential_names", Value: "{\"admin_test\": \"Administrator\", \"editor_test\": \"Editor\"}", DataType: "map(string)"},
@@ -223,11 +224,25 @@ func TestRunStandardSolutionIBMKeys(t *testing.T) {
 		Prefix:        "mongodb-icd-key",
 		ResourceGroup: resourceGroup,
 	})
+	options.TestSetup()
+	options.TerraformOptions.NoColor = true
+	options.TerraformOptions.Logger = logger.Discard
+	options.TerraformOptions.Vars = map[string]interface{}{
+		"prefix":              options.Prefix,
+		"region":              "us-south",
+		"mongodb_version":     "7.0",
+		"provider_visibility": "public",
+		"resource_group_name": options.Prefix,
+	}
 
-	options.TerraformVars = map[string]interface{}{
-		"mongodb_version":              "7.0",
-		"provider_visibility":          "public",
-		"resource_group_name":          options.Prefix,
+	// Test the DA when using an existing KMS instance
+	var standardSolutionWithExistingKms = map[string]interface{}{
+		"access_tags":               permanentResources["accessTags"],
+		"existing_kms_instance_crn": permanentResources["hpcs_south_crn"],
+	}
+
+	// Test the DA when using IBM owned encryption key
+	var standardSolutionWithUseIbmOwnedEncKey = map[string]interface{}{
 		"use_ibm_owned_encryption_key": true,
 	}
 
