@@ -214,26 +214,25 @@ func TestRunExistingInstance(t *testing.T) {
 }
 
 // Test the DA when using IBM owned encryption keys
- func TestRunStandardSolutionIBMKeys(t *testing.T) {
- 	t.Parallel()
+func TestRunStandardSolutionIBMKeys(t *testing.T) {
+	t.Parallel()
 
- 	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
- 		Testing:       t,
- 		TerraformDir:  standardSolutionTerraformDir,
- 		Region:        "us-south",
- 		Prefix:        "mongodb-icd-key",
- 		ResourceGroup: resourceGroup,
- 	})
+	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
+		Testing:       t,
+		TerraformDir:  standardSolutionTerraformDir,
+		Region:        "us-south",
+		Prefix:        "mongodb-icd-key",
+		ResourceGroup: resourceGroup,
+	})
 
- 	options.TerraformVars = map[string]interface{}{
- 		"mongodb_version":        "7.0",
- 		"provider_visibility":          "public",
- 		"resource_group_name":          options.Prefix,
- 		"use_ibm_owned_encryption_key": true,
- 	}
+	options.TerraformVars = map[string]interface{}{
+		"mongodb_version":              "7.0",
+		"provider_visibility":          "public",
+		"resource_group_name":          options.Prefix,
+		"use_ibm_owned_encryption_key": true,
+	}
 
- 	output, err := options.RunTestConsistency()
- 	assert.Nil(t, err, "This should not have errored")
- 	assert.NotNil(t, output, "Expected some output")
- }
-
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
+}
