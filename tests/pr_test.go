@@ -214,39 +214,26 @@ func TestRunExistingInstance(t *testing.T) {
 }
 
 // Test the DA when using IBM owned encryption keys
-func TestRunStandardSolutionIBMKeys(t *testing.T) {
-	t.Parallel()
+ func TestRunStandardSolutionIBMKeys(t *testing.T) {
+ 	t.Parallel()
 
-	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
-		Testing:       t,
-		TerraformDir:  standardSolutionTerraformDir,
-		Region:        "us-south",
-		Prefix:        "mongodb-icd-key",
-		ResourceGroup: resourceGroup,
-	})
-	options.TestSetup()
-	options.TerraformOptions.NoColor = true
-	options.TerraformOptions.Logger = logger.Discard
-	options.TerraformOptions.Vars = map[string]interface{}{
-		"prefix":              options.Prefix,
-		"region":              "us-south",
-		"mongodb_version":     "7.0",
-		"provider_visibility": "public",
-		"resource_group_name": options.Prefix,
-	}
+ 	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
+ 		Testing:       t,
+ 		TerraformDir:  standardSolutionTerraformDir,
+ 		Region:        "us-south",
+ 		Prefix:        "mongodb-icd-key",
+ 		ResourceGroup: resourceGroup,
+ 	})
 
-	// Test the DA when using an existing KMS instance
-	var standardSolutionWithExistingKms = map[string]interface{}{
-		"access_tags":               permanentResources["accessTags"],
-		"existing_kms_instance_crn": permanentResources["hpcs_south_crn"],
-	}
+ 	options.TerraformVars = map[string]interface{}{
+ 		"mongodb_version":        "7.0",
+ 		"provider_visibility":          "public",
+ 		"resource_group_name":          options.Prefix,
+ 		"use_ibm_owned_encryption_key": true,
+ 	}
 
-	// Test the DA when using IBM owned encryption key
-	var standardSolutionWithUseIbmOwnedEncKey = map[string]interface{}{
-		"use_ibm_owned_encryption_key": true,
-	}
+ 	output, err := options.RunTestConsistency()
+ 	assert.Nil(t, err, "This should not have errored")
+ 	assert.NotNil(t, output, "Expected some output")
+ }
 
-	output, err := options.RunTestConsistency()
-	assert.Nil(t, err, "This should not have errored")
-	assert.NotNil(t, output, "Expected some output")
-}
