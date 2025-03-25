@@ -55,25 +55,3 @@ func TestRunRestoredDBExample(t *testing.T) {
 	assert.Nil(t, err, "This should not have errored")
 	assert.NotNil(t, output, "Expected some output")
 }
-
-func TestRunPointInTimeRecoveryDBExample(t *testing.T) {
-	t.Parallel()
-
-	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:       t,
-		TerraformDir:  "examples/pitr",
-		Prefix:        "mdb-pitr",
-		ResourceGroup: resourceGroup,
-		Region:        fmt.Sprint(permanentResources["mongodbRegion"]),
-		TerraformVars: map[string]interface{}{
-			"pitr_id":         permanentResources["mongodbCrn"],
-			"pitr_time":       " ", // if blank string is passed, earliest_point_in_time_recovery_time will be used to restore
-			"mongodb_version": "6.0",
-		},
-		CloudInfoService: sharedInfoSvc,
-	})
-
-	output, err := options.RunTestConsistency()
-	assert.Nil(t, err, "This should not have errored")
-	assert.NotNil(t, output, "Expected some output")
-}

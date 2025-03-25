@@ -282,19 +282,3 @@ variable "backup_crn" {
     error_message = "backup_crn must be null OR starts with 'crn:' and contains ':backup:'"
   }
 }
-
-##############################################################
-# Point-In-Time Recovery (PITR)
-##############################################################
-
-variable "pitr_id" {
-  type        = string
-  description = "(Optional) The ID of the source deployment MongoDB instance that you want to recover back to. The MongoDB instance is expected to be in an up and in running state."
-  default     = null
-}
-
-variable "pitr_time" {
-  type        = string
-  description = "(Optional) The timestamp in UTC format (%Y-%m-%dT%H:%M:%SZ) for any time in the last 7 days that you want to restore to. If empty string (\"\") is passed, earliest_point_in_time_recovery_time will be used as pitr_time. To retrieve the timestamp, run the command (ibmcloud cdb MongoDB earliest-pitr-timestamp <deployment name or CRN>). For more info on Point-in-time Recovery, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pitr&interface=ui"
-  default     = null
-}
