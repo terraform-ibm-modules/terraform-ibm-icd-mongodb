@@ -135,6 +135,15 @@ variable "use_ibm_owned_encryption_key" {
   type        = bool
   description = "IBM Cloud Databases will secure your deployment's data at rest automatically with an encryption key that IBM hold. Alternatively, you may select your own Key Management System instance and encryption key (Key Protect or Hyper Protect Crypto Services) by setting this to false. If setting to false, a value must be passed for `existing_kms_instance_crn` to create a new key, or `existing_kms_key_crn` and/or `existing_backup_kms_key_crn` to use an existing key."
   default     = false
+
+  validation {
+    condition     = !(var.use_ibm_owned_encryption_key && (var.existing_kms_instance_crn != null || var.existing_kms_key_crn != null || var.existing_backup_kms_key_crn != null))
+    error_message = "When setting values for 'existing_kms_instance_crn', 'existing_kms_key_crn', or 'existing_backup_kms_key_crn', 'use_ibm_owned_encryption_key' must be set to false."
+  }
+  validation {
+    condition     = var.use_ibm_owned_encryption_key || (var.existing_kms_instance_crn != null || var.existing_kms_key_crn != null)
+    error_message = "When 'use_ibm_owned_encryption_key' is false, you must provide either 'existing_kms_instance_crn' (to create a new key) or 'existing_kms_key_crn' (to use an existing key)."
+  }
 }
 
 variable "existing_kms_instance_crn" {
@@ -259,6 +268,10 @@ variable "existing_secrets_manager_instance_crn" {
   type        = string
   default     = null
   description = "The CRN of existing secrets manager to use to create service credential secrets for Databases for MongoDB instance."
+  validation {
+    condition     = length(var.service_credential_secrets) == 0 || var.existing_secrets_manager_instance_crn != null
+    error_message = "`existing_secrets_manager_instance_crn` is required when adding service credentials to a Secrets Manager secret."
+  }
 }
 
 variable "existing_secrets_manager_endpoint_type" {
