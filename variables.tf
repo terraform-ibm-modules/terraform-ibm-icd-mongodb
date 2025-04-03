@@ -58,14 +58,14 @@ variable "members" {
   # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
 
-variable "member_cpu_count" {
+variable "cpu_count" {
   type        = number
   description = "Allocated dedicated CPU per member. For shared CPU, set to 0. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
   default     = 0
   # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
 
-variable "member_disk_mb" {
+variable "disk_mb" {
   type        = number
   description = "The disk that is allocated per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
   default     = 10240
@@ -79,7 +79,7 @@ variable "member_host_flavor" {
   # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }
 
-variable "member_memory_mb" {
+variable "memory_mb" {
   type        = number
   description = "Allocated memory per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
   default     = 4096

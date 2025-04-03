@@ -207,7 +207,7 @@ resource "ibm_database" "mongodb" {
         id = var.member_host_flavor
       }
       disk {
-        allocation_mb = var.member_disk_mb
+        allocation_mb = var.disk_mb
       }
       members {
         allocation_count = var.members
@@ -224,13 +224,13 @@ resource "ibm_database" "mongodb" {
         id = var.member_host_flavor
       }
       disk {
-        allocation_mb = var.member_disk_mb
+        allocation_mb = var.disk_mb
       }
       memory {
-        allocation_mb = var.member_memory_mb
+        allocation_mb = var.memory_mb
       }
       cpu {
-        allocation_count = var.member_cpu_count
+        allocation_count = var.cpu_count
       }
       members {
         allocation_count = var.members
@@ -244,13 +244,13 @@ resource "ibm_database" "mongodb" {
     content {
       group_id = "member" # Only member type is allowed for IBM Cloud Databases
       memory {
-        allocation_mb = var.member_memory_mb
+        allocation_mb = var.memory_mb
       }
       disk {
-        allocation_mb = var.member_disk_mb
+        allocation_mb = var.disk_mb
       }
       cpu {
-        allocation_count = var.member_cpu_count
+        allocation_count = var.cpu_count
       }
       members {
         allocation_count = var.members

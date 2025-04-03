@@ -311,9 +311,9 @@ module "mongodb" {
   users                             = var.users
   members                           = var.members
   member_host_flavor                = var.member_host_flavor
-  member_memory_mb                  = var.member_memory_mb
-  member_disk_mb                    = var.member_disk_mb
-  member_cpu_count                  = var.member_cpu_count
+  memory_mb                         = var.memory_mb
+  disk_mb                           = var.disk_mb
+  cpu_count                         = var.cpu_count
   auto_scaling                      = var.auto_scaling
   service_credential_names          = var.service_credential_names
   backup_crn                        = var.backup_crn

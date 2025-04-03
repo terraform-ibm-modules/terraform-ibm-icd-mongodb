@@ -72,19 +72,19 @@ variable "members" {
   default     = 3
 }
 
-variable "member_memory_mb" {
+variable "memory_mb" {
   type        = number
   description = "The memory per member that is allocated. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)"
   default     = 4096
 }
 
-variable "member_cpu_count" {
+variable "cpu_count" {
   type        = number
   description = "The dedicated CPU per member that is allocated. For shared CPU, set to 0. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)."
   default     = 0
 }
 
-variable "member_disk_mb" {
+variable "disk_mb" {
   type        = number
   description = "The disk that is allocated per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)."
   default     = 10240

@@ -31,7 +31,7 @@ module "resource_group" {
 resource "ibm_is_vpc" "example_vpc" {
   name           = "${var.prefix}-vpc"
   resource_group = module.resource_group.resource_group_id
-  tags           = var.resource_tags
+  tags           = var.tags
 }
 
 resource "ibm_is_subnet" "testacc_subnet" {
@@ -59,7 +59,7 @@ module "key_protect_all_inclusive" {
   # Note: Database instance and Key Protect must be created on the same region.
   region                    = var.region
   key_protect_instance_name = "${var.prefix}-kp"
-  resource_tags             = var.resource_tags
+  resource_tags             = var.tags
   keys = [
     {
       key_ring_name = "icd"
@@ -113,7 +113,7 @@ module "icd_mongodb" {
   region            = var.region
   plan              = var.plan
   access_tags       = var.access_tags
-  tags              = var.resource_tags
+  tags              = var.tags
   auto_scaling      = var.auto_scaling
   # Example of how to use different KMS keys for data and backups
   use_ibm_owned_encryption_key = false
@@ -122,7 +122,7 @@ module "icd_mongodb" {
   backup_encryption_key_crn    = module.key_protect_all_inclusive.keys["icd.${local.backups_key_name}"].crn
   service_credential_names     = local.service_credential_names
   member_host_flavor           = "multitenant"
-  member_memory_mb             = 4096
+  memory_mb                    = 4096
 }
 
 ##############################################################################
@@ -139,7 +139,7 @@ module "secrets_manager" {
   secrets_manager_name = "${var.prefix}-secrets-manager"
   sm_service_plan      = "trial"
   allowed_network      = "public-and-private"
-  sm_tags              = var.resource_tags
+  sm_tags              = var.tags
 }
 
 # Add a Secrets Group to the secret manager instance

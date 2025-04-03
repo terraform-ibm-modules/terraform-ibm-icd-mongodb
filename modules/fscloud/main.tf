@@ -17,11 +17,11 @@ module "mongodb" {
   access_tags                       = var.access_tags
   tags                              = var.tags
   members                           = var.members
-  member_memory_mb                  = var.member_memory_mb
+  memory_mb                         = var.memory_mb
   admin_pass                        = var.admin_pass
   users                             = var.users
-  member_disk_mb                    = var.member_disk_mb
-  member_cpu_count                  = var.member_cpu_count
+  disk_mb                           = var.disk_mb
+  cpu_count                         = var.cpu_count
   member_host_flavor                = var.member_host_flavor
   auto_scaling                      = var.auto_scaling
   service_credential_names          = var.service_credential_names

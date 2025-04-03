@@ -21,7 +21,7 @@ module "database" {
   region             = var.region
   mongodb_version    = var.mongodb_version
   access_tags        = var.access_tags
-  tags               = var.resource_tags
+  tags               = var.tags
   service_endpoints  = var.service_endpoints
   member_host_flavor = var.member_host_flavor
   service_credential_names = {
