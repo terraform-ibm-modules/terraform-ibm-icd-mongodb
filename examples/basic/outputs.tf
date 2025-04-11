@@ -2,32 +2,37 @@
 # Outputs
 ##############################################################################
 output "id" {
-  description = "Mongodb instance id"
-  value       = module.mongodb.id
+  description = "Database instance id"
+  value       = module.database.id
+}
+
+output "mongodb_crn" {
+  description = "Mongodb CRN"
+  value       = module.database.crn
 }
 
 output "version" {
   description = "Mongodb instance version"
-  value       = module.mongodb.version
+  value       = module.database.version
 }
 
 output "adminuser" {
   description = "Database admin user name"
-  value       = module.mongodb.adminuser
+  value       = module.database.adminuser
 }
 
 output "hostname" {
   description = "Database connection hostname"
-  value       = module.mongodb.hostname
+  value       = module.database.hostname
 }
 
 output "port" {
   description = "Database connection port"
-  value       = module.mongodb.port
+  value       = module.database.port
 }
 
 output "certificate_base64" {
   description = "Database connection certificate"
-  value       = module.mongodb.certificate_base64
+  value       = module.database.certificate_base64
   sensitive   = true
 }

@@ -22,7 +22,7 @@ variable "resource_group" {
   default     = null
 }
 
-variable "resource_tags" {
+variable "tags" {
   type        = list(string)
   description = "Optional list of tags to be added to created resources"
   default     = []
@@ -56,4 +56,39 @@ variable "backup_encryption_key_crn" {
   description = "The CRN of a Hyper Protect Crypto Services use for encrypting the disk that holds deployment backups. Only used if var.kms_encryption_enabled is set to true. There are limitation per region on the Hyper Protect Crypto Services and region for those services. See https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-hpcs#use-hpcs-backups"
   default     = null
   # Validation happens in the root module
+}
+
+variable "auto_scaling" {
+  type = object({
+    disk = object({
+      capacity_enabled             = optional(bool)
+      free_space_less_than_percent = optional(number)
+      io_above_percent             = optional(number)
+      io_enabled                   = optional(bool)
+      io_over_period               = optional(string)
+      rate_increase_percent        = optional(number)
+      rate_limit_mb_per_member     = optional(number)
+      rate_period_seconds          = optional(number)
+      rate_units                   = optional(string)
+    })
+    memory = object({
+      io_above_percent         = optional(number)
+      io_enabled               = optional(bool)
+      io_over_period           = optional(string)
+      rate_increase_percent    = optional(number)
+      rate_limit_mb_per_member = optional(number)
+      rate_period_seconds      = optional(number)
+      rate_units               = optional(string)
+    })
+  })
+  description = "Optional rules to allow the database to increase resources in response to usage. Only a single autoscaling block is allowed. Make sure you understand the effects of autoscaling, especially for production environments. See https://cloud.ibm.com/docs/databases-for-elasticsearch?topic=databases-for-elasticsearch-autoscaling&interface=cli#autoscaling-considerations in the IBM Cloud Docs."
+  default = {
+    disk = {
+      capacity_enabled : true,
+      io_enabled : true
+    }
+    memory = {
+      io_enabled : true,
+    }
+  }
 }

@@ -7,7 +7,7 @@ variable "resource_group_id" {
   description = "The resource group ID where the MongoDB instance will be created."
 }
 
-variable "instance_name" {
+variable "name" {
   type        = string
   description = "Name of the mongodb instance"
 }
@@ -202,8 +202,17 @@ variable "cbr_rules" {
         value = string
     }))) }))
     enforcement_mode = string
+    tags = optional(list(object({
+      name  = string
+      value = string
+    })))
+    operations = optional(list(object({
+      api_types = list(object({
+        api_type_id = string
+      }))
+    })))
   }))
-  description = "(Optional, list) List of CBR rules to create"
+  description = "(Optional, list) List of context-based restrictions rules to create."
   default     = []
   # Validation happens in the rule module
 }

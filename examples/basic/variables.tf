@@ -34,8 +34,25 @@ variable "mongodb_version" {
   default     = null
 }
 
-variable "resource_tags" {
+variable "tags" {
   type        = list(string)
   description = "Optional list of tags to be added to created resources"
   default     = []
+}
+
+variable "service_endpoints" {
+  type        = string
+  description = "The type of endpoint of the database instance. Possible values: `public`, `private`, `public-and-private`."
+  default     = "public"
+
+  validation {
+    condition     = can(regex("public|public-and-private|private", var.service_endpoints))
+    error_message = "Valid values for service_endpoints are 'public', 'public-and-private', and 'private'"
+  }
+}
+variable "member_host_flavor" {
+  type        = string
+  description = "The host flavor per member. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/database#host_flavor)."
+  default     = "multitenant"
+  # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
 }

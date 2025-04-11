@@ -1,10 +1,11 @@
 module "mongodb" {
   source                            = "../../"
   resource_group_id                 = var.resource_group_id
-  instance_name                     = var.instance_name
+  name                              = var.name
   region                            = var.region
+  plan                              = var.plan
   skip_iam_authorization_policy     = var.skip_iam_authorization_policy
-  endpoints                         = "private"
+  service_endpoints                 = "private"
   mongodb_version                   = var.mongodb_version
   use_ibm_owned_encryption_key      = var.use_ibm_owned_encryption_key
   use_same_kms_key_for_backups      = var.use_same_kms_key_for_backups
@@ -15,7 +16,6 @@ module "mongodb" {
   cbr_rules                         = var.cbr_rules
   access_tags                       = var.access_tags
   tags                              = var.tags
-  plan                              = var.plan
   members                           = var.members
   memory_mb                         = var.memory_mb
   admin_pass                        = var.admin_pass

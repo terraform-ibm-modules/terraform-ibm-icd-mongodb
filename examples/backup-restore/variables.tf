@@ -34,13 +34,14 @@ variable "mongodb_version" {
   default     = null
 }
 
-variable "resource_tags" {
+variable "tags" {
   type        = list(string)
   description = "Optional list of tags to be added to created resources"
   default     = []
 }
 
-variable "mongo_db_crn" {
+variable "existing_database_crn" {
   type        = string
   description = "The existing CRN of a mongoDB instance to fetch the latest backup crn."
+  default     = null
 }

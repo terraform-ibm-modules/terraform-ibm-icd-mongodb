@@ -56,6 +56,12 @@ variable "plan" {
   }
 }
 
+variable "existing_mongodb_instance_crn" {
+  type        = string
+  default     = null
+  description = "The CRN of an existing Databases for MongoDB instance. If no value is specified, a new instance is created."
+}
+
 ##############################################################################
 # ICD hosting model properties
 ##############################################################################
@@ -66,19 +72,19 @@ variable "members" {
   default     = 3
 }
 
-variable "member_memory_mb" {
+variable "memory_mb" {
   type        = number
   description = "The memory per member that is allocated. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)"
   default     = 4096
 }
 
-variable "member_cpu_count" {
+variable "cpu_count" {
   type        = number
   description = "The dedicated CPU per member that is allocated. For shared CPU, set to 0. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)."
   default     = 0
 }
 
-variable "member_disk_mb" {
+variable "disk_mb" {
   type        = number
   description = "The disk that is allocated per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)."
   default     = 10240
@@ -88,6 +94,11 @@ variable "member_host_flavor" {
   type        = string
   description = "The host flavor per member. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/database#host_flavor)."
   default     = "multitenant"
+  # Prevent null or "", require multitenant or a machine type
+  validation {
+    condition     = (length(var.member_host_flavor) > 0)
+    error_message = "Member host flavor must be specified. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/database#host_flavor)."
+  }
 }
 
 variable "service_credential_names" {
@@ -316,8 +327,26 @@ variable "service_credential_secrets" {
   }
 }
 
-variable "skip_mongodb_sm_auth_policy" {
+variable "skip_mongodb_secret_manager_auth_policy" {
   type        = bool
   description = "Whether an IAM authorization policy is created for Secrets Manager instance to create a service credential secrets for Databases for MongoDB. If set to false, the Secrets Manager instance passed by the user is granted the Key Manager access to the MongoDB instance created by the Deployable Architecture. Set to `true` to use an existing policy. The value of this is ignored if any value for 'existing_secrets_manager_instance_crn' is not passed."
   default     = false
+}
+
+variable "admin_pass_secret_manager_secret_group" {
+  type        = string
+  description = "The name of a new or existing secrets manager secret group for admin password. To use existing secret group, `use_existing_admin_pass_secrets_manager_secret_group` must be set to `true`. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
+  default     = "mongodb-secrets"
+}
+
+variable "use_existing_admin_pass_secret_manager_secret_group" {
+  type        = bool
+  description = "Whether to use an existing secrets manager secret group for admin password."
+  default     = false
+}
+
+variable "admin_pass_secret_manager_secret_name" {
+  type        = string
+  description = "The name of a new mongodb administrator secret. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
+  default     = "mongodb-admin-password"
 }
