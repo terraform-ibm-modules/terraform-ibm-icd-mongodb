@@ -270,10 +270,6 @@ variable "existing_secrets_manager_instance_crn" {
   type        = string
   default     = null
   description = "The CRN of existing secrets manager to use to create service credential secrets for Databases for MongoDB instance."
-  validation {
-    condition     = length(var.service_credential_secrets) == 0 || var.existing_secrets_manager_instance_crn != null
-    error_message = "`existing_secrets_manager_instance_crn` is required when adding service credentials to a Secrets Manager secret."
-  }
 }
 
 variable "existing_secrets_manager_endpoint_type" {
