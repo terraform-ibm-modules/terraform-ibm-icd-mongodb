@@ -11,15 +11,23 @@ module "resource_group" {
 }
 
 ##############################################################################
-# ICD mongodb database
+# MongoDB Instance
 ##############################################################################
 
-module "mongodb" {
-  source            = "../.."
-  resource_group_id = module.resource_group.resource_group_id
-  instance_name     = "${var.prefix}-mongodb"
-  region            = var.region
-  mongodb_version   = var.mongodb_version
-  access_tags       = var.access_tags
-  tags              = var.resource_tags
+module "database" {
+  source             = "../.."
+  resource_group_id  = module.resource_group.resource_group_id
+  name               = "${var.prefix}-data-store"
+  region             = var.region
+  mongodb_version    = var.mongodb_version
+  access_tags        = var.access_tags
+  tags               = var.tags
+  service_endpoints  = var.service_endpoints
+  member_host_flavor = var.member_host_flavor
+  service_credential_names = {
+    "mongodb_admin" : "Administrator",
+    "mongodb_operator" : "Operator",
+    "mongodb_viewer" : "Viewer",
+    "mongodb_editor" : "Editor",
+  }
 }

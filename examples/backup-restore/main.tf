@@ -11,18 +11,18 @@ module "resource_group" {
 }
 
 data "ibm_database_backups" "backup_database" {
-  deployment_id = var.mongo_db_crn
+  deployment_id = var.existing_database_crn
 }
 
 # New mongo db instance pointing to the backup instance
-module "restored_mongo_db" {
+module "restored_icd_mongodb" {
   source             = "../.."
   resource_group_id  = module.resource_group.resource_group_id
-  instance_name      = "${var.prefix}-mongodb-restored"
+  name               = "${var.prefix}-mongodb-restored"
   region             = var.region
   mongodb_version    = var.mongodb_version
   access_tags        = var.access_tags
-  tags               = var.resource_tags
+  tags               = var.tags
   member_host_flavor = "multitenant"
   backup_crn         = data.ibm_database_backups.backup_database.backups[0].backup_id
 }

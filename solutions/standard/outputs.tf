@@ -4,60 +4,44 @@
 
 output "id" {
   description = "MongoDB instance id"
-  value       = module.mongodb.id
+  value       = local.mongodb_id
 }
 
 output "version" {
   description = "MongoDB instance version"
-  value       = module.mongodb.version
+  value       = local.mongodb_version
 }
 
 output "guid" {
   description = "MongoDB instance guid"
-  value       = module.mongodb.guid
+  value       = local.mongodb_guid
 }
 
 output "crn" {
   description = "MongoDB instance crn"
-  value       = module.mongodb.crn
-}
-
-output "cbr_rule_ids" {
-  description = "CBR rule ids created to restrict MongoDB"
-  value       = module.mongodb.cbr_rule_ids
+  value       = local.mongodb_crn
 }
 
 output "service_credentials_json" {
   description = "Service credentials json map"
-  value       = module.mongodb.service_credentials_json
+  value       = var.existing_mongodb_instance_crn != null ? null : module.mongodb[0].service_credentials_json
   sensitive   = true
 }
 
 output "service_credentials_object" {
   description = "Service credentials object"
-  value       = module.mongodb.service_credentials_object
+  value       = var.existing_mongodb_instance_crn != null ? null : module.mongodb[0].service_credentials_object
   sensitive   = true
-}
-
-output "adminuser" {
-  description = "Database admin user name"
-  value       = module.mongodb.adminuser
 }
 
 output "hostname" {
   description = "Database connection hostname"
-  value       = module.mongodb.hostname
+  value       = local.mongodb_hostname
 }
 
 output "port" {
   description = "Database connection port"
-  value       = module.mongodb.port
-}
-
-output "certificate_base64" {
-  description = "Database connection certificate"
-  value       = module.mongodb.certificate_base64
-  sensitive   = true
+  value       = local.mongodb_port
 }
 
 output "secrets_manager_secrets" {

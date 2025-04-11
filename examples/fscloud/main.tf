@@ -23,7 +23,7 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 resource "ibm_is_vpc" "example_vpc" {
   name           = "${var.prefix}-vpc"
   resource_group = module.resource_group.resource_group_id
-  tags           = var.resource_tags
+  tags           = var.tags
 }
 
 resource "ibm_is_subnet" "testacc_subnet" {
@@ -56,9 +56,9 @@ module "cbr_zone" {
 module "mongodb" {
   source                    = "../../modules/fscloud"
   resource_group_id         = module.resource_group.resource_group_id
-  instance_name             = "${var.prefix}-mongodb"
+  name                      = "${var.prefix}-mongodb"
   region                    = var.region
-  tags                      = var.resource_tags
+  tags                      = var.tags
   access_tags               = var.access_tags
   kms_key_crn               = var.kms_key_crn
   backup_encryption_key_crn = var.backup_encryption_key_crn
@@ -70,15 +70,7 @@ module "mongodb" {
     "mongodb_viewer" : "Viewer",
     "mongodb_editor" : "Editor",
   }
-  auto_scaling = {
-    disk = {
-      capacity_enabled : true,
-      io_enabled : true
-    }
-    memory = {
-      io_enabled : true,
-    }
-  }
+  auto_scaling       = var.auto_scaling
   member_host_flavor = "b3c.4x16.encrypted"
   cbr_rules = [
     {
