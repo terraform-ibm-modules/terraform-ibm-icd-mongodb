@@ -280,6 +280,10 @@ variable "existing_secrets_manager_endpoint_type" {
   type        = string
   description = "The endpoint type to use if `existing_secrets_manager_instance_crn` is specified. Possible values: public, private."
   default     = "private"
+  validation {
+    condition     = contains(["public", "private"], var.existing_secrets_manager_endpoint_type)
+    error_message = "Only \"public\" and \"private\" are allowed values for 'existing_secrets_endpoint_type'."
+  }
 }
 
 variable "service_credential_secrets" {
