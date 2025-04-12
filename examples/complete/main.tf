@@ -133,7 +133,7 @@ module "icd_mongodb" {
 module "secrets_manager" {
   count                = var.existing_secret_manager_instance_guid == null ? 1 : 0
   source               = "terraform-ibm-modules/secrets-manager/ibm"
-  version              = "1.23.6"
+  version              = "2.1.1"
   resource_group_id    = module.resource_group.resource_group_id
   region               = var.region
   secrets_manager_name = "${var.prefix}-secrets-manager"
