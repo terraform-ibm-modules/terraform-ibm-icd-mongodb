@@ -65,16 +65,6 @@ variable "existing_mongodb_instance_crn" {
   type        = string
   default     = null
   description = "The CRN of an existing Databases for MongoDB instance. If no value is specified, a new instance is created."
-
-  validation {
-    condition     = var.existing_mongodb_instance_crn != null ? true : var.use_ibm_owned_encryption_key && (var.existing_kms_instance_crn != null || var.existing_kms_key_crn != null || var.existing_backup_kms_key_crn != null) ? false : true
-    error_message = "When setting values for 'existing_kms_instance_crn', 'existing_kms_key_crn' or 'existing_backup_kms_key_crn', the 'use_ibm_owned_encryption_key' input must be set to false."
-  }
-
-  validation {
-    condition     = var.existing_mongodb_instance_crn != null ? true : !var.use_ibm_owned_encryption_key && (var.existing_kms_instance_crn == null && var.existing_kms_key_crn == null) ? false : true
-    error_message = "When 'use_ibm_owned_encryption_key' is false, a value is required for either 'existing_kms_instance_crn' (to create a new key), or 'existing_kms_key_crn' to use an existing key."
-  }
 }
 
 ##############################################################################
@@ -161,6 +151,29 @@ variable "use_ibm_owned_encryption_key" {
   type        = bool
   description = "IBM Cloud Databases will secure your deployment's data at rest automatically with an encryption key that IBM hold. Alternatively, you may select your own Key Management System instance and encryption key (Key Protect or Hyper Protect Crypto Services) by setting this to false. If setting to false, a value must be passed for `existing_kms_instance_crn` to create a new key, or `existing_kms_key_crn` and/or `existing_backup_kms_key_crn` to use an existing key."
   default     = false
+
+  validation {
+    condition = (
+      var.existing_mongodb_instance_crn != null ||
+      !(var.use_ibm_owned_encryption_key && (
+        var.existing_kms_instance_crn != null ||
+        var.existing_kms_key_crn != null ||
+        var.existing_backup_kms_key_crn != null
+      ))
+    )
+    error_message = "When setting values for 'existing_kms_instance_crn', 'existing_kms_key_crn' or 'existing_backup_kms_key_crn', the 'use_ibm_owned_encryption_key' input must be set to false."
+  }
+
+  # this validation ensures key info is provided when IBM-owned key is disabled and no MongoDB instance is given
+  validation {
+    condition = !(
+      var.existing_mongodb_instance_crn == null &&
+      var.use_ibm_owned_encryption_key == false &&
+      var.existing_kms_instance_crn == null &&
+      var.existing_kms_key_crn == null
+    )
+    error_message = "When 'use_ibm_owned_encryption_key' is false, you must provide either 'existing_kms_instance_crn' (to create a new key) or 'existing_kms_key_crn' (to use an existing key)."
+  }
 }
 
 variable "existing_kms_instance_crn" {
@@ -285,16 +298,6 @@ variable "existing_secrets_manager_instance_crn" {
   type        = string
   default     = null
   description = "The CRN of existing secrets manager to use to create service credential secrets for Databases for MongoDB instance."
-
-  validation {
-    condition     = var.existing_secrets_manager_instance_crn != null && var.admin_pass_secret_manager_secret_group == null ? false : true
-    error_message = "`admin_pass_secret_manager_secret_group` is required when `existing_secrets_manager_instance_crn` is set."
-  }
-
-  validation {
-    condition     = var.existing_secrets_manager_instance_crn != null && var.admin_pass_secret_manager_secret_name == null ? false : true
-    error_message = "`admin_pass_secret_manager_secret_name` is required when `existing_secrets_manager_instance_crn` is set."
-  }
 }
 
 variable "existing_secrets_manager_endpoint_type" {
@@ -337,6 +340,14 @@ variable "service_credential_secrets" {
     ])
     error_message = "service_credentials_source_service_role_crn must be a serviceRole CRN. See https://cloud.ibm.com/iam/roles"
   }
+
+  validation {
+    condition = (
+      length(var.service_credential_secrets) == 0 ||
+      var.existing_secrets_manager_instance_crn != null
+    )
+    error_message = "`existing_secrets_manager_instance_crn` is required when adding service credentials to a secrets manager secret."
+  }
 }
 
 variable "skip_mongodb_secret_manager_auth_policy" {
@@ -349,6 +360,14 @@ variable "admin_pass_secret_manager_secret_group" {
   type        = string
   description = "The name of a new or existing secrets manager secret group for admin password. To use existing secret group, `use_existing_admin_pass_secrets_manager_secret_group` must be set to `true`. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
   default     = "mongodb-secrets"
+
+  validation {
+    condition = (
+      var.existing_secrets_manager_instance_crn == null ||
+      var.admin_pass_secret_manager_secret_group != null
+    )
+    error_message = "`admin_pass_secret_manager_secret_group` is required when `existing_secrets_manager_instance_crn` is set."
+  }
 }
 
 variable "use_existing_admin_pass_secret_manager_secret_group" {
@@ -361,4 +380,11 @@ variable "admin_pass_secret_manager_secret_name" {
   type        = string
   description = "The name of a new mongodb administrator secret. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
   default     = "mongodb-admin-password"
+  validation {
+    condition = (
+      var.existing_secrets_manager_instance_crn == null ||
+      var.admin_pass_secret_manager_secret_name != null
+    )
+    error_message = "`admin_pass_secret_manager_secret_name` is required when `existing_secrets_manager_instance_crn` is set."
+  }
 }
