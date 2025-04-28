@@ -315,10 +315,6 @@ locals {
 #######################################################################################################################
 
 locals {
-  ## Variable validation (approach based on https://github.com/hashicorp/terraform/issues/25609#issuecomment-1057614400)
-  # tflint-ignore: terraform_unused_declarations
-  validate_secret_manager_crn = length(local.service_credential_secrets) > 0 && var.existing_secrets_manager_instance_crn == null ? tobool("`existing_secrets_manager_instance_crn` is required when adding service credentials to a secrets manager secret.") : false
-
   create_secret_manager_auth_policy = var.skip_mongodb_secret_manager_auth_policy || var.existing_secrets_manager_instance_crn == null ? 0 : 1
 }
 
