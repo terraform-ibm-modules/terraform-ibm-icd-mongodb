@@ -314,25 +314,25 @@ variable "service_credential_secrets" {
   }
 }
 
-variable "skip_mongodb_secret_manager_auth_policy" {
+variable "skip_mongodb_secrets_manager_auth_policy" {
   type        = bool
   description = "Whether an IAM authorization policy is created for Secrets Manager instance to create a service credential secrets for Databases for MongoDB. If set to false, the Secrets Manager instance passed by the user is granted the Key Manager access to the MongoDB instance created by the Deployable Architecture. Set to `true` to use an existing policy. The value of this is ignored if any value for 'existing_secrets_manager_instance_crn' is not passed."
   default     = false
 }
 
-variable "admin_pass_secret_manager_secret_group" {
+variable "admin_pass_secrets_manager_secret_group" {
   type        = string
   description = "The name of a new or existing secrets manager secret group for admin password. To use existing secret group, `use_existing_admin_pass_secrets_manager_secret_group` must be set to `true`. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
   default     = "mongodb-secrets"
 }
 
-variable "use_existing_admin_pass_secret_manager_secret_group" {
+variable "use_existing_admin_pass_secrets_manager_secret_group" {
   type        = bool
   description = "Whether to use an existing secrets manager secret group for admin password."
   default     = false
 }
 
-variable "admin_pass_secret_manager_secret_name" {
+variable "admin_pass_secrets_manager_secret_name" {
   type        = string
   description = "The name of a new mongodb administrator secret. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
   default     = "mongodb-admin-password"

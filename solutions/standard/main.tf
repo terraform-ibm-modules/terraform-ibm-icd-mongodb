@@ -335,17 +335,17 @@ locals {
 locals {
   ## Variable validation (approach based on https://github.com/hashicorp/terraform/issues/25609#issuecomment-1057614400)
   # tflint-ignore: terraform_unused_declarations
-  validate_secret_manager_crn = length(local.service_credential_secrets) > 0 && var.existing_secrets_manager_instance_crn == null ? tobool("`existing_secrets_manager_instance_crn` is required when adding service credentials to a secrets manager secret.") : false
+  validate_secrets_manager_crn = length(local.service_credential_secrets) > 0 && var.existing_secrets_manager_instance_crn == null ? tobool("`existing_secrets_manager_instance_crn` is required when adding service credentials to a secrets manager secret.") : false
   # tflint-ignore: terraform_unused_declarations
-  validate_secret_manager_sg = var.existing_secrets_manager_instance_crn != null && var.admin_pass_secret_manager_secret_group == null ? tobool("`admin_pass_secret_manager_secret_group` is required when `existing_secrets_manager_instance_crn` is set.") : false
+  validate_secrets_manager_sg = var.existing_secrets_manager_instance_crn != null && var.admin_pass_secrets_manager_secret_group == null ? tobool("`admin_pass_secrets_manager_secret_group` is required when `existing_secrets_manager_instance_crn` is set.") : false
   # tflint-ignore: terraform_unused_declarations
-  validate_secret_manager_sn = var.existing_secrets_manager_instance_crn != null && var.admin_pass_secret_manager_secret_name == null ? tobool("`admin_pass_secret_manager_secret_name` is required when `existing_secrets_manager_instance_crn` is set.") : false
+  validate_secrets_manager_sn = var.existing_secrets_manager_instance_crn != null && var.admin_pass_secrets_manager_secret_name == null ? tobool("`admin_pass_secrets_manager_secret_name` is required when `existing_secrets_manager_instance_crn` is set.") : false
 
-  create_secret_manager_auth_policy = var.skip_mongodb_secret_manager_auth_policy || var.existing_secrets_manager_instance_crn == null ? 0 : 1
+  create_secrets_manager_auth_policy = var.skip_mongodb_secrets_manager_auth_policy || var.existing_secrets_manager_instance_crn == null ? 0 : 1
 }
 
 # Parse the Secrets Manager CRN
-module "secret_manager_instance_crn_parser" {
+module "secrets_manager_instance_crn_parser" {
   count   = var.existing_secrets_manager_instance_crn != null ? 1 : 0
   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
   version = "1.1.0"
@@ -355,7 +355,7 @@ module "secret_manager_instance_crn_parser" {
 
 # create a service authorization between Secrets Manager and the target service (Databases for MongoDB)
 resource "ibm_iam_authorization_policy" "secrets_manager_key_manager" {
-  count                       = local.create_secret_manager_auth_policy
+  count                       = local.create_secrets_manager_auth_policy
   depends_on                  = [module.mongodb]
   source_service_name         = "secrets-manager"
   source_resource_instance_id = local.existing_secrets_manager_instance_guid
@@ -367,7 +367,7 @@ resource "ibm_iam_authorization_policy" "secrets_manager_key_manager" {
 
 # workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
 resource "time_sleep" "wait_for_mongodb_authorization_policy" {
-  count           = local.create_secret_manager_auth_policy
+  count           = local.create_secrets_manager_auth_policy
   depends_on      = [ibm_iam_authorization_policy.secrets_manager_key_manager]
   create_duration = "30s"
 }
@@ -397,10 +397,10 @@ locals {
 
   # Build the structure of the arbitrary credential type secret for admin password
   admin_pass_secret = [{
-    secret_group_name     = (var.prefix != null && var.prefix != "") && var.admin_pass_secret_manager_secret_group != null ? "${var.prefix}-${var.admin_pass_secret_manager_secret_group}" : var.admin_pass_secret_manager_secret_group
-    existing_secret_group = var.use_existing_admin_pass_secret_manager_secret_group
+    secret_group_name     = (var.prefix != null && var.prefix != "") && var.admin_pass_secrets_manager_secret_group != null ? "${var.prefix}-${var.admin_pass_secrets_manager_secret_group}" : var.admin_pass_secrets_manager_secret_group
+    existing_secret_group = var.use_existing_admin_pass_secrets_manager_secret_group
     secrets = [{
-      secret_name             = (var.prefix != null && var.prefix != "") && var.admin_pass_secret_manager_secret_name != null ? "${var.prefix}-${var.admin_pass_secret_manager_secret_name}" : var.admin_pass_secret_manager_secret_name
+      secret_name             = (var.prefix != null && var.prefix != "") && var.admin_pass_secrets_manager_secret_name != null ? "${var.prefix}-${var.admin_pass_secrets_manager_secret_name}" : var.admin_pass_secrets_manager_secret_name
       secret_type             = "arbitrary"
       secret_payload_password = local.admin_pass
       }
@@ -410,8 +410,8 @@ locals {
   # Concatinate into 1 secrets object
   secrets = concat(local.service_credential_secrets, local.admin_pass_secret)
   # Parse Secrets Manager details from the CRN
-  existing_secrets_manager_instance_guid   = var.existing_secrets_manager_instance_crn != null ? module.secret_manager_instance_crn_parser[0].service_instance : null
-  existing_secrets_manager_instance_region = var.existing_secrets_manager_instance_crn != null ? module.secret_manager_instance_crn_parser[0].region : null
+  existing_secrets_manager_instance_guid   = var.existing_secrets_manager_instance_crn != null ? module.secrets_manager_instance_crn_parser[0].service_instance : null
+  existing_secrets_manager_instance_region = var.existing_secrets_manager_instance_crn != null ? module.secrets_manager_instance_crn_parser[0].region : null
 }
 
 module "secrets_manager_service_credentials" {
