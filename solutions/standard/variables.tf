@@ -364,9 +364,9 @@ variable "admin_pass_secrets_manager_secret_group" {
   validation {
     condition = (
       var.existing_secrets_manager_instance_crn == null ||
-      var.admin_pass_secret_manager_secret_group != null
+      var.admin_pass_secrets_manager_secret_group != null
     )
-    error_message = "`admin_pass_secret_manager_secret_group` is required when `existing_secrets_manager_instance_crn` is set."
+    error_message = "`admin_pass_secrets_manager_secret_group` is required when `existing_secrets_manager_instance_crn` is set."
   }
 }
 
@@ -383,8 +383,8 @@ variable "admin_pass_secrets_manager_secret_name" {
   validation {
     condition = (
       var.existing_secrets_manager_instance_crn == null ||
-      var.admin_pass_secret_manager_secret_name != null
+      var.admin_pass_secrets_manager_secret_name != null
     )
-    error_message = "`admin_pass_secret_manager_secret_name` is required when `existing_secrets_manager_instance_crn` is set."
+    error_message = "`admin_pass_secrets_manager_secret_name` is required when `existing_secrets_manager_instance_crn` is set."
   }
 }
