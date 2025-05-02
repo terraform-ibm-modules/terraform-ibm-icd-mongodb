@@ -3,11 +3,9 @@ package test
 
 import (
 	"fmt"
-	"strings"
 
 	"testing"
 
-	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/stretchr/testify/assert"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 )
@@ -15,14 +13,11 @@ import (
 func testPlanICDVersions(t *testing.T, version string) {
 	t.Parallel()
 
-	prefix := fmt.Sprintf("mongo-%s", strings.ToLower(random.UniqueId()))
-	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
+	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:      t,
 		TerraformDir: "examples/basic",
 		TerraformVars: map[string]interface{}{
 			"mongodb_version": version,
-			"prefix":          prefix,
-			"region":          fmt.Sprint(permanentResources["mongodbRegion"]),
 		},
 		CloudInfoService: sharedInfoSvc,
 	})
@@ -43,15 +38,15 @@ func TestPlanICDVersions(t *testing.T) {
 
 func TestRunRestoredDBExample(t *testing.T) {
 	t.Parallel()
-	prefix := fmt.Sprintf("mongodb-res-%s", strings.ToLower(random.UniqueId()))
-	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
-		Testing:      t,
-		TerraformDir: "examples/backup-restore",
+
+	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+		Testing:       t,
+		TerraformDir:  "examples/backup-restore",
+		Prefix:        "mongo-restored",
+		Region:        fmt.Sprint(permanentResources["mongodbRegion"]),
+		ResourceGroup: resourceGroup,
 		TerraformVars: map[string]interface{}{
 			"existing_database_crn": permanentResources["mongodbCrn"],
-			"prefix":                prefix,
-			"region":                fmt.Sprint(permanentResources["mongodbRegion"]),
-			"resource_group":        resourceGroup,
 		},
 		CloudInfoService: sharedInfoSvc,
 	})
