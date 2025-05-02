@@ -23,7 +23,7 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 resource "ibm_is_vpc" "example_vpc" {
   name           = "${var.prefix}-vpc"
   resource_group = module.resource_group.resource_group_id
-  tags           = var.tags
+  tags           = var.resource_tags
 }
 
 resource "ibm_is_subnet" "testacc_subnet" {
@@ -58,7 +58,7 @@ module "mongodb" {
   resource_group_id         = module.resource_group.resource_group_id
   name                      = "${var.prefix}-mongodb"
   region                    = var.region
-  tags                      = var.tags
+  tags                      = var.resource_tags
   access_tags               = var.access_tags
   kms_key_crn               = var.kms_key_crn
   backup_encryption_key_crn = var.backup_encryption_key_crn
