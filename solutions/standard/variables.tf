@@ -192,6 +192,7 @@ variable "kms_endpoint_type" {
   type        = string
   description = "The type of endpoint to use for communicating with the Key Protect or Hyper Protect Crypto Services instance. Possible values: `public`, `private`. Applies only if `existing_kms_key_crn` is not specified."
   default     = "private"
+
   validation {
     condition     = can(regex("public|private", var.kms_endpoint_type))
     error_message = "The kms_endpoint_type value must be 'public' or 'private'."
@@ -304,6 +305,7 @@ variable "existing_secrets_manager_endpoint_type" {
   type        = string
   description = "The endpoint type to use if `existing_secrets_manager_instance_crn` is specified. Possible values: public, private."
   default     = "private"
+
   validation {
     condition     = contains(["public", "private"], var.existing_secrets_manager_endpoint_type)
     error_message = "Only \"public\" and \"private\" are allowed values for 'existing_secrets_endpoint_type'."
@@ -380,6 +382,7 @@ variable "admin_pass_secrets_manager_secret_name" {
   type        = string
   description = "The name of a new mongodb administrator secret. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
   default     = "mongodb-admin-password"
+
   validation {
     condition = (
       var.existing_secrets_manager_instance_crn == null ||
