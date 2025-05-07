@@ -47,15 +47,15 @@ variable "plan" {
   default     = "enterprise"
 }
 
-variable "existing_secret_manager_instance_guid" {
+variable "existing_secrets_manager_instance_guid" {
   type        = string
   description = "Existing Secrets Manager GUID. If not provided an new instance will be provisioned"
   default     = null
 }
 
-variable "existing_secret_manager_instance_region" {
+variable "existing_secrets_manager_instance_region" {
   type        = string
-  description = "Required if value is passed into var.existing_secret_manager_instance_guid"
+  description = "Required if value is passed into var.existing_secrets_manager_instance_guid"
   default     = null
 }
 
