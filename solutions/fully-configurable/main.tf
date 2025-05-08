@@ -2,11 +2,11 @@
 # Resource Group
 #######################################################################################################################
 
+
 module "resource_group" {
   source                       = "terraform-ibm-modules/resource-group/ibm"
   version                      = "1.2.0"
-  resource_group_name          = var.use_existing_resource_group == false ? ((var.prefix != null && var.prefix != "") ? "${var.prefix}-${var.resource_group_name}" : var.resource_group_name) : null
-  existing_resource_group_name = var.use_existing_resource_group == true ? var.resource_group_name : null
+  existing_resource_group_name = var.existing_resource_group_name
 }
 
 #######################################################################################################################
@@ -14,9 +14,10 @@ module "resource_group" {
 #######################################################################################################################
 
 locals {
+  prefix                = (var.prefix != null && trimspace(var.prefix) != "" ? "${var.prefix}-" : "")
   create_new_kms_key    = var.existing_mongodb_instance_crn == null && !var.use_ibm_owned_encryption_key && var.existing_kms_key_crn == null ? true : false # no need to create any KMS resources if passing an existing key, or using IBM owned keys
-  mongodb_key_name      = var.prefix != null ? "${var.prefix}-${var.key_name}" : var.key_name
-  mongodb_key_ring_name = var.prefix != null ? "${var.prefix}-${var.key_ring_name}" : var.key_ring_name
+  mongodb_key_name      = "${local.prefix}${var.key_name}"
+  mongodb_key_ring_name = "${local.prefix}${var.key_ring_name}"
 }
 
 module "kms" {
@@ -269,10 +270,10 @@ data "ibm_database_connection" "existing_connection" {
 # Create new instance
 module "mongodb" {
   count                             = var.existing_mongodb_instance_crn != null ? 0 : 1
-  source                            = "../../modules/fscloud"
+  source                            = "../.."
   depends_on                        = [time_sleep.wait_for_authorization_policy, time_sleep.wait_for_backup_kms_authorization_policy]
   resource_group_id                 = module.resource_group.resource_group_id
-  name                              = (var.prefix != null && var.prefix != "") ? "${var.prefix}-${var.name}" : var.name
+  name                              = "${local.prefix}${var.mongodb_name}"
   plan                              = var.plan
   region                            = var.region
   mongodb_version                   = var.mongodb_version
@@ -282,8 +283,8 @@ module "mongodb" {
   backup_encryption_key_crn         = local.backup_kms_key_crn
   use_same_kms_key_for_backups      = local.use_same_kms_key_for_backups
   use_default_backup_encryption_key = var.use_default_backup_encryption_key
-  access_tags                       = var.access_tags
-  tags                              = var.tags
+  access_tags                       = var.mongodb_access_tags
+  tags                              = var.mongodb_tags
   admin_pass                        = local.admin_pass
   users                             = var.users
   members                           = var.members
@@ -294,6 +295,7 @@ module "mongodb" {
   auto_scaling                      = var.auto_scaling
   service_credential_names          = var.service_credential_names
   backup_crn                        = var.backup_crn
+  service_endpoints                 = var.service_endpoints
 }
 
 locals {
@@ -365,10 +367,10 @@ locals {
 
   # Build the structure of the arbitrary credential type secret for admin password
   admin_pass_secret = [{
-    secret_group_name     = (var.prefix != null && var.prefix != "") && var.admin_pass_secrets_manager_secret_group != null ? "${var.prefix}-${var.admin_pass_secrets_manager_secret_group}" : var.admin_pass_secrets_manager_secret_group
+    secret_group_name     = "${local.prefix}${var.admin_pass_secrets_manager_secret_group}"
     existing_secret_group = var.use_existing_admin_pass_secrets_manager_secret_group
     secrets = [{
-      secret_name             = (var.prefix != null && var.prefix != "") && var.admin_pass_secrets_manager_secret_name != null ? "${var.prefix}-${var.admin_pass_secrets_manager_secret_name}" : var.admin_pass_secrets_manager_secret_name
+      secret_name             = "${local.prefix}${var.admin_pass_secrets_manager_secret_name}"
       secret_type             = "arbitrary"
       secret_payload_password = local.admin_pass
       }
