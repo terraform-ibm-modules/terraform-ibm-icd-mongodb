@@ -7,24 +7,30 @@ variable "ibmcloud_api_key" {
   description = "The IBM Cloud API key to deploy resources."
   sensitive   = true
 }
-variable "use_existing_resource_group" {
-  type        = bool
-  description = "Whether to use an existing resource group."
-  default     = false
-}
 
-variable "resource_group_name" {
+variable "existing_resource_group_name" {
   type        = string
-  description = "The name of a new or an existing resource group to provision the Databases for MongoDB in. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
+  description = "The name of an existing resource group to provision the Databases for MongoDB in."
+  default     = "Default"
+  nullable    = false
 }
 
 variable "prefix" {
   type        = string
-  description = "Prefix to add to all resources created by this solution."
-  default     = null
+  description = "The prefix to add to all resources that this solution creates (e.g `prod`, `test`, `dev`). To not use any prefix value, you can set this value to `null` or an empty string."
+  nullable    = true
+  validation {
+    condition = (var.prefix == null ? true :
+      alltrue([
+        can(regex("^[a-z]{0,1}[-a-z0-9]{0,14}[a-z0-9]{0,1}$", var.prefix)),
+        length(regexall("^.*--.*", var.prefix)) == 0
+      ])
+    )
+    error_message = "Prefix must begin with a lowercase letter, contain only lowercase letters, numbers, and - characters. Prefixes must end with a lowercase letter or number and be 16 or fewer characters."
+  }
 }
 
-variable "name" {
+variable "mongodb_name" {
   type        = string
   description = "The name of the Databases for MongoDB instance. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
   default     = "mongodb"
@@ -58,6 +64,17 @@ variable "plan" {
       var.plan == "enterprise",
     ])
     error_message = "Only supported plans are standard or enterprise"
+  }
+}
+
+variable "service_endpoints" {
+  type        = string
+  description = "The type of endpoint of the database instance. Possible values: `public`, `private`, `public-and-private`."
+  default     = "public"
+
+  validation {
+    condition     = can(regex("public|public-and-private|private", var.service_endpoints))
+    error_message = "Valid values for service_endpoints are 'public', 'public-and-private', and 'private'"
   }
 }
 
@@ -107,7 +124,7 @@ variable "member_host_flavor" {
 }
 
 variable "service_credential_names" {
-  description = "Map of name, role for service credentials that you want to create for the database. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/blob/main/solutions/standard/DA-types.md#svc-credential-name)"
+  description = "Map of name, role for service credentials that you want to create for the database. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/blob/main/solutions/fully-configurable/DA-types.md#svc-credential-name)"
   type        = map(string)
   default     = {}
 }
@@ -128,16 +145,16 @@ variable "users" {
   }))
   default     = []
   sensitive   = true
-  description = "A list of users that you want to create on the database. Users block is supported by MongoDB version >= 6.0. Multiple blocks are allowed. The user password must be in the range of 10-32 characters. Be warned that in most case using IAM service credentials (via the var.service_credential_names) is sufficient to control access to the MongoDB instance. This blocks creates native MongoDB database users. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/blob/main/solutions/standard/DA-types.md#users)"
+  description = "A list of users that you want to create on the database. Users block is supported by MongoDB version >= 6.0. Multiple blocks are allowed. The user password must be in the range of 10-32 characters. Be warned that in most case using IAM service credentials (via the var.service_credential_names) is sufficient to control access to the MongoDB instance. This blocks creates native MongoDB database users. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/blob/main/solutions/fully-configurable/DA-types.md#users)"
 }
 
-variable "tags" {
+variable "mongodb_tags" {
   type        = list(any)
   description = "The list of tags to be added to the Databases for MongoDB instance."
   default     = []
 }
 
-variable "access_tags" {
+variable "mongodb_access_tags" {
   type        = list(string)
   description = "A list of access tags to apply to the Databases for MongoDB instance created by the solution. [Learn more](https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial)."
   default     = []
@@ -147,32 +164,40 @@ variable "access_tags" {
 # Encryption
 ##############################################################
 
-variable "use_ibm_owned_encryption_key" {
+variable "kms_encryption_enabled" {
   type        = bool
-  description = "IBM Cloud Databases will secure your deployment's data at rest automatically with an encryption key that IBM hold. Alternatively, you may select your own Key Management System instance and encryption key (Key Protect or Hyper Protect Crypto Services) by setting this to false. If setting to false, a value must be passed for `existing_kms_instance_crn` to create a new key, or `existing_kms_key_crn` and/or `existing_backup_kms_key_crn` to use an existing key."
+  description = "Set to true to enable KMS Encryption using customer managed keys. When set to true, a value must be passed for either 'existing_kms_instance_crn', 'existing_kms_key_crn' or 'existing_backup_kms_key_crn'."
   default     = false
 
+  # this validation ensures key info is provided when Kms encryption is enabled and no MongoDB instance is given
   validation {
     condition = (
       var.existing_mongodb_instance_crn != null ||
-      !(var.use_ibm_owned_encryption_key && (
+      (var.kms_encryption_enabled && (
         var.existing_kms_instance_crn != null ||
         var.existing_kms_key_crn != null ||
         var.existing_backup_kms_key_crn != null
       ))
     )
-    error_message = "When setting values for 'existing_kms_instance_crn', 'existing_kms_key_crn' or 'existing_backup_kms_key_crn', the 'use_ibm_owned_encryption_key' input must be set to false."
+    error_message = "When setting values for 'existing_kms_instance_crn', 'existing_kms_key_crn' or 'existing_backup_kms_key_crn', the 'kms_encryption_enabled' input must be set to true."
+  }
+}
+
+variable "use_ibm_owned_encryption_key" {
+  type        = bool
+  description = "IBM Cloud Databases will secure your deployment's data at rest automatically with an encryption key that IBM hold. Alternatively, you may select your own Key Management System instance and encryption key (Key Protect or Hyper Protect Crypto Services) by setting this to false. If setting to false, a value must be passed for `existing_kms_instance_crn` to create a new key, or `existing_kms_key_crn` and/or `existing_backup_kms_key_crn` to use an existing key."
+  default     = true
+
+  validation {
+    condition     = var.use_ibm_owned_encryption_key ? !var.kms_encryption_enabled : true
+    error_message = "When setting input 'use_ibm_owned_encryption_key' true, 'kms_encryption_enabled' input must be set to false."
   }
 
-  # this validation ensures key info is provided when IBM-owned key is disabled and no MongoDB instance is given
   validation {
-    condition = !(
-      var.existing_mongodb_instance_crn == null &&
-      var.use_ibm_owned_encryption_key == false &&
-      var.existing_kms_instance_crn == null &&
-      var.existing_kms_key_crn == null
+    condition = (
+      var.use_ibm_owned_encryption_key ? length(compact([var.existing_kms_instance_crn, var.existing_kms_key_crn, var.existing_backup_kms_key_crn])) == 0 : true
     )
-    error_message = "When 'use_ibm_owned_encryption_key' is false, you must provide either 'existing_kms_instance_crn' (to create a new key) or 'existing_kms_key_crn' (to use an existing key)."
+    error_message = "When using ibm owned encryption keys by setting input 'use_ibm_owned_encryption_key' to true, 'existing_kms_instance_crn', 'existing_kms_key_crn' and 'existing_backup_kms_key_crn' should not be set."
   }
 }
 
@@ -180,12 +205,33 @@ variable "existing_kms_instance_crn" {
   type        = string
   description = "The CRN of a Key Protect or Hyper Protect Crypto Services instance. Required to create a new encryption key and key ring which will be used to encrypt both deployment data and backups. Applies only if `use_ibm_owned_encryption_key` is false. To use an existing key, pass values for `existing_kms_key_crn` and/or `existing_backup_kms_key_crn`. Bare in mind that backups encryption is only available in certain regions. See [Bring your own key for backups](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok) and [Using the HPCS Key for Backup encryption](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-hpcs#use-hpcs-backups)."
   default     = null
+
+  validation {
+    condition     = var.existing_mongodb_instance_crn != null ? var.existing_kms_instance_crn == null : true
+    error_message = "When using an existing mongodb instance 'existing_kms_instance_crn' should not be set"
+  }
 }
 
 variable "existing_kms_key_crn" {
   type        = string
   description = "The CRN of a Key Protect or Hyper Protect Crypto Services encryption key to encrypt your data. Applies only if `use_ibm_owned_encryption_key` is false. By default this key is used for both deployment data and backups, but this behaviour can be altered using the optional `existing_backup_kms_key_crn` input. If no value is passed a new key will be created in the instance specified in the `existing_kms_instance_crn` input. Bare in mind that backups encryption is only available in certain regions. See [Bring your own key for backups](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok) and [Using the HPCS Key for Backup encryption](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-hpcs#use-hpcs-backups)."
   default     = null
+
+  validation {
+    condition     = var.existing_mongodb_instance_crn != null ? var.existing_kms_key_crn == null : true
+    error_message = "When using an existing mongodb instance 'existing_kms_key_crn' should not be set"
+  }
+}
+
+variable "existing_backup_kms_key_crn" {
+  type        = string
+  description = "The CRN of a Key Protect or Hyper Protect Crypto Services encryption key that you want to use for encrypting the disk that holds deployment backups. Applies only if `use_ibm_owned_encryption_key` is false. If no value is passed, the value of `existing_kms_key_crn` is used. If no value is passed for `existing_kms_key_crn`, a new key will be created in the instance specified in the `existing_kms_instance_crn` input. Alternatively set `use_default_backup_encryption_key` to true to use the IBM Cloud Databases default encryption. Bare in mind that backups encryption is only available in certain regions. See [Bring your own key for backups](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok) and [Using the HPCS Key for Backup encryption](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-hpcs#use-hpcs-backups)."
+  default     = null
+
+  validation {
+    condition     = var.existing_mongodb_instance_crn != null ? var.existing_backup_kms_key_crn == null : true
+    error_message = "When using an existing mongodb instance 'existing_backup_kms_key_crn' should not be set"
+  }
 }
 
 variable "kms_endpoint_type" {
@@ -224,12 +270,6 @@ variable "key_name" {
   description = "The name for the key created for the Databases for MongoDB key. Applies only if not specifying an existing key. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
 }
 
-variable "existing_backup_kms_key_crn" {
-  type        = string
-  description = "The CRN of a Key Protect or Hyper Protect Crypto Services encryption key that you want to use for encrypting the disk that holds deployment backups. Applies only if `use_ibm_owned_encryption_key` is false. If no value is passed, the value of `existing_kms_key_crn` is used. If no value is passed for `existing_kms_key_crn`, a new key will be created in the instance specified in the `existing_kms_instance_crn` input. Alternatively set `use_default_backup_encryption_key` to true to use the IBM Cloud Databases default encryption. Bare in mind that backups encryption is only available in certain regions. See [Bring your own key for backups](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok) and [Using the HPCS Key for Backup encryption](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-hpcs#use-hpcs-backups)."
-  default     = null
-}
-
 variable "use_default_backup_encryption_key" {
   type        = bool
   description = "When `use_ibm_owned_encryption_key` is set to false, backups will be encrypted with either the key specified in `existing_kms_key_crn`, in `existing_backup_kms_key_crn`, or with a new key that will be created in the instance specified in the `existing_kms_instance_crn` input. If you do not want to use your own key for backups encryption, you can set this to `true` to use the IBM Cloud Databases default encryption for backups. Alternatively set `use_ibm_owned_encryption_key` to true to use the default encryption for both backups and deployment data."
@@ -249,6 +289,7 @@ variable "backup_crn" {
     error_message = "backup_crn must be null OR starts with 'crn:' and contains ':backup:'"
   }
 }
+
 variable "provider_visibility" {
   description = "Set the visibility value for the IBM terraform provider. Supported values are `public`, `private`, `public-and-private`. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/guides/custom-service-endpoints)."
   type        = string
@@ -287,7 +328,7 @@ variable "auto_scaling" {
       rate_units               = optional(string, "mb")
     })
   })
-  description = "Optional rules to allow the database to increase resources in response to usage. Only a single autoscaling block is allowed. Make sure you understand the effects of autoscaling, especially for production environments. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/blob/main/solutions/standard/DA-types.md#autoscaling)"
+  description = "Optional rules to allow the database to increase resources in response to usage. Only a single autoscaling block is allowed. Make sure you understand the effects of autoscaling, especially for production environments. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/blob/main/solutions/fully-configurable/DA-types.md#autoscaling)"
   default     = null
 }
 
@@ -330,7 +371,7 @@ variable "service_credential_secrets" {
     }))
   }))
   default     = []
-  description = "Service credential secrets configuration for Databases for MongoDB. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/tree/main/solutions/standard/DA-types.md#service-credential-secrets)."
+  description = "Service credential secrets configuration for Databases for MongoDB. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/tree/main/solutions/fully-configurable/DA-types.md#service-credential-secrets)."
 
   validation {
     # Service roles CRNs can be found at https://cloud.ibm.com/iam/roles, select the IBM Cloud Database and select the role

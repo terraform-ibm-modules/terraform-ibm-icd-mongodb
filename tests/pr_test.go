@@ -22,7 +22,7 @@ import (
 )
 
 const fscloudExampleTerraformDir = "examples/fscloud"
-const standardSolutionTerraformDir = "solutions/standard"
+const fullyConfigurableSolutionTerraformDir = "solutions/fully-configurable"
 const latestVersion = "7.0"
 
 // Use existing resource group
@@ -55,19 +55,19 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-func TestRunStandardSolutionSchematics(t *testing.T) {
+func TestRunFullyConfigurableSolutionSchematics(t *testing.T) {
 	t.Parallel()
 
 	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
 		Testing: t,
 		TarIncludePatterns: []string{
 			"*.tf",
-			fmt.Sprintf("%s/*.tf", standardSolutionTerraformDir),
+			fmt.Sprintf("%s/*.tf", fullyConfigurableSolutionTerraformDir),
 			fmt.Sprintf("%s/*.tf", fscloudExampleTerraformDir),
 			fmt.Sprintf("%s/*.tf", "modules/fscloud"),
 			fmt.Sprintf("%s/*.sh", "scripts"),
 		},
-		TemplateFolder:         standardSolutionTerraformDir,
+		TemplateFolder:         fullyConfigurableSolutionTerraformDir,
 		BestRegionYAMLPath:     regionSelectionPath,
 		Prefix:                 "mdb-st-da",
 		ResourceGroup:          resourceGroup,
@@ -93,12 +93,14 @@ func TestRunStandardSolutionSchematics(t *testing.T) {
 
 	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
-		{Name: "access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
+		{Name: "mongodb_access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
+		{Name: "kms_encryption_enabled", Value: true, DataType: "bool"},
+		{Name: "use_ibm_owned_encryption_key", Value: false, DataType: "bool"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 		{Name: "existing_backup_kms_key_crn", Value: permanentResources["hpcs_south_root_key_crn"], DataType: "string"},
 		{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
 		{Name: "mongodb_version", Value: "7.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
-		{Name: "resource_group_name", Value: options.Prefix, DataType: "string"},
+		{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
 		{Name: "plan", Value: "standard", DataType: "string"},
 		{Name: "service_credential_names", Value: "{\"admin_test\": \"Administrator\", \"editor_test\": \"Editor\"}", DataType: "map(string)"},
 		{Name: "existing_secrets_manager_instance_crn", Value: permanentResources["secretsManagerCRN"], DataType: "string"},
@@ -111,12 +113,12 @@ func TestRunStandardSolutionSchematics(t *testing.T) {
 	err := options.RunSchematicTest()
 	assert.Nil(t, err, "This should not have errored")
 }
-func TestRunStandardUpgradeSolution(t *testing.T) {
+func TestRunFullyConfigurableUpgradeSolution(t *testing.T) {
 	t.Parallel()
 
 	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
 		Testing:                    t,
-		TerraformDir:               standardSolutionTerraformDir,
+		TerraformDir:               fullyConfigurableSolutionTerraformDir,
 		BestRegionYAMLPath:         regionSelectionPath,
 		Prefix:                     "mongodb-st-da-upg",
 		ResourceGroup:              resourceGroup,
@@ -124,11 +126,13 @@ func TestRunStandardUpgradeSolution(t *testing.T) {
 	})
 
 	options.TerraformVars = map[string]interface{}{
-		"access_tags":               permanentResources["accessTags"],
-		"existing_kms_instance_crn": permanentResources["hpcs_south_crn"],
-		"kms_endpoint_type":         "public",
-		"provider_visibility":       "public",
-		"resource_group_name":       options.Prefix,
+		"mongodb_access_tags":          permanentResources["accessTags"],
+		"kms_encryption_enabled":       true,
+		"use_ibm_owned_encryption_key": false,
+		"existing_kms_instance_crn":    permanentResources["hpcs_south_crn"],
+		"kms_endpoint_type":            "public",
+		"provider_visibility":          "public",
+		"existing_resource_group_name": resourceGroup,
 	}
 
 	output, err := options.RunTestUpgrade()
@@ -175,12 +179,12 @@ func TestRunExistingInstance(t *testing.T) {
 			Testing: t,
 			TarIncludePatterns: []string{
 				"*.tf",
-				fmt.Sprintf("%s/*.tf", standardSolutionTerraformDir),
+				fmt.Sprintf("%s/*.tf", fullyConfigurableSolutionTerraformDir),
 				fmt.Sprintf("%s/*.tf", fscloudExampleTerraformDir),
 				fmt.Sprintf("%s/*.tf", "modules/fscloud"),
 				fmt.Sprintf("%s/*.sh", "scripts"),
 			},
-			TemplateFolder:         standardSolutionTerraformDir,
+			TemplateFolder:         fullyConfigurableSolutionTerraformDir,
 			BestRegionYAMLPath:     regionSelectionPath,
 			Prefix:                 "mongodb-sr-da",
 			ResourceGroup:          resourceGroup,
@@ -191,9 +195,8 @@ func TestRunExistingInstance(t *testing.T) {
 		options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 			{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 			{Name: "existing_mongodb_instance_crn", Value: terraform.Output(t, existingTerraformOptions, "mongodb_crn"), DataType: "string"},
-			{Name: "resource_group_name", Value: fmt.Sprintf("%s-resource-group", prefix), DataType: "string"},
+			{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
 			{Name: "region", Value: region, DataType: "string"},
-			{Name: "use_existing_resource_group", Value: true, DataType: "bool"},
 			{Name: "provider_visibility", Value: "public", DataType: "string"},
 		}
 		err := options.RunSchematicTest()
@@ -214,12 +217,12 @@ func TestRunExistingInstance(t *testing.T) {
 }
 
 // Test the DA when using IBM owned encryption keys
-func TestRunStandardSolutionIBMKeys(t *testing.T) {
+func TestRunfullyConfigurableSolutionIBMKeys(t *testing.T) {
 	t.Parallel()
 
 	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
 		Testing:       t,
-		TerraformDir:  standardSolutionTerraformDir,
+		TerraformDir:  fullyConfigurableSolutionTerraformDir,
 		Region:        "us-south",
 		Prefix:        "mongodb-icd-key",
 		ResourceGroup: resourceGroup,
@@ -228,8 +231,9 @@ func TestRunStandardSolutionIBMKeys(t *testing.T) {
 	options.TerraformVars = map[string]interface{}{
 		"mongodb_version":              "7.0",
 		"provider_visibility":          "public",
-		"resource_group_name":          options.Prefix,
+		"existing_resource_group_name": resourceGroup,
 		"use_ibm_owned_encryption_key": true,
+		"prefix":                       options.Prefix,
 	}
 
 	output, err := options.RunTestConsistency()

@@ -47,10 +47,10 @@
       ],
       "flavors": [
         {
-          "label": "Standard",
-          "name": "standard",
+          "label": "Fully configurable",
+          "name": "fully-configurable",
           "install_type": "fullstack",
-          "working_directory": "solutions/standard",
+          "working_directory": "solutions/fully-configurable",
           "compliance": {
             "authority": "scc-v3",
             "profiles": [
@@ -115,16 +115,13 @@
               ]
             },
             {
-              "key": "use_existing_resource_group"
-            },
-            {
-              "key": "resource_group_name"
+              "key": "existing_resource_group_name"
             },
             {
               "key": "prefix"
             },
             {
-              "key": "name"
+              "key": "mongodb_name"
             },
             {
               "key": "region",
@@ -204,6 +201,9 @@
               "key": "plan"
             },
             {
+              "key": "service_endpoints"
+            },
+            {
               "key": "members"
             },
             {
@@ -240,10 +240,13 @@
               "key": "users"
             },
             {
-              "key": "tags"
+              "key": "mongodb_tags"
             },
             {
-              "key": "access_tags"
+              "key": "mongodb_access_tags"
+            },
+            {
+              "key": "kms_encryption_enabled"
             },
             {
               "key": "use_ibm_owned_encryption_key"
