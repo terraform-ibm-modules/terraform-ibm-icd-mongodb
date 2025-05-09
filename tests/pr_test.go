@@ -23,6 +23,7 @@ import (
 
 const fscloudExampleTerraformDir = "examples/fscloud"
 const fullyConfigurableSolutionTerraformDir = "solutions/fully-configurable"
+const securityEnforcedSolutionTerraformDir = "solutions/security-enforced"
 const latestVersion = "7.0"
 
 // Use existing resource group
@@ -113,6 +114,7 @@ func TestRunFullyConfigurableSolutionSchematics(t *testing.T) {
 	err := options.RunSchematicTest()
 	assert.Nil(t, err, "This should not have errored")
 }
+
 func TestRunFullyConfigurableUpgradeSolution(t *testing.T) {
 	t.Parallel()
 
@@ -140,6 +142,63 @@ func TestRunFullyConfigurableUpgradeSolution(t *testing.T) {
 		assert.Nil(t, err, "This should not have errored")
 		assert.NotNil(t, output, "Expected some output")
 	}
+}
+
+func TestRunSecurityEnforcedSolutionSchematics(t *testing.T) {
+	t.Parallel()
+
+	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
+		Testing: t,
+		TarIncludePatterns: []string{
+			"*.tf",
+			fmt.Sprintf("%s/*.tf", fullyConfigurableSolutionTerraformDir),
+			fmt.Sprintf("%s/*.tf", securityEnforcedSolutionTerraformDir),
+			fmt.Sprintf("%s/*.tf", fscloudExampleTerraformDir),
+			fmt.Sprintf("%s/*.tf", "modules/fscloud"),
+			fmt.Sprintf("%s/*.sh", "scripts"),
+		},
+		TemplateFolder:         securityEnforcedSolutionTerraformDir,
+		BestRegionYAMLPath:     regionSelectionPath,
+		Prefix:                 "mdb-st-da",
+		ResourceGroup:          resourceGroup,
+		DeleteWorkspaceOnFail:  false,
+		WaitJobCompleteMinutes: 60,
+	})
+
+	serviceCredentialSecrets := []map[string]interface{}{
+		{
+			"secret_group_name": fmt.Sprintf("%s-secret-group", options.Prefix),
+			"service_credentials": []map[string]string{
+				{
+					"secret_name": fmt.Sprintf("%s-cred-reader", options.Prefix),
+					"service_credentials_source_service_role_crn": "crn:v1:bluemix:public:iam::::role:Viewer",
+				},
+				{
+					"secret_name": fmt.Sprintf("%s-cred-writer", options.Prefix),
+					"service_credentials_source_service_role_crn": "crn:v1:bluemix:public:iam::::role:Editor",
+				},
+			},
+		},
+	}
+
+	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
+		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
+		{Name: "mongodb_access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
+		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
+		{Name: "existing_backup_kms_key_crn", Value: permanentResources["hpcs_south_root_key_crn"], DataType: "string"},
+		{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
+		{Name: "mongodb_version", Value: "7.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
+		{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
+		{Name: "plan", Value: "standard", DataType: "string"},
+		{Name: "service_credential_names", Value: "{\"admin_test\": \"Administrator\", \"editor_test\": \"Editor\"}", DataType: "map(string)"},
+		{Name: "existing_secrets_manager_instance_crn", Value: permanentResources["secretsManagerCRN"], DataType: "string"},
+		{Name: "service_credential_secrets", Value: serviceCredentialSecrets, DataType: "list(object)"},
+		{Name: "admin_pass_secrets_manager_secret_group", Value: options.Prefix, DataType: "string"},
+		{Name: "admin_pass_secrets_manager_secret_name", Value: options.Prefix, DataType: "string"},
+		{Name: "prefix", Value: options.Prefix, DataType: "string"},
+	}
+	err := options.RunSchematicTest()
+	assert.Nil(t, err, "This should not have errored")
 }
 
 func TestRunExistingInstance(t *testing.T) {

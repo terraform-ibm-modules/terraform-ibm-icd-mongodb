@@ -1,4 +1,4 @@
-# IBM Cloud Databases for MongoDB (Fully Configurable)
+# IBM Cloud Databases for MongoDB (Security Enforced)
 
 ## Prerequisites
 - An existing resource group
