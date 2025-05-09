@@ -98,6 +98,18 @@
               "key": "ibmcloud_api_key"
             },
             {
+              "key": "existing_resource_group_name",
+              "required": true,
+              "custom_config": {
+                "type": "resource_group",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "identifier": "rg_name"
+                }
+              }
+            },
+            {
               "key": "provider_visibility",
               "options": [
                 {
@@ -113,9 +125,6 @@
                   "value": "public-and-private"
                 }
               ]
-            },
-            {
-              "key": "existing_resource_group_name"
             },
             {
               "key": "prefix"
@@ -258,7 +267,17 @@
               "key": "existing_kms_key_crn"
             },
             {
-              "key": "kms_endpoint_type"
+              "key": "kms_endpoint_type",
+              "options": [
+                {
+                  "displayname": "public",
+                  "value": "public"
+                },
+                {
+                  "displayname": "private",
+                  "value": "private"
+                }
+              ]
             },
             {
               "key": "skip_mongodb_kms_auth_policy"
@@ -289,6 +308,234 @@
             },
             {
               "key": "existing_secrets_manager_endpoint_type"
+            },
+            {
+              "key": "service_credential_secrets"
+            },
+            {
+              "key": "skip_mongodb_secrets_manager_auth_policy"
+            }
+          ]
+        },
+        {
+          "label": "Security Enforced",
+          "name": "security-enforced",
+          "install_type": "fullstack",
+          "working_directory": "solutions/security-enforced",
+          "compliance": {
+            "authority": "scc-v3",
+            "profiles": [
+              {
+                "profile_name": "IBM Cloud Framework for Financial Services",
+                "profile_version": "1.7.0"
+              }
+            ]
+          },
+          "iam_permissions": [
+            {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::role:Editor"
+              ],
+              "service_name": "databases-for-mongodb"
+            },
+            {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                "crn:v1:bluemix:public:iam::::role:Editor"
+              ],
+              "service_name": "kms"
+            }
+          ],
+          "architecture": {
+            "descriptions": "This architecture creates an instance of IBM Cloud Databases for MongoDB instance with KMS encryption. Supports autoscaling.",
+            "features": [
+              {
+                "title": " Creates an instance of Databases for MongoDB",
+                "description": "This architecture creates an instance of IBM Cloud Databases for MongoDB with KMS encryption. It accepts or creates a resource group, and provides autoscaling rules."
+              }
+            ],
+            "diagrams": [
+              {
+                "diagram": {
+                  "caption": "Databases for MongoDB instance on IBM Cloud",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/main/reference-architecture/deployable-architecture-mongodb.svg",
+                  "type": "image/svg+xml"
+                },
+                "description": "This architecture supports creating and configuring an instance of Databases for MongoDB instance with KMS encryption."
+              }
+            ]
+          },
+          "configuration": [
+            {
+              "key": "ibmcloud_api_key"
+            },
+            {
+              "key": "existing_resource_group_name",
+              "required": true,
+              "custom_config": {
+                "type": "resource_group",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "identifier": "rg_name"
+                }
+              }
+            },
+            {
+              "key": "region",
+              "required": true,
+              "default_value": "us-south",
+              "options": [
+                {
+                  "displayname": "Chennai (che01)",
+                  "value": "che01"
+                },
+                {
+                  "displayname": "Dallas (us-south)",
+                  "value": "us-south"
+                },
+                {
+                  "displayname": "Frankfurt (eu-de)",
+                  "value": "eu-de"
+                },
+                {
+                  "displayname": "London (eu-gb)",
+                  "value": "eu-gb"
+                },
+                {
+                  "displayname": "Madrid (eu-es)",
+                  "value": "eu-es"
+                },
+                {
+                  "displayname": "Osaka (jp-osa)",
+                  "value": "jp-osa"
+                },
+                {
+                  "displayname": "Paris (par01)",
+                  "value": "par01"
+                },
+                {
+                  "displayname": "Sao Paulo (br-sao)",
+                  "value": "br-sao"
+                },
+                {
+                  "displayname": "Sydney (au-syd)",
+                  "value": "au-syd"
+                },
+                {
+                  "displayname": "Toronto (ca-tor)",
+                  "value": "ca-tor"
+                },
+                {
+                  "displayname": "Tokyo (jp-tok)",
+                  "value": "jp-tok"
+                },
+                {
+                  "displayname": "Washington (us-east)",
+                  "value": "us-east"
+                }
+              ]
+            },
+            {
+              "key": "prefix"
+            },
+            {
+              "key": "mongodb_name"
+            },
+
+            {
+              "key": "mongodb_version",
+              "required": false,
+              "default_value": "__NULL__",
+              "options": [
+                {
+                  "displayname": "preferred",
+                  "value": "__NULL__"
+                },
+                {
+                  "displayname": "6.0",
+                  "value": "6.0"
+                },
+                {
+                  "displayname": "7.0",
+                  "value": "7.0"
+                }
+              ]
+            },
+            {
+              "key": "plan"
+            },
+            {
+              "key": "members"
+            },
+            {
+              "key": "memory_mb"
+            },
+            {
+              "key": "cpu_count"
+            },
+            {
+              "key": "disk_mb"
+            },
+            {
+              "key": "member_host_flavor"
+            },
+            {
+              "key": "service_credential_names"
+            },
+            {
+              "key": "admin_pass"
+            },
+            {
+              "key": "admin_pass_secrets_manager_secret_group"
+            },
+            {
+              "key": "admin_pass_secrets_manager_secret_name"
+            },
+            {
+              "key": "existing_mongodb_instance_crn"
+            },
+            {
+              "key": "use_existing_admin_pass_secrets_manager_secret_group"
+            },
+            {
+              "key": "users"
+            },
+            {
+              "key": "mongodb_tags"
+            },
+            {
+              "key": "mongodb_access_tags"
+            },
+            {
+              "key": "existing_kms_instance_crn"
+            },
+            {
+              "key": "existing_kms_key_crn"
+            },
+            {
+              "key": "skip_mongodb_kms_auth_policy"
+            },
+            {
+              "key": "ibmcloud_kms_api_key"
+            },
+            {
+              "key": "key_ring_name"
+            },
+            {
+              "key": "key_name"
+            },
+            {
+              "key": "existing_backup_kms_key_crn"
+            },
+            {
+              "key": "auto_scaling"
+            },
+            {
+              "key": "backup_crn"
+            },
+            {
+              "key": "existing_secrets_manager_instance_crn"
             },
             {
               "key": "service_credential_secrets"

@@ -40,11 +40,6 @@ variable "region" {
   description = "The region where you want to deploy your instance."
   type        = string
   default     = "us-south"
-
-  validation {
-    condition     = var.existing_mongodb_instance_crn != null && var.region != local.existing_mongodb_region ? false : true
-    error_message = "The region detected in the 'existing_mongodb_instance_crn' value must match the value of the 'region' input variable when passing an existing instance."
-  }
 }
 
 variable "mongodb_version" {
@@ -64,17 +59,6 @@ variable "plan" {
       var.plan == "enterprise",
     ])
     error_message = "Only supported plans are standard or enterprise"
-  }
-}
-
-variable "service_endpoints" {
-  type        = string
-  description = "The type of endpoint of the database instance. Possible values: `public`, `private`, `public-and-private`."
-  default     = "private"
-
-  validation {
-    condition     = can(regex("public|public-and-private|private", var.service_endpoints))
-    error_message = "Valid values for service_endpoints are 'public', 'public-and-private', and 'private'"
   }
 }
 
@@ -164,43 +148,6 @@ variable "mongodb_access_tags" {
 # Encryption
 ##############################################################
 
-variable "kms_encryption_enabled" {
-  type        = bool
-  description = "Set to true to enable KMS Encryption using customer managed keys. When set to true, a value must be passed for either 'existing_kms_instance_crn', 'existing_kms_key_crn' or 'existing_backup_kms_key_crn'."
-  default     = false
-
-  # this validation ensures key info is provided when Kms encryption is enabled and no MongoDB instance is given
-  validation {
-    condition = (
-      var.existing_mongodb_instance_crn != null ||
-      (var.kms_encryption_enabled && (
-        var.existing_kms_instance_crn != null ||
-        var.existing_kms_key_crn != null ||
-        var.existing_backup_kms_key_crn != null
-      ))
-    )
-    error_message = "When setting values for 'existing_kms_instance_crn', 'existing_kms_key_crn' or 'existing_backup_kms_key_crn', the 'kms_encryption_enabled' input must be set to true."
-  }
-}
-
-variable "use_ibm_owned_encryption_key" {
-  type        = bool
-  description = "IBM Cloud Databases will secure your deployment's data at rest automatically with an encryption key that IBM hold. Alternatively, you may select your own Key Management System instance and encryption key (Key Protect or Hyper Protect Crypto Services) by setting this to false. If setting to false, a value must be passed for `existing_kms_instance_crn` to create a new key, or `existing_kms_key_crn` and/or `existing_backup_kms_key_crn` to use an existing key."
-  default     = true
-
-  validation {
-    condition     = var.use_ibm_owned_encryption_key ? !var.kms_encryption_enabled : true
-    error_message = "When setting input 'use_ibm_owned_encryption_key' true, 'kms_encryption_enabled' input must be set to false."
-  }
-
-  validation {
-    condition = (
-      var.use_ibm_owned_encryption_key ? length(compact([var.existing_kms_instance_crn, var.existing_kms_key_crn, var.existing_backup_kms_key_crn])) == 0 : true
-    )
-    error_message = "When using ibm owned encryption keys by setting input 'use_ibm_owned_encryption_key' to true, 'existing_kms_instance_crn', 'existing_kms_key_crn' and 'existing_backup_kms_key_crn' should not be set."
-  }
-}
-
 variable "existing_kms_instance_crn" {
   type        = string
   description = "The CRN of a Key Protect or Hyper Protect Crypto Services instance. Required to create a new encryption key and key ring which will be used to encrypt both deployment data and backups. Applies only if `use_ibm_owned_encryption_key` is false. To use an existing key, pass values for `existing_kms_key_crn` and/or `existing_backup_kms_key_crn`. Bare in mind that backups encryption is only available in certain regions. See [Bring your own key for backups](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok) and [Using the HPCS Key for Backup encryption](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-hpcs#use-hpcs-backups)."
@@ -209,6 +156,13 @@ variable "existing_kms_instance_crn" {
   validation {
     condition     = var.existing_mongodb_instance_crn != null ? var.existing_kms_instance_crn == null : true
     error_message = "When using an existing mongodb instance 'existing_kms_instance_crn' should not be set"
+  }
+
+  validation {
+    condition = (
+      length(compact([var.existing_kms_instance_crn, var.existing_kms_key_crn, var.existing_backup_kms_key_crn])) == 1 ? true : false
+    )
+    error_message = "To enable KMS encryption one of 'existing_kms_instance_crn', 'existing_kms_key_crn' or 'existing_backup_kms_key_crn' must be set."
   }
 }
 
@@ -231,17 +185,6 @@ variable "existing_backup_kms_key_crn" {
   validation {
     condition     = var.existing_mongodb_instance_crn != null ? var.existing_backup_kms_key_crn == null : true
     error_message = "When using an existing mongodb instance 'existing_backup_kms_key_crn' should not be set"
-  }
-}
-
-variable "kms_endpoint_type" {
-  type        = string
-  description = "The type of endpoint to use for communicating with the Key Protect or Hyper Protect Crypto Services instance. Possible values: `public`, `private`. Applies only if `existing_kms_key_crn` is not specified."
-  default     = "private"
-
-  validation {
-    condition     = can(regex("public|private", var.kms_endpoint_type))
-    error_message = "The kms_endpoint_type value must be 'public' or 'private'."
   }
 }
 
@@ -270,12 +213,6 @@ variable "key_name" {
   description = "The name for the key created for the Databases for MongoDB key. Applies only if not specifying an existing key. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
 }
 
-variable "use_default_backup_encryption_key" {
-  type        = bool
-  description = "When `use_ibm_owned_encryption_key` is set to false, backups will be encrypted with either the key specified in `existing_kms_key_crn`, in `existing_backup_kms_key_crn`, or with a new key that will be created in the instance specified in the `existing_kms_instance_crn` input. If you do not want to use your own key for backups encryption, you can set this to `true` to use the IBM Cloud Databases default encryption for backups. Alternatively set `use_ibm_owned_encryption_key` to true to use the default encryption for both backups and deployment data."
-  default     = false
-}
-
 variable "backup_crn" {
   type        = string
   description = "The CRN of a backup resource to restore from. The backup is created by a database deployment with the same service ID. The backup is loaded after provisioning and the new deployment starts up that uses that data. A backup CRN is in the format crn:v1:<…>:backup:. If omitted, the database is provisioned empty."
@@ -287,17 +224,6 @@ variable "backup_crn" {
       can(regex("^crn:.*:backup:", var.backup_crn))
     ])
     error_message = "backup_crn must be null OR starts with 'crn:' and contains ':backup:'"
-  }
-}
-
-variable "provider_visibility" {
-  description = "Set the visibility value for the IBM terraform provider. Supported values are `public`, `private`, `public-and-private`. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/guides/custom-service-endpoints)."
-  type        = string
-  default     = "private"
-
-  validation {
-    condition     = contains(["public", "private", "public-and-private"], var.provider_visibility)
-    error_message = "Invalid visibility option. Allowed values are 'public', 'private', or 'public-and-private'."
   }
 }
 
@@ -340,17 +266,6 @@ variable "existing_secrets_manager_instance_crn" {
   type        = string
   default     = null
   description = "The CRN of existing secrets manager to use to create service credential secrets for Databases for MongoDB instance."
-}
-
-variable "existing_secrets_manager_endpoint_type" {
-  type        = string
-  description = "The endpoint type to use if `existing_secrets_manager_instance_crn` is specified. Possible values: public, private."
-  default     = "private"
-
-  validation {
-    condition     = contains(["public", "private"], var.existing_secrets_manager_endpoint_type)
-    error_message = "Only \"public\" and \"private\" are allowed values for 'existing_secrets_endpoint_type'."
-  }
 }
 
 variable "service_credential_secrets" {
