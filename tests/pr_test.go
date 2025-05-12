@@ -128,6 +128,7 @@ func TestRunFullyConfigurableUpgradeSolution(t *testing.T) {
 	})
 
 	options.TerraformVars = map[string]interface{}{
+		"prefix":                       options.Prefix,
 		"mongodb_access_tags":          permanentResources["accessTags"],
 		"kms_encryption_enabled":       true,
 		"use_ibm_owned_encryption_key": false,
@@ -252,6 +253,7 @@ func TestRunExistingInstance(t *testing.T) {
 		})
 
 		options.TerraformVars = []testschematic.TestSchematicTerraformVar{
+			{Name: "prefix", Value: options.Prefix, DataType: "string"},
 			{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 			{Name: "existing_mongodb_instance_crn", Value: terraform.Output(t, existingTerraformOptions, "mongodb_crn"), DataType: "string"},
 			{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
@@ -283,7 +285,7 @@ func TestRunfullyConfigurableSolutionIBMKeys(t *testing.T) {
 		Testing:       t,
 		TerraformDir:  fullyConfigurableSolutionTerraformDir,
 		Region:        "us-south",
-		Prefix:        "mongodb-icd-key",
+		Prefix:        "mongo-key",
 		ResourceGroup: resourceGroup,
 	})
 
