@@ -157,13 +157,6 @@ variable "existing_kms_instance_crn" {
     condition     = var.existing_mongodb_instance_crn != null ? var.existing_kms_instance_crn == null : true
     error_message = "When using an existing mongodb instance 'existing_kms_instance_crn' should not be set"
   }
-
-  validation {
-    condition = (
-      length(compact([var.existing_kms_instance_crn, var.existing_kms_key_crn, var.existing_backup_kms_key_crn])) == 1 ? true : false
-    )
-    error_message = "To enable KMS encryption one of 'existing_kms_instance_crn', 'existing_kms_key_crn' or 'existing_backup_kms_key_crn' must be set."
-  }
 }
 
 variable "existing_kms_key_crn" {

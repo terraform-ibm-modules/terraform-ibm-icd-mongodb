@@ -70,7 +70,7 @@ func TestRunFullyConfigurableSolutionSchematics(t *testing.T) {
 		},
 		TemplateFolder:         fullyConfigurableSolutionTerraformDir,
 		BestRegionYAMLPath:     regionSelectionPath,
-		Prefix:                 "mdb-st-da",
+		Prefix:                 "mdb-fc-da",
 		ResourceGroup:          resourceGroup,
 		DeleteWorkspaceOnFail:  false,
 		WaitJobCompleteMinutes: 60,
@@ -98,7 +98,6 @@ func TestRunFullyConfigurableSolutionSchematics(t *testing.T) {
 		{Name: "kms_encryption_enabled", Value: true, DataType: "bool"},
 		{Name: "use_ibm_owned_encryption_key", Value: false, DataType: "bool"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
-		{Name: "existing_backup_kms_key_crn", Value: permanentResources["hpcs_south_root_key_crn"], DataType: "string"},
 		{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
 		{Name: "mongodb_version", Value: "7.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
 		{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
@@ -160,7 +159,7 @@ func TestRunSecurityEnforcedSolutionSchematics(t *testing.T) {
 		},
 		TemplateFolder:         securityEnforcedSolutionTerraformDir,
 		BestRegionYAMLPath:     regionSelectionPath,
-		Prefix:                 "mdb-st-da",
+		Prefix:                 "mdb-se-da",
 		ResourceGroup:          resourceGroup,
 		DeleteWorkspaceOnFail:  false,
 		WaitJobCompleteMinutes: 60,
@@ -186,7 +185,6 @@ func TestRunSecurityEnforcedSolutionSchematics(t *testing.T) {
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 		{Name: "mongodb_access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
-		{Name: "existing_backup_kms_key_crn", Value: permanentResources["hpcs_south_root_key_crn"], DataType: "string"},
 		{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
 		{Name: "mongodb_version", Value: "7.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
 		{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
@@ -204,7 +202,7 @@ func TestRunSecurityEnforcedSolutionSchematics(t *testing.T) {
 
 func TestRunExistingInstance(t *testing.T) {
 	t.Parallel()
-	prefix := fmt.Sprintf("mongodb-t-%s", strings.ToLower(random.UniqueId()))
+	prefix := fmt.Sprintf("mdb-t-%s", strings.ToLower(random.UniqueId()))
 	realTerraformDir := ".."
 	tempTerraformDir, _ := files.CopyTerraformFolderToTemp(realTerraformDir, fmt.Sprintf(prefix+"-%s", strings.ToLower(random.UniqueId())))
 	region := validICDRegions[rand.Intn(len(validICDRegions))]
@@ -246,7 +244,7 @@ func TestRunExistingInstance(t *testing.T) {
 			},
 			TemplateFolder:         fullyConfigurableSolutionTerraformDir,
 			BestRegionYAMLPath:     regionSelectionPath,
-			Prefix:                 "mongodb-sr-da",
+			Prefix:                 "mdb-sr-da",
 			ResourceGroup:          resourceGroup,
 			DeleteWorkspaceOnFail:  false,
 			WaitJobCompleteMinutes: 60,
