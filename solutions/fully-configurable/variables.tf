@@ -169,17 +169,19 @@ variable "kms_encryption_enabled" {
   description = "Set to true to enable KMS Encryption using customer managed keys. When set to true, a value must be passed for either 'existing_kms_instance_crn', 'existing_kms_key_crn' or 'existing_backup_kms_key_crn'."
   default     = false
 
-  # this validation ensures key info is provided when Kms encryption is enabled and no MongoDB instance is given
   validation {
-    condition = (
-      var.existing_mongodb_instance_crn != null ||
-      (var.kms_encryption_enabled && (
-        var.existing_kms_instance_crn != null ||
-        var.existing_kms_key_crn != null ||
-        var.existing_backup_kms_key_crn != null
-      ))
-    )
-    error_message = "When setting values for 'existing_kms_instance_crn', 'existing_kms_key_crn' or 'existing_backup_kms_key_crn', the 'kms_encryption_enabled' input must be set to true."
+    condition     = var.existing_mongodb_instance_crn != null ? var.kms_encryption_enabled == false : true
+    error_message = "When using an existing mongodb instance 'kms_encryption_enabled' should not be enabled"
+  }
+
+  validation {
+    condition     = var.kms_encryption_enabled == true ? (var.existing_kms_instance_crn != null || var.existing_kms_key_crn != null || var.existing_backup_kms_key_crn != null) : true
+    error_message = "You must provide at least one of 'existing_kms_instance_crn', 'existing_kms_root_key_crn' or 'existing_backup_kms_key_crn' inputs if 'kms_encryption_enabled' is set to true."
+  }
+
+  validation {
+    condition     = var.kms_encryption_enabled == false ? (var.existing_kms_key_crn == null && var.existing_kms_instance_crn == null && var.existing_backup_kms_key_crn == null) : true
+    error_message = "If 'kms_encryption_enabled' is set to false, you should not pass values for 'existing_kms_instance_crn', 'existing_kms_root_key_crn' or 'existing_backup_kms_key_crn'. inputs"
   }
 }
 
