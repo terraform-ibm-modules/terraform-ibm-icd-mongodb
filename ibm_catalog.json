@@ -75,7 +75,6 @@
             }
           ],
           "architecture": {
-            "descriptions": "This architecture creates an instance of IBM Cloud Databases for MongoDB instance with KMS encryption. Supports autoscaling.",
             "features": [
               {
                 "title": " Creates an instance of Databases for MongoDB",
@@ -187,8 +186,8 @@
               "default_value": "__NULL__",
               "options": [
                 {
-                "displayname": "preferred",
-                "value": "__NULL__"
+                  "displayname": "preferred",
+                  "value": "__NULL__"
                 },
                 {
                   "displayname": "6.0",
@@ -198,7 +197,6 @@
                   "displayname": "7.0",
                   "value": "7.0"
                 }
-
               ]
             },
             {
