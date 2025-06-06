@@ -1,7 +1,9 @@
 #######################################################################################################################
 # Resource Group
 #######################################################################################################################
-
+locals {
+  prefix = var.prefix != null ? trimspace(var.prefix) != "" ? "${var.prefix}-" : "" : ""
+}
 
 module "resource_group" {
   source                       = "terraform-ibm-modules/resource-group/ibm"
@@ -14,8 +16,12 @@ module "resource_group" {
 #######################################################################################################################
 
 locals {
-  prefix                = (var.prefix != null && trimspace(var.prefix) != "" ? "${var.prefix}-" : "")
-  create_new_kms_key    = var.existing_mongodb_instance_crn == null && !var.use_ibm_owned_encryption_key && var.existing_kms_key_crn == null ? true : false # no need to create any KMS resources if passing an existing key, or using IBM owned keys
+  create_new_kms_key = (
+    var.kms_encryption_enabled &&
+    var.existing_mongodb_instance_crn == null &&
+    !var.use_ibm_owned_encryption_key &&
+    var.existing_kms_key_crn == null
+  )
   mongodb_key_name      = "${local.prefix}${var.key_name}"
   mongodb_key_ring_name = "${local.prefix}${var.key_ring_name}"
 }
@@ -26,7 +32,7 @@ module "kms" {
   }
   count                       = local.create_new_kms_key ? 1 : 0
   source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
-  version                     = "5.0.2"
+  version                     = "5.1.7"
   create_key_protect_instance = false
   region                      = local.kms_region
   existing_kms_instance_crn   = var.existing_kms_instance_crn
@@ -86,16 +92,16 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 
 locals {
   account_id                                  = data.ibm_iam_account_settings.iam_account_settings.account_id
-  create_cross_account_kms_auth_policy        = var.existing_mongodb_instance_crn == null && var.ibmcloud_kms_api_key != null && !var.use_ibm_owned_encryption_key
-  create_cross_account_backup_kms_auth_policy = var.existing_mongodb_instance_crn == null && var.ibmcloud_kms_api_key != null && !var.use_ibm_owned_encryption_key && var.existing_backup_kms_key_crn != null
+  create_cross_account_kms_auth_policy        = var.kms_encryption_enabled && !var.skip_mongodb_kms_auth_policy && var.ibmcloud_kms_api_key != null && !var.use_ibm_owned_encryption_key
+  create_cross_account_backup_kms_auth_policy = var.kms_encryption_enabled && !var.skip_mongodb_kms_auth_policy && var.ibmcloud_kms_api_key != null && !var.use_ibm_owned_encryption_key && var.existing_backup_kms_key_crn != null
 
-  # If KMS encryption enabled (and existing ES instance is not being passed), parse details from the existing key if being passed, otherwise get it from the key that the DA creates
-  kms_account_id    = var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? module.kms_key_crn_parser[0].account_id : module.kms_instance_crn_parser[0].account_id
-  kms_service       = var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? module.kms_key_crn_parser[0].service_name : module.kms_instance_crn_parser[0].service_name
-  kms_instance_guid = var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? module.kms_key_crn_parser[0].service_instance : module.kms_instance_crn_parser[0].service_instance
-  kms_key_crn       = var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? var.existing_kms_key_crn : module.kms[0].keys[format("%s.%s", local.mongodb_key_ring_name, local.mongodb_key_name)].crn
-  kms_key_id        = var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? module.kms_key_crn_parser[0].resource : module.kms[0].keys[format("%s.%s", local.mongodb_key_ring_name, local.mongodb_key_name)].key_id
-  kms_region        = var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? module.kms_key_crn_parser[0].region : module.kms_instance_crn_parser[0].region
+  # If KMS encryption enabled (and existing MongoDB instance is not being passed), parse details from the existing key if being passed, otherwise get it from the key that the DA creates
+  kms_account_id    = !var.kms_encryption_enabled || var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? module.kms_key_crn_parser[0].account_id : module.kms_instance_crn_parser[0].account_id
+  kms_service       = !var.kms_encryption_enabled || var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? module.kms_key_crn_parser[0].service_name : module.kms_instance_crn_parser[0].service_name
+  kms_instance_guid = !var.kms_encryption_enabled || var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? module.kms_key_crn_parser[0].service_instance : module.kms_instance_crn_parser[0].service_instance
+  kms_key_crn       = !var.kms_encryption_enabled || var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? var.existing_kms_key_crn : module.kms[0].keys[format("%s.%s", local.mongodb_key_ring_name, local.mongodb_key_name)].crn
+  kms_key_id        = !var.kms_encryption_enabled || var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? module.kms_key_crn_parser[0].resource : module.kms[0].keys[format("%s.%s", local.mongodb_key_ring_name, local.mongodb_key_name)].key_id
+  kms_region        = !var.kms_encryption_enabled || var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? module.kms_key_crn_parser[0].region : module.kms_instance_crn_parser[0].region
 
   # If creating KMS cross account policy for backups, parse backup key details from passed in key CRN
   backup_kms_account_id    = local.create_cross_account_backup_kms_auth_policy ? module.kms_backup_key_crn_parser[0].account_id : local.kms_account_id
@@ -220,7 +226,7 @@ locals {
   # if - replace first char with J
   # elseif _ replace first char with K
   # else use asis
-  generated_admin_password = startswith(random_password.admin_password[0].result, "-") ? "J${substr(random_password.admin_password[0].result, 1, -1)}" : startswith(random_password.admin_password[0].result, "_") ? "K${substr(random_password.admin_password[0].result, 1, -1)}" : random_password.admin_password[0].result
+  generated_admin_password = (length(random_password.admin_password) > 0 ? (startswith(random_password.admin_password[0].result, "-") ? "J${substr(random_password.admin_password[0].result, 1, -1)}" : startswith(random_password.admin_password[0].result, "_") ? "K${substr(random_password.admin_password[0].result, 1, -1)}" : random_password.admin_password[0].result) : null)
   # admin password to use
   admin_pass = var.admin_pass == null ? local.generated_admin_password : var.admin_pass
 }
@@ -273,29 +279,30 @@ module "mongodb" {
   source                            = "../.."
   depends_on                        = [time_sleep.wait_for_authorization_policy, time_sleep.wait_for_backup_kms_authorization_policy]
   resource_group_id                 = module.resource_group.resource_group_id
-  name                              = "${local.prefix}${var.mongodb_name}"
+  name                              = "${local.prefix}${var.name}"
   plan                              = var.plan
   region                            = var.region
   mongodb_version                   = var.mongodb_version
-  skip_iam_authorization_policy     = var.skip_mongodb_kms_auth_policy
+  skip_iam_authorization_policy     = var.kms_encryption_enabled ? var.skip_mongodb_kms_auth_policy : true
   use_ibm_owned_encryption_key      = var.use_ibm_owned_encryption_key
   kms_key_crn                       = local.kms_key_crn
   backup_encryption_key_crn         = local.backup_kms_key_crn
   use_same_kms_key_for_backups      = local.use_same_kms_key_for_backups
   use_default_backup_encryption_key = var.use_default_backup_encryption_key
-  access_tags                       = var.mongodb_access_tags
-  tags                              = var.mongodb_tags
+  access_tags                       = var.access_tags
+  tags                              = var.resource_tags
   admin_pass                        = local.admin_pass
   users                             = var.users
   members                           = var.members
   member_host_flavor                = var.member_host_flavor
-  memory_mb                         = var.memory_mb
-  disk_mb                           = var.disk_mb
-  cpu_count                         = var.cpu_count
+  memory_mb                         = var.member_memory_mb
+  disk_mb                           = var.member_disk_mb
+  cpu_count                         = var.member_cpu_count
   auto_scaling                      = var.auto_scaling
   service_credential_names          = var.service_credential_names
   backup_crn                        = var.backup_crn
-  service_endpoints                 = var.service_endpoints
+  #  kms_encryption_enabled            = var.kms_encryption_enabled NOT AVAILABLE IN BASE MODULE
+  service_endpoints = var.service_endpoints
 }
 
 locals {
@@ -326,7 +333,6 @@ module "secrets_manager_instance_crn_parser" {
 # create a service authorization between Secrets Manager and the target service (Databases for MongoDB)
 resource "ibm_iam_authorization_policy" "secrets_manager_key_manager" {
   count                       = local.create_secrets_manager_auth_policy
-  depends_on                  = [module.mongodb]
   source_service_name         = "secrets-manager"
   source_resource_instance_id = local.existing_secrets_manager_instance_guid
   target_service_name         = "databases-for-mongodb"
@@ -388,7 +394,7 @@ module "secrets_manager_service_credentials" {
   count                       = length(local.service_credential_secrets) > 0 ? 1 : 0
   depends_on                  = [time_sleep.wait_for_mongodb_authorization_policy]
   source                      = "terraform-ibm-modules/secrets-manager/ibm//modules/secrets"
-  version                     = "2.2.6"
+  version                     = "2.3.1"
   existing_sm_instance_guid   = local.existing_secrets_manager_instance_guid
   existing_sm_instance_region = local.existing_secrets_manager_instance_region
   endpoint_type               = var.existing_secrets_manager_endpoint_type

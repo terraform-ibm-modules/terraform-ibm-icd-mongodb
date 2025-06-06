@@ -130,7 +130,7 @@
               "key": "prefix"
             },
             {
-              "key": "mongodb_name"
+              "key": "name"
             },
             {
               "key": "region",
@@ -217,13 +217,13 @@
               "key": "members"
             },
             {
-              "key": "memory_mb"
+              "key": "member_memory_mb"
             },
             {
-              "key": "cpu_count"
+              "key": "member_cpu_count"
             },
             {
-              "key": "disk_mb"
+              "key": "member_disk_mb"
             },
             {
               "key": "member_host_flavor"
@@ -250,10 +250,10 @@
               "key": "users"
             },
             {
-              "key": "mongodb_tags"
+              "key": "resource_tags"
             },
             {
-              "key": "mongodb_access_tags"
+              "key": "access_tags"
             },
             {
               "key": "kms_encryption_enabled"
@@ -441,7 +441,7 @@
               "key": "prefix"
             },
             {
-              "key": "mongodb_name"
+              "key": "name"
             },
 
             {
@@ -470,13 +470,13 @@
               "key": "members"
             },
             {
-              "key": "memory_mb"
+              "key": "member_memory_mb"
             },
             {
-              "key": "cpu_count"
+              "key": "member_cpu_count"
             },
             {
-              "key": "disk_mb"
+              "key": "member_disk_mb"
             },
             {
               "key": "member_host_flavor"
@@ -503,10 +503,10 @@
               "key": "users"
             },
             {
-              "key": "mongodb_tags"
+              "key": "resource_tags"
             },
             {
-              "key": "mongodb_access_tags"
+              "key": "access_tags"
             },
             {
               "key": "existing_kms_instance_crn"

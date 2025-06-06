@@ -10,14 +10,14 @@ variable "ibmcloud_api_key" {
 
 variable "existing_resource_group_name" {
   type        = string
-  description = "The name of an existing resource group to provision the Databases for MongoDB in."
+  description = "The name of an existing resource group to provision resources in."
   default     = "Default"
   nullable    = false
 }
 
 variable "prefix" {
   type        = string
-  description = "The prefix to add to all resources that this solution creates (e.g `prod`, `test`, `dev`). To not use any prefix value, you can set this value to `null` or an empty string."
+  description = "The prefix to be added to all resources created by this solution. To skip using a prefix, set this value to null or an empty string. The prefix must begin with a lowercase letter and may contain only lowercase letters, digits, and hyphens '-'. It should not exceed 16 characters, must not end with a hyphen('-'), and can not contain consecutive hyphens ('--'). Example: prod-0205-cos"
   nullable    = true
   validation {
     condition = (var.prefix == null ? true :
@@ -26,11 +26,11 @@ variable "prefix" {
         length(regexall("^.*--.*", var.prefix)) == 0
       ])
     )
-    error_message = "Prefix must begin with a lowercase letter, contain only lowercase letters, numbers, and - characters. Prefixes must end with a lowercase letter or number and be 16 or fewer characters."
+    error_message = "Prefix must begin with a lowercase letter and may contain only lowercase letters, digits, and hyphens '-'. It should not exceed 16 characters, must not end with a hyphen('-'), and cannot contain consecutive hyphens ('--')."
   }
 }
 
-variable "mongodb_name" {
+variable "name" {
   type        = string
   description = "The name of the Databases for MongoDB instance. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
   default     = "mongodb"
@@ -45,6 +45,12 @@ variable "region" {
     condition     = var.existing_mongodb_instance_crn != null && var.region != local.existing_mongodb_region ? false : true
     error_message = "The region detected in the 'existing_mongodb_instance_crn' value must match the value of the 'region' input variable when passing an existing instance."
   }
+}
+
+variable "existing_mongodb_instance_crn" {
+  type        = string
+  default     = null
+  description = "The CRN of an existing Databases for MongoDB instance. If no value is specified, a new instance is created."
 }
 
 variable "mongodb_version" {
@@ -67,10 +73,14 @@ variable "plan" {
   }
 }
 
+##############################################################################
+# ICD hosting model properties
+##############################################################################
+
 variable "service_endpoints" {
   type        = string
   description = "The type of endpoint of the database instance. Possible values: `public`, `private`, `public-and-private`."
-  default     = "private"
+  default     = "public"
 
   validation {
     condition     = can(regex("public|public-and-private|private", var.service_endpoints))
@@ -78,35 +88,25 @@ variable "service_endpoints" {
   }
 }
 
-variable "existing_mongodb_instance_crn" {
-  type        = string
-  default     = null
-  description = "The CRN of an existing Databases for MongoDB instance. If no value is specified, a new instance is created."
-}
-
-##############################################################################
-# ICD hosting model properties
-##############################################################################
-
 variable "members" {
   type        = number
   description = "The number of members that are allocated. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)."
   default     = 3
 }
 
-variable "memory_mb" {
+variable "member_memory_mb" {
   type        = number
   description = "The memory per member that is allocated. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)"
   default     = 4096
 }
 
-variable "cpu_count" {
+variable "member_cpu_count" {
   type        = number
   description = "The dedicated CPU per member that is allocated. For shared CPU, set to 0. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)."
   default     = 0
 }
 
-variable "disk_mb" {
+variable "member_disk_mb" {
   type        = number
   description = "The disk that is allocated per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)."
   default     = 10240
@@ -148,13 +148,13 @@ variable "users" {
   description = "A list of users that you want to create on the database. Users block is supported by MongoDB version >= 6.0. Multiple blocks are allowed. The user password must be in the range of 10-32 characters. Be warned that in most case using IAM service credentials (via the var.service_credential_names) is sufficient to control access to the MongoDB instance. This blocks creates native MongoDB database users. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/blob/main/solutions/fully-configurable/DA-types.md#users)"
 }
 
-variable "mongodb_tags" {
-  type        = list(any)
+variable "resource_tags" {
+  type        = list(string)
   description = "The list of tags to be added to the Databases for MongoDB instance."
   default     = []
 }
 
-variable "mongodb_access_tags" {
+variable "access_tags" {
   type        = list(string)
   description = "A list of access tags to apply to the Databases for MongoDB instance created by the solution. [Learn more](https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial)."
   default     = []
@@ -240,7 +240,6 @@ variable "kms_endpoint_type" {
   type        = string
   description = "The type of endpoint to use for communicating with the Key Protect or Hyper Protect Crypto Services instance. Possible values: `public`, `private`. Applies only if `existing_kms_key_crn` is not specified."
   default     = "private"
-
   validation {
     condition     = can(regex("public|private", var.kms_endpoint_type))
     error_message = "The kms_endpoint_type value must be 'public' or 'private'."
@@ -334,9 +333,9 @@ variable "auto_scaling" {
   default     = null
 }
 
-##############################################################################
-## Secrets Manager Service Credentials
-##############################################################################
+#############################################################################
+# Secrets Manager Service Credentials
+#############################################################################
 
 variable "existing_secrets_manager_instance_crn" {
   type        = string
@@ -348,7 +347,6 @@ variable "existing_secrets_manager_endpoint_type" {
   type        = string
   description = "The endpoint type to use if `existing_secrets_manager_instance_crn` is specified. Possible values: public, private."
   default     = "private"
-
   validation {
     condition     = contains(["public", "private"], var.existing_secrets_manager_endpoint_type)
     error_message = "Only \"public\" and \"private\" are allowed values for 'existing_secrets_endpoint_type'."
@@ -360,7 +358,7 @@ variable "service_credential_secrets" {
     secret_group_name        = string
     secret_group_description = optional(string)
     existing_secret_group    = optional(bool)
-    service_credentials = list(object({
+    service_credentials = list(object({ # pragma: allowlist secret
       secret_name                                 = string
       service_credentials_source_service_role_crn = string
       secret_labels                               = optional(list(string))
@@ -397,8 +395,8 @@ variable "service_credential_secrets" {
 
 variable "skip_mongodb_secrets_manager_auth_policy" {
   type        = bool
-  description = "Whether an IAM authorization policy is created for Secrets Manager instance to create a service credential secrets for Databases for MongoDB. If set to false, the Secrets Manager instance passed by the user is granted the Key Manager access to the MongoDB instance created by the Deployable Architecture. Set to `true` to use an existing policy. The value of this is ignored if any value for 'existing_secrets_manager_instance_crn' is not passed."
   default     = false
+  description = "Whether an IAM authorization policy is created for Secrets Manager instance to create a service credential secrets for Databases for MongoDB. If set to false, the Secrets Manager instance passed by the user is granted the Key Manager access to the MongoDB instance created by the Deployable Architecture. Set to `true` to use an existing policy. The value of this is ignored if any value for 'existing_secrets_manager_instance_crn' is not passed."
 }
 
 variable "admin_pass_secrets_manager_secret_group" {
