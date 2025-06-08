@@ -301,8 +301,8 @@ module "mongodb" {
   auto_scaling                      = var.auto_scaling
   service_credential_names          = var.service_credential_names
   backup_crn                        = var.backup_crn
-  #  kms_encryption_enabled            = var.kms_encryption_enabled NOT AVAILABLE IN BASE MODULE
-  service_endpoints = var.service_endpoints
+  kms_encryption_enabled            = var.kms_encryption_enabled
+  service_endpoints                 = var.service_endpoints
 }
 
 locals {

@@ -10,7 +10,7 @@
 locals {
   # If 'use_ibm_owned_encryption_key' is true or 'use_default_backup_encryption_key' is true, default to null.
   # If no value is passed for 'backup_encryption_key_crn', then default to use 'kms_key_crn'.
-  backup_encryption_key_crn = var.use_ibm_owned_encryption_key || var.use_default_backup_encryption_key ? null : (var.backup_encryption_key_crn != null ? var.backup_encryption_key_crn : var.kms_key_crn)
+  backup_encryption_key_crn = !var.kms_encryption_enabled || var.use_ibm_owned_encryption_key || var.use_default_backup_encryption_key ? null : (var.backup_encryption_key_crn != null ? var.backup_encryption_key_crn : var.kms_key_crn)
 
   # Determine if auto scaling is enabled
   auto_scaling_enabled = var.auto_scaling == null ? [] : [1]
@@ -24,8 +24,8 @@ locals {
 ########################################################################################################################
 
 locals {
-  parse_kms_key        = !var.use_ibm_owned_encryption_key
-  parse_backup_kms_key = !var.use_ibm_owned_encryption_key && !var.use_default_backup_encryption_key
+  parse_kms_key        = var.kms_encryption_enabled && !var.use_ibm_owned_encryption_key
+  parse_backup_kms_key = var.kms_encryption_enabled && !var.use_ibm_owned_encryption_key && !var.use_default_backup_encryption_key
 }
 
 module "kms_key_crn_parser" {
@@ -59,10 +59,10 @@ locals {
 ########################################################################################################################
 
 locals {
-  # only create auth policy if 'use_ibm_owned_encryption_key' is false, and 'skip_iam_authorization_policy' is false
-  create_kms_auth_policy = !var.use_ibm_owned_encryption_key && !var.skip_iam_authorization_policy ? 1 : 0
-  # only create backup auth policy if 'use_ibm_owned_encryption_key' is false, 'skip_iam_authorization_policy' is false and 'use_same_kms_key_for_backups' is false
-  create_backup_kms_auth_policy = !var.use_ibm_owned_encryption_key && !var.skip_iam_authorization_policy && !var.use_same_kms_key_for_backups ? 1 : 0
+  # only create auth policy if 'kms_encryption_enabled' is enabled, 'use_ibm_owned_encryption_key' is false, and 'skip_iam_authorization_policy' is false
+  create_kms_auth_policy = var.kms_encryption_enabled && !var.use_ibm_owned_encryption_key && !var.skip_iam_authorization_policy ? 1 : 0
+  # only create backup auth policy if kms_encryption_enabled' is enabled, 'use_ibm_owned_encryption_key' is false, 'skip_iam_authorization_policy' is false and 'use_same_kms_key_for_backups' is false
+  create_backup_kms_auth_policy = var.kms_encryption_enabled && !var.use_ibm_owned_encryption_key && !var.skip_iam_authorization_policy && !var.use_same_kms_key_for_backups ? 1 : 0
 }
 
 # Create IAM Authorization Policies to allow MongoDB to access KMS for the encryption key
@@ -106,8 +106,9 @@ resource "ibm_iam_authorization_policy" "kms_policy" {
 
 # workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
 resource "time_sleep" "wait_for_authorization_policy" {
-  count           = local.create_kms_auth_policy
-  depends_on      = [ibm_iam_authorization_policy.kms_policy]
+  count      = local.create_kms_auth_policy
+  depends_on = [ibm_iam_authorization_policy.kms_policy]
+
   create_duration = "30s"
 }
 
@@ -168,9 +169,9 @@ resource "ibm_database" "mongodb" {
   service                   = "databases-for-mongodb"
   version                   = var.mongodb_version
   resource_group_id         = var.resource_group_id
-  adminpassword             = var.admin_pass
-  tags                      = var.tags
   service_endpoints         = var.service_endpoints
+  tags                      = var.tags
+  adminpassword             = var.admin_pass
   key_protect_key           = var.kms_key_crn
   backup_encryption_key_crn = local.backup_encryption_key_crn
   backup_id                 = var.backup_crn
@@ -246,7 +247,6 @@ resource "ibm_database" "mongodb" {
       }
     }
   }
-
 
   ## This for_each block is NOT a loop to attach to multiple auto_scaling blocks.
   ## This block is only used to conditionally add auto_scaling block depending on var.auto_scaling
