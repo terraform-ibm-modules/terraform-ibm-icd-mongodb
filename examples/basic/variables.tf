@@ -40,16 +40,13 @@ variable "resource_tags" {
   default     = []
 }
 
+# Note: public-and-private not supported by MongoDB all plans
 variable "service_endpoints" {
   type        = string
-  description = "The type of endpoint of the database instance. Possible values: `public`, `private`, `public-and-private`."
+  description = "The type of endpoint of the database instance. Possible values: `public`, `private`."
   default     = "public"
-
-  validation {
-    condition     = can(regex("public|public-and-private|private", var.service_endpoints))
-    error_message = "Valid values for service_endpoints are 'public', 'public-and-private', and 'private'"
-  }
 }
+
 variable "member_host_flavor" {
   type        = string
   description = "The host flavor per member. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/database#host_flavor)."
