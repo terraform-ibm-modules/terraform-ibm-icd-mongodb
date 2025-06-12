@@ -371,8 +371,9 @@ locals {
   } : null
 }
 
+# Note: public-and-private not supported by MongoDB all plans
 data "ibm_database_connection" "database_connection" {
-  endpoint_type = var.service_endpoints == "public-and-private" ? "public" : var.service_endpoints
+  endpoint_type = var.service_endpoints
   deployment_id = ibm_database.mongodb.id
   user_id       = ibm_database.mongodb.adminuser
   user_type     = "database"
