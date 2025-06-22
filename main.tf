@@ -168,9 +168,9 @@ resource "ibm_database" "mongodb" {
   service                   = "databases-for-mongodb"
   version                   = var.mongodb_version
   resource_group_id         = var.resource_group_id
-  adminpassword             = var.admin_pass
-  tags                      = var.tags
   service_endpoints         = var.service_endpoints
+  tags                      = var.tags
+  adminpassword             = var.admin_pass
   key_protect_key           = var.kms_key_crn
   backup_encryption_key_crn = local.backup_encryption_key_crn
   backup_id                 = var.backup_crn
@@ -246,7 +246,6 @@ resource "ibm_database" "mongodb" {
       }
     }
   }
-
 
   ## This for_each block is NOT a loop to attach to multiple auto_scaling blocks.
   ## This block is only used to conditionally add auto_scaling block depending on var.auto_scaling

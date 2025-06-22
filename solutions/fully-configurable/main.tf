@@ -14,8 +14,13 @@ module "resource_group" {
 #######################################################################################################################
 
 locals {
-  prefix                = (var.prefix != null && trimspace(var.prefix) != "" ? "${var.prefix}-" : "")
-  create_new_kms_key    = var.existing_mongodb_instance_crn == null && !var.use_ibm_owned_encryption_key && var.existing_kms_key_crn == null ? true : false # no need to create any KMS resources if passing an existing key, or using IBM owned keys
+  prefix = (var.prefix != null && trimspace(var.prefix) != "" ? "${var.prefix}-" : "")
+  create_new_kms_key = (
+    var.kms_encryption_enabled &&
+    var.existing_mongodb_instance_crn == null &&
+    !var.use_ibm_owned_encryption_key &&
+    var.existing_kms_key_crn == null
+  )
   mongodb_key_name      = "${local.prefix}${var.key_name}"
   mongodb_key_ring_name = "${local.prefix}${var.key_ring_name}"
 }
@@ -42,7 +47,7 @@ module "kms" {
           standard_key             = false
           rotation_interval_month  = 3
           dual_auth_delete_enabled = false
-          force_delete             = true
+          force_delete             = true # Force delete must be set to true, or the terraform destroy will fail since the service does not de-register itself from the key until the reclamation period has expired.
         }
       ]
     }
@@ -89,7 +94,7 @@ locals {
   create_cross_account_kms_auth_policy        = var.existing_mongodb_instance_crn == null && var.ibmcloud_kms_api_key != null && !var.use_ibm_owned_encryption_key
   create_cross_account_backup_kms_auth_policy = var.existing_mongodb_instance_crn == null && var.ibmcloud_kms_api_key != null && !var.use_ibm_owned_encryption_key && var.existing_backup_kms_key_crn != null
 
-  # If KMS encryption enabled (and existing ES instance is not being passed), parse details from the existing key if being passed, otherwise get it from the key that the DA creates
+  # If KMS encryption enabled (and existing MongoDB instance is not being passed), parse details from the existing key if being passed, otherwise get it from the key that the DA creates
   kms_account_id    = var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? module.kms_key_crn_parser[0].account_id : module.kms_instance_crn_parser[0].account_id
   kms_service       = var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? module.kms_key_crn_parser[0].service_name : module.kms_instance_crn_parser[0].service_name
   kms_instance_guid = var.existing_mongodb_instance_crn != null || var.use_ibm_owned_encryption_key ? null : var.existing_kms_key_crn != null ? module.kms_key_crn_parser[0].service_instance : module.kms_instance_crn_parser[0].service_instance
@@ -220,7 +225,7 @@ locals {
   # if - replace first char with J
   # elseif _ replace first char with K
   # else use asis
-  generated_admin_password = startswith(random_password.admin_password[0].result, "-") ? "J${substr(random_password.admin_password[0].result, 1, -1)}" : startswith(random_password.admin_password[0].result, "_") ? "K${substr(random_password.admin_password[0].result, 1, -1)}" : random_password.admin_password[0].result
+  generated_admin_password = (length(random_password.admin_password) > 0 ? (startswith(random_password.admin_password[0].result, "-") ? "J${substr(random_password.admin_password[0].result, 1, -1)}" : startswith(random_password.admin_password[0].result, "_") ? "K${substr(random_password.admin_password[0].result, 1, -1)}" : random_password.admin_password[0].result) : null)
   # admin password to use
   admin_pass = var.admin_pass == null ? local.generated_admin_password : var.admin_pass
 }
@@ -273,25 +278,25 @@ module "mongodb" {
   source                            = "../.."
   depends_on                        = [time_sleep.wait_for_authorization_policy, time_sleep.wait_for_backup_kms_authorization_policy]
   resource_group_id                 = module.resource_group.resource_group_id
-  name                              = "${local.prefix}${var.mongodb_name}"
+  name                              = "${local.prefix}${var.name}"
   plan                              = var.plan
   region                            = var.region
   mongodb_version                   = var.mongodb_version
-  skip_iam_authorization_policy     = var.skip_mongodb_kms_auth_policy
+  skip_iam_authorization_policy     = var.kms_encryption_enabled ? var.skip_mongodb_kms_auth_policy : true
   use_ibm_owned_encryption_key      = var.use_ibm_owned_encryption_key
   kms_key_crn                       = local.kms_key_crn
   backup_encryption_key_crn         = local.backup_kms_key_crn
   use_same_kms_key_for_backups      = local.use_same_kms_key_for_backups
   use_default_backup_encryption_key = var.use_default_backup_encryption_key
   access_tags                       = var.mongodb_access_tags
-  tags                              = var.mongodb_tags
+  tags                              = var.mongodb_resource_tags
   admin_pass                        = local.admin_pass
   users                             = var.users
   members                           = var.members
   member_host_flavor                = var.member_host_flavor
-  memory_mb                         = var.memory_mb
-  disk_mb                           = var.disk_mb
-  cpu_count                         = var.cpu_count
+  memory_mb                         = var.member_memory_mb
+  disk_mb                           = var.member_disk_mb
+  cpu_count                         = var.member_cpu_count
   auto_scaling                      = var.auto_scaling
   service_credential_names          = var.service_credential_names
   backup_crn                        = var.backup_crn
