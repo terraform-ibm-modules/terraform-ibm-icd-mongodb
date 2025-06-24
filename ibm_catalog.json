@@ -335,9 +335,6 @@
               }
             },
             {
-              "key": "use_ibm_owned_encryption_key"
-            },
-            {
               "key": "ibmcloud_kms_api_key"
             },
             {

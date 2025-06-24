@@ -96,7 +96,6 @@ func TestRunFullyConfigurableSolutionSchematics(t *testing.T) {
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 		{Name: "mongodb_access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
 		{Name: "kms_encryption_enabled", Value: true, DataType: "bool"},
-		{Name: "use_ibm_owned_encryption_key", Value: false, DataType: "bool"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 		{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
 		{Name: "mongodb_version", Value: "7.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
@@ -287,7 +286,6 @@ func TestRunfullyConfigurableSolutionIBMKeys(t *testing.T) {
 		"mongodb_version":              "7.0",
 		"provider_visibility":          "public",
 		"existing_resource_group_name": resourceGroup,
-		"use_ibm_owned_encryption_key": true,
 		"prefix":                       options.Prefix,
 	}
 

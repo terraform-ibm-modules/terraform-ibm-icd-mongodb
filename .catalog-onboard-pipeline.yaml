@@ -6,7 +6,7 @@ offerings:
     catalog_id: 7df1e4ca-d54c-4fd0-82ce-3d13247308cd
     offering_id: 39b67380-7bc8-407f-832c-d610afa17d53
     variations:
-      - name: standard
+      - name: fully-configurable
         mark_ready: true
         install_type: fullstack
         scc:

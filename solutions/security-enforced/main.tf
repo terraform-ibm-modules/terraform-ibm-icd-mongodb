@@ -24,7 +24,6 @@ module "mongodb" {
   mongodb_access_tags      = var.mongodb_access_tags
   # Encryption
   kms_encryption_enabled            = true
-  use_ibm_owned_encryption_key      = false
   existing_kms_instance_crn         = var.existing_kms_instance_crn
   existing_kms_key_crn              = var.existing_kms_key_crn
   kms_endpoint_type                 = "private"
