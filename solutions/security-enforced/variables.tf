@@ -165,8 +165,11 @@ variable "existing_kms_key_crn" {
   default     = null
 
   validation {
-    condition     = var.existing_mongodb_instance_crn != null ? var.existing_kms_key_crn == null : true
-    error_message = "When using an existing mongodb instance 'existing_kms_key_crn' should not be set"
+    condition = (
+      (var.existing_kms_key_crn != null && var.existing_kms_instance_crn == null) ||
+      (var.existing_kms_key_crn == null && var.existing_kms_instance_crn != null)
+    )
+    error_message = "Either existing_kms_key_crn or existing_kms_instance_crn must be set, but not both."
   }
 }
 

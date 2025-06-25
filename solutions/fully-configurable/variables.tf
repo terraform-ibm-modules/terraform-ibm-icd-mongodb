@@ -74,6 +74,11 @@ variable "plan" {
   }
 }
 
+
+##############################################################################
+# ICD hosting model properties
+##############################################################################
+
 variable "service_endpoints" {
   type        = string
   description = "The type of endpoint of the database instance. Possible values: `public`, `private`, `public-and-private`."
@@ -84,11 +89,6 @@ variable "service_endpoints" {
     error_message = "Valid values for service_endpoints are 'public', 'public-and-private', and 'private'"
   }
 }
-
-
-##############################################################################
-# ICD hosting model properties
-##############################################################################
 
 variable "members" {
   type        = number
@@ -172,23 +172,18 @@ variable "kms_encryption_enabled" {
   default     = false
 
   validation {
-    condition = (
-      !var.kms_encryption_enabled ||
+    condition = (!var.kms_encryption_enabled ||
       var.existing_mongodb_instance_crn != null ||
-      (
-        var.existing_kms_instance_crn != null ||
-        var.existing_kms_key_crn != null ||
-        var.existing_backup_kms_key_crn != null
-      )
+      var.existing_kms_instance_crn != null ||
+      var.existing_kms_key_crn != null ||
+      var.existing_backup_kms_key_crn != null
     )
-    error_message = "When 'kms_encryption_enabled' is true and setting values for 'existing_kms_instance_crn', 'existing_kms_key_crn' or 'existing_backup_kms_key_crn'."
+    error_message = "When 'kms_encryption_enabled' is true, you must provide either 'existing_backup_kms_key_crn', 'existing_kms_instance_crn' (to create a new key) or 'existing_kms_key_crn' (to use an existing key)."
   }
 
   validation {
-    condition = (
-      !var.kms_encryption_enabled ? length(compact([var.existing_kms_instance_crn, var.existing_kms_key_crn, var.existing_backup_kms_key_crn])) == 0 : true
-    )
-    error_message = "When using ibm owned encryption keys by setting input 'kms_encryption_enabled' to false, 'existing_kms_instance_crn', 'existing_kms_key_crn' and 'existing_backup_kms_key_crn' should not be set."
+    condition     = (var.existing_kms_instance_crn == null && var.existing_kms_key_crn == null && var.existing_backup_kms_key_crn == null) || var.kms_encryption_enabled
+    error_message = "When either 'existing_kms_instance_crn', 'existing_kms_key_crn' or 'existing_backup_kms_key_crn' is set then 'kms_encryption_enabled' must be set to true."
   }
 }
 
@@ -263,7 +258,7 @@ variable "existing_backup_kms_key_crn" {
 
 variable "use_default_backup_encryption_key" {
   type        = bool
-  description = "When `use_ibm_owned_encryption_key` is set to false, backups will be encrypted with either the key specified in `existing_kms_key_crn`, in `existing_backup_kms_key_crn`, or with a new key that will be created in the instance specified in the `existing_kms_instance_crn` input. If you do not want to use your own key for backups encryption, you can set this to `true` to use the IBM Cloud Databases default encryption for backups. Alternatively set `use_ibm_owned_encryption_key` to true to use the default encryption for both backups and deployment data."
+  description = "When `kms_encryption_enabled` is set to true, backups will be encrypted with either the key specified in `existing_kms_key_crn`, in `existing_backup_kms_key_crn`, or with a new key that will be created in the instance specified in the `existing_kms_instance_crn` input. If you do not want to use your own key for backups encryption, you can set this to `true` to use the IBM Cloud Databases default encryption for backups. Alternatively set `kms_encryption_enabled` to false to use the default encryption for both backups and deployment data."
   default     = false
 }
 
