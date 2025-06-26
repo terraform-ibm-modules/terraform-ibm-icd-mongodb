@@ -1,13 +1,10 @@
-##############################################################################
-# ICD MongoDB module
-##############################################################################
-
-
 ########################################################################################################################
 # Locals
 ########################################################################################################################
 
 locals {
+  # If no value passed for 'backup_encryption_key_crn' use the value of 'kms_key_crn' and perform validation of 'kms_key_crn' to check if region is supported by backup encryption key.
+
   # If 'use_ibm_owned_encryption_key' is true or 'use_default_backup_encryption_key' is true, default to null.
   # If no value is passed for 'backup_encryption_key_crn', then default to use 'kms_key_crn'.
   backup_encryption_key_crn = var.use_ibm_owned_encryption_key || var.use_default_backup_encryption_key ? null : (var.backup_encryption_key_crn != null ? var.backup_encryption_key_crn : var.kms_key_crn)
@@ -163,8 +160,8 @@ resource "time_sleep" "wait_for_backup_kms_authorization_policy" {
 resource "ibm_database" "mongodb" {
   depends_on                = [time_sleep.wait_for_authorization_policy, time_sleep.wait_for_backup_kms_authorization_policy]
   name                      = var.name
-  location                  = var.region
   plan                      = var.plan
+  location                  = var.region
   service                   = "databases-for-mongodb"
   version                   = var.mongodb_version
   resource_group_id         = var.resource_group_id
@@ -291,7 +288,7 @@ resource "ibm_database" "mongodb" {
   }
 }
 
-resource "ibm_resource_tag" "mongodb_tag" {
+resource "ibm_resource_tag" "access_tag" {
   count       = length(var.access_tags) == 0 ? 0 : 1
   resource_id = ibm_database.mongodb.resource_crn
   tags        = var.access_tags
