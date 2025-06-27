@@ -202,13 +202,8 @@
             },
             {
               "key": "mongodb_version",
-              "required": false,
-              "default_value": "__NULL__",
+              "required": true,
               "options": [
-                {
-                  "displayname": "preferred",
-                  "value": "__NULL__"
-                },
                 {
                   "displayname": "6.0",
                   "value": "6.0"
@@ -524,13 +519,8 @@
             },
             {
               "key": "mongodb_version",
-              "required": false,
-              "default_value": "__NULL__",
+              "required": true,
               "options": [
-                {
-                  "displayname": "preferred",
-                  "value": "__NULL__"
-                },
                 {
                   "displayname": "6.0",
                   "value": "6.0"
