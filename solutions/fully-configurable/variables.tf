@@ -122,7 +122,7 @@ variable "member_cpu_count" {
 variable "member_disk_mb" {
   type        = number
   description = "The disk that is allocated per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)."
-  default     = 10240
+  default     = 5120
 }
 
 variable "member_host_flavor" {
@@ -158,7 +158,7 @@ variable "users" {
   }))
   default     = []
   sensitive   = true
-  description = "A list of users that you want to create on the database. Users block is supported by MongoDB version >= 6.0. Multiple blocks are allowed. The user password must be in the range of 10-32 characters. Be warned that in most case using IAM service credentials (via the var.service_credential_names) is sufficient to control access to the MongoDB instance. This blocks creates native MongoDB database users. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/blob/main/solutions/fully-configurable/DA-types.md#users)"
+  description = "A list of users that you want to create on the database. Multiple blocks are allowed. The user password must be in the range of 10-32 characters. Be warned that in most case using IAM service credentials (via the var.service_credential_names) is sufficient to control access to the MongoDB instance. This blocks creates native MongoDB database users. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/blob/main/solutions/fully-configurable/DA-types.md#users)"
 }
 
 variable "resource_tags" {

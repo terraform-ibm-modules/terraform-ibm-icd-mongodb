@@ -515,9 +515,6 @@
               ]
             },
             {
-              "key": "plan"
-            },
-            {
               "key": "mongodb_version",
               "required": true,
               "options": [
@@ -530,6 +527,9 @@
                   "value": "7.0"
                 }
               ]
+            },
+            {
+              "key": "plan"
             },
             {
               "key": "name"
