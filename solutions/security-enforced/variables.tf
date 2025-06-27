@@ -49,7 +49,7 @@ variable "name" {
 }
 
 variable "region" {
-  description = "The region to provision all resources in. [Learn more](https://terraform-ibm-modules.github.io/documentation/#/region) about how to select different regions for different services."
+  description = "The region where you want to deploy your instance."
   type        = string
   default     = "us-south"
 }
@@ -61,7 +61,7 @@ variable "existing_mongodb_instance_crn" {
 }
 
 variable "mongodb_version" {
-  description = "The version of the Databases for MongoDB instance. If no value is specified, the current preferred version of Databases for MongoDB is used."
+  description = "The version of the Databases for MongoDB instance."
   type        = string
   default     = null
 }
