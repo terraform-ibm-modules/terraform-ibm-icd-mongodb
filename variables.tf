@@ -55,7 +55,7 @@ variable "members" {
   type        = number
   description = "The number of members that are allocated. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)"
   default     = 3
-  # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
+  # Validation is done in terraform plan phase by IBM provider, so no need to add any extra validation here
 }
 
 variable "cpu_count" {
@@ -118,8 +118,8 @@ variable "service_credential_names" {
 
 variable "service_endpoints" {
   type        = string
-  description = "The type of endpoint of the database instance. Possible values: `public`, `private`, `public-and-private`."
-  default     = "public"
+  description = "Specify whether you want to enable the public, private, or both service endpoints. Supported values are 'public', 'private', or 'public-and-private'."
+  default     = "private"
 
   validation {
     condition     = can(regex("public|public-and-private|private", var.service_endpoints))
@@ -128,7 +128,7 @@ variable "service_endpoints" {
 }
 
 variable "tags" {
-  type        = list(any)
+  type        = list(string)
   description = "Optional list of tags to be added to the MongoDB instance."
   default     = []
 }
@@ -291,7 +291,7 @@ variable "cbr_rules" {
       }))
     })))
   }))
-  description = "(Optional, list) List of context-based restrictions rules to create."
+  description = "(Optional, list) List of CBR rules to create"
   default     = []
   # Validation happens in the rule module
 }
