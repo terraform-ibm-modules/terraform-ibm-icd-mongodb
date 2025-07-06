@@ -136,7 +136,7 @@ module "icd_mongodb" {
 module "secrets_manager" {
   count                = var.existing_secrets_manager_instance_guid == null ? 1 : 0
   source               = "terraform-ibm-modules/secrets-manager/ibm"
-  version              = "2.6.4"
+  version              = "2.6.5"
   resource_group_id    = module.resource_group.resource_group_id
   region               = var.region
   secrets_manager_name = "${var.prefix}-secrets-manager"
@@ -148,7 +148,7 @@ module "secrets_manager" {
 # Add a Secrets Group to the secret manager instance
 module "secrets_manager_secrets_group" {
   source               = "terraform-ibm-modules/secrets-manager-secret-group/ibm"
-  version              = "1.3.8"
+  version              = "1.3.9"
   region               = local.secrets_manager_region
   secrets_manager_guid = local.secrets_manager_guid
   #tfsec:ignore:general-secrets-no-plaintext-exposure
