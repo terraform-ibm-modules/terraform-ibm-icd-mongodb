@@ -185,7 +185,6 @@ func TestRunSecurityEnforcedSolutionSchematics(t *testing.T) {
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 		{Name: "access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
-		{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
 		{Name: "mongodb_version", Value: "7.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
 		{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
 		{Name: "plan", Value: "standard", DataType: "string"},
