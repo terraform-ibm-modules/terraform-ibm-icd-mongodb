@@ -90,7 +90,7 @@ variable "service_credential_names" {
 }
 
 variable "tags" {
-  type        = list(any)
+  type        = list(string)
   description = "Optional list of tags to be added to the MongoDB instance."
   default     = []
 }
@@ -99,6 +99,18 @@ variable "access_tags" {
   type        = list(string)
   description = "A list of access tags to apply to the MongoDB instance created by the module, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial for more details"
   default     = []
+}
+
+variable "version_upgrade_skip_backup" {
+  type        = bool
+  description = "Whether to skip taking a backup before upgrading the database version. Attention: Skipping a backup is not recommended. Skipping a backup before a version upgrade is dangerous and may result in data loss if the upgrade fails at any stage — there will be no immediate backup to restore from."
+  default     = false
+}
+
+variable "deletion_protection" {
+  type        = bool
+  description = "If the DB instance should have deletion protection within terraform enabled. This is not a property of the resource and does not prevent deletion outside of terraform. The database can not be deleted by terraform when this value is set to 'true'. The default is 'true'."
+  default     = true
 }
 
 ##############################################################

@@ -6,6 +6,8 @@ module "mongodb" {
   plan                              = var.plan
   skip_iam_authorization_policy     = var.skip_iam_authorization_policy
   service_endpoints                 = "private"
+  deletion_protection               = var.deletion_protection
+  version_upgrade_skip_backup       = var.version_upgrade_skip_backup
   mongodb_version                   = var.mongodb_version
   use_ibm_owned_encryption_key      = var.use_ibm_owned_encryption_key
   use_same_kms_key_for_backups      = var.use_same_kms_key_for_backups

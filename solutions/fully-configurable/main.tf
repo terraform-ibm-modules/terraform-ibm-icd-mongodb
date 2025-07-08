@@ -302,6 +302,8 @@ module "mongodb" {
   service_credential_names          = var.service_credential_names
   backup_crn                        = var.backup_crn
   service_endpoints                 = var.service_endpoints
+  deletion_protection               = var.deletion_protection
+  version_upgrade_skip_backup       = var.version_upgrade_skip_backup
 }
 
 locals {

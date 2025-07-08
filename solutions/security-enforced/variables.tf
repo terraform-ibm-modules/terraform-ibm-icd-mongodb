@@ -156,6 +156,12 @@ variable "access_tags" {
   default     = []
 }
 
+variable "deletion_protection" {
+  type        = bool
+  description = "If the DB instance should have deletion protection within terraform enabled. This is not a property of the resource and does not prevent deletion outside of terraform. The database can not be deleted by terraform when this value is set to 'true'. The default is 'true'."
+  default     = true
+}
+
 ##############################################################
 # Encryption
 ##############################################################
