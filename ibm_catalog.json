@@ -281,6 +281,9 @@
               "key": "deletion_protection"
             },
             {
+              "key": "timeouts_update"
+            },
+            {
               "key": "version_upgrade_skip_backup"
             },
             {
@@ -414,7 +417,7 @@
               ],
               "service_name": "databases-for-mongodb"
             },
-           {
+            {
               "role_crns": [
                 "crn:v1:bluemix:public:iam::::role:Editor"
               ],
@@ -582,6 +585,9 @@
             },
             {
               "key": "deletion_protection"
+            },
+            {
+              "key": "timeouts_update"
             },
             {
               "key": "service_credential_names"

@@ -284,7 +284,7 @@ resource "ibm_database" "mongodb" {
 
   timeouts {
     create = "120m" # Extending provisioning time to 120 minutes
-    update = "120m"
+    update = var.timeouts_update
     delete = "15m"
   }
 }

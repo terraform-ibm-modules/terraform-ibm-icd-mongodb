@@ -8,6 +8,7 @@ module "mongodb" {
   service_endpoints                 = "private"
   deletion_protection               = var.deletion_protection
   version_upgrade_skip_backup       = var.version_upgrade_skip_backup
+  timeouts_update                   = var.timeouts_update
   mongodb_version                   = var.mongodb_version
   use_ibm_owned_encryption_key      = var.use_ibm_owned_encryption_key
   use_same_kms_key_for_backups      = var.use_same_kms_key_for_backups
