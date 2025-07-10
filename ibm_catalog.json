@@ -270,10 +270,6 @@
                 {
                   "displayname": "public",
                   "value": "public"
-                },
-                {
-                  "displayname": "public-and-private",
-                  "value": "public-and-private"
                 }
               ]
             },

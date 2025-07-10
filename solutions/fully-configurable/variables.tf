@@ -90,14 +90,15 @@ variable "plan" {
 # ICD hosting model properties
 ##############################################################################
 
+# mongodb does not support public-and-private
 variable "service_endpoints" {
   type        = string
-  description = "The type of endpoint of the database instance. Possible values: `public`, `private`, `public-and-private`."
+  description = "The endpoint the database instance will be available on. Possible values: `public` or `private`."
   default     = "private"
 
   validation {
-    condition     = can(regex("public|public-and-private|private", var.service_endpoints))
-    error_message = "Valid values for service_endpoints are 'public', 'public-and-private', and 'private'"
+    condition     = can(regex("public|private", var.service_endpoints))
+    error_message = "Valid values for service_endpoints are 'public' or 'private'"
   }
 }
 

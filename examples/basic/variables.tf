@@ -42,12 +42,12 @@ variable "resource_tags" {
 
 variable "service_endpoints" {
   type        = string
-  description = "The type of endpoint of the database instance. Possible values: `public`, `private`, `public-and-private`."
+  description = "Specify whether you want to enable the public or private endpoints on the instance. Supported values are 'public' or 'private'."
   default     = "public"
 
   validation {
-    condition     = can(regex("public|public-and-private|private", var.service_endpoints))
-    error_message = "Valid values for service_endpoints are 'public', 'public-and-private', and 'private'"
+    condition     = can(regex("public|private", var.service_endpoints))
+    error_message = "Valid values for service_endpoints are 'public' or 'private'"
   }
 }
 variable "member_host_flavor" {

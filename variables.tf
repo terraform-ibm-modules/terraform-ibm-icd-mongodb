@@ -116,14 +116,15 @@ variable "service_credential_names" {
   }
 }
 
+# mongodb does not support public-and-private
 variable "service_endpoints" {
   type        = string
-  description = "Specify whether you want to enable the public, private, or both service endpoints. Supported values are 'public', 'private', or 'public-and-private'."
+  description = "Specify whether you want to enable the public or private endpoints on the instance. Supported values are 'public' or 'private'."
   default     = "private"
 
   validation {
-    condition     = can(regex("public|public-and-private|private", var.service_endpoints))
-    error_message = "Valid values for service_endpoints are 'public', 'public-and-private', and 'private'"
+    condition     = can(regex("public|private", var.service_endpoints))
+    error_message = "Valid values for service_endpoints are 'public' and 'private'"
   }
 }
 
