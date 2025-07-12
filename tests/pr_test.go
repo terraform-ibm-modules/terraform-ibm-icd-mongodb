@@ -96,6 +96,7 @@ func TestRunFullyConfigurableSolutionSchematics(t *testing.T) {
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 		{Name: "access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
 		{Name: "kms_encryption_enabled", Value: true, DataType: "bool"},
+		{Name: "deletion_protection", Value: false, DataType: "bool"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 		{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
 		{Name: "mongodb_version", Value: "7.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
@@ -136,6 +137,7 @@ func TestRunSecurityEnforcedUpgradeSolutionSchematics(t *testing.T) {
 	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 		{Name: "prefix", Value: options.Prefix, DataType: "string"},
+		{Name: "deletion_protection", Value: false, DataType: "bool"},
 		{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 	}
@@ -184,6 +186,7 @@ func TestRunSecurityEnforcedSolutionSchematics(t *testing.T) {
 	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 		{Name: "access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
+		{Name: "deletion_protection", Value: false, DataType: "bool"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 		{Name: "mongodb_version", Value: "7.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
 		{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
@@ -254,6 +257,7 @@ func TestRunExistingInstance(t *testing.T) {
 			{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 			{Name: "existing_mongodb_instance_crn", Value: terraform.Output(t, existingTerraformOptions, "mongodb_crn"), DataType: "string"},
 			{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
+			{Name: "deletion_protection", Value: false, DataType: "bool"},
 			{Name: "region", Value: region, DataType: "string"},
 			{Name: "provider_visibility", Value: "public", DataType: "string"},
 		}
@@ -291,6 +295,7 @@ func TestRunfullyConfigurableSolutionIBMKeys(t *testing.T) {
 		"provider_visibility":          "public",
 		"existing_resource_group_name": resourceGroup,
 		"prefix":                       options.Prefix,
+		"deletion_protection":          false,
 	}
 
 	output, err := options.RunTestConsistency()
