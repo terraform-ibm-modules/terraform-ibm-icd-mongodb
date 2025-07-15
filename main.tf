@@ -303,7 +303,7 @@ resource "ibm_resource_tag" "access_tag" {
 module "cbr_rule" {
   count            = length(var.cbr_rules) > 0 ? length(var.cbr_rules) : 0
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module"
-  version          = "1.32.2"
+  version          = "1.32.3"
   rule_description = var.cbr_rules[count.index].description
   enforcement_mode = var.cbr_rules[count.index].enforcement_mode
   rule_contexts    = var.cbr_rules[count.index].rule_contexts
@@ -369,7 +369,7 @@ locals {
 }
 
 data "ibm_database_connection" "database_connection" {
-  endpoint_type = var.service_endpoints == "public-and-private" ? "public" : var.service_endpoints
+  endpoint_type = var.service_endpoints
   deployment_id = ibm_database.mongodb.id
   user_id       = ibm_database.mongodb.adminuser
   user_type     = "database"
