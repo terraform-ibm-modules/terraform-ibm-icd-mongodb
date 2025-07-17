@@ -110,24 +110,23 @@ If you can't use the IAM-enabled `service_credential_names` input variable for a
 
 ### Options for users
 
- - `name` (required): The username for the user account.
- - `password` (required): The password for the user account in the range of 10-32 characters.
- - `type` (required): The user type. The "type" field is required to generate the connection string for the outputs.
- - `role`: The user role. The role determines the user's access level and permissions.
+- `name` (required): The username for the user account.
+- `password` (required): The password for the user account in the range of 10-32 characters.
+- `type` (required): The user type. The "type" field is required to generate the connection string for the outputs.
+- `role`: The user role. The role determines the user's access level and permissions.
 
 ### Example users
-
 
 ```hcl
 [
   {
     "name": "es_admin",
-    "password": "securepassword123",  # pragma: allowlist secret
+    "password": "securepassword123",
     "type": "database",
   },
   {
     "name": "es_reader",
-    "password": "readpassword123",  # pragma: allowlist secret
+    "password": "readpassword123",
     "type": "ops_manager"
   }
 ]
@@ -138,7 +137,7 @@ If you can't use the IAM-enabled `service_credential_names` input variable for a
 The Autoscaling variable sets the rules for how database increase resources in response to usage. Make sure you understand the effects of autoscaling, especially for production environments. For more information, see [Autoscaling](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-autoscaling&interface=ui#autoscaling-consider).
 
 - Variable name: `auto_scaling`
-- Type: An object with `disk` and `memory` configurations.
+- Type: An object with `disk` and `memory` configurations
 
 ### Disk options for auto_scaling
 
@@ -155,7 +154,6 @@ The disk object in the `auto_scaling` input contains the following options. All 
 - `rate_limit_mb_per_member`: The limit in megabytes for the rate of disk increase per member (default: `3670016`).
 - `rate_period_seconds`: How long (in seconds) the rate limit is applied for disk (default: `900` (15 minutes)).
 - `rate_units`: The units to use for the rate increase (default: `"mb"` (megabytes)).
-
 
 ### Memory options for auto_scaling
 
@@ -195,47 +193,5 @@ The following example shows values for both disk and memory for the `auto_scalin
       "rate_period_seconds": 900,
       "rate_units": "mb"
   }
-}
-```
-
-## Configuration  <a name="configuration"></a>
-
-The Configuration variable tunes the Redis database to suit different use case. For more information, see [Configuration](https://cloud.ibm.com/docs/databases-for-redis?topic=databases-for-redis-changing-configuration&interface=cli).
-
-- Variable name: `configuration`
-- Type: An object with `maxmemory`, `maxmemory-policy`, `appendonly`, `maxmemory-samples` and `stop-writes-on-bgsave-error` attributes
-- Default value: An object with following configuration:
-```
-{
-  maxmemory : 80,
-  maxmemory-policy : "noeviction",
-  appendonly : "yes",
-  maxmemory-samples : 5,
-  stop-writes-on-bgsave-error : "yes"
-}
-```
-
-### Options for configuration
-
-The configuration object in the input contains the following options. All options are optional.
-
-- `maxmemory`: Determines the amount of data that you can store in Redis as a percentage of the deployments memory. (default: `80`).
-- `maxmemory-policy`: Determines eviction behavior when `maxmemory` limit is reached [Learn more](https://cloud.ibm.com/docs/databases-for-redis?topic=databases-for-redis-redis-cache&interface=cli#redis-cache-maxmemory-policy) (default: `noeviction`).
-- `appendonly`: Enables Redis persistence when set to `yes`, If you are caching data, you want to set this value to `no`. (default: `yes`).
-- `maxmemory-samples`: Tunes LRU eviction algorithm when Redis is configured as a cache [Learn more](https://cloud.ibm.com/docs/databases-for-redis?topic=databases-for-redis-redis-cache&interface=cli#redis-cache-other-settings) (default: `5`).
-- `stop-writes-on-bgsave-error`: Redis stops accepting writes if it detects an unsuccessful backup snapshot. For caching, you can set to `no`. (default: `yes`).
-
-
-### Example configuration
-
-The following example shows values for the `configuration` input.
-
-```hcl
-{
-    "maxmemory": 80,
-    "maxmemory-policy": "noeviction",
-    "appendonly": "yes",
-    "maxmemory-samples": 5,
-    "stop-writes-on-bgsave-error": "yes"
 }
 ```
