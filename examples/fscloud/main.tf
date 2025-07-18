@@ -63,6 +63,7 @@ module "mongodb" {
   region                    = var.region
   tags                      = var.resource_tags
   access_tags               = var.access_tags
+  deletion_protection       = false
   kms_key_crn               = var.kms_key_crn
   backup_encryption_key_crn = var.backup_encryption_key_crn
   backup_crn                = var.backup_crn
