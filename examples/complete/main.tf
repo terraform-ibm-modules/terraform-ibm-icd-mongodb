@@ -89,7 +89,7 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 ##############################################################################
 module "cbr_zone" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
-  version          = "1.32.4"
+  version          = "1.32.5"
   name             = "${var.prefix}-VPC-network-zone"
   zone_description = "CBR Network zone containing VPC"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
@@ -137,7 +137,7 @@ module "icd_mongodb" {
 module "secrets_manager" {
   count                = var.existing_secrets_manager_instance_guid == null ? 1 : 0
   source               = "terraform-ibm-modules/secrets-manager/ibm"
-  version              = "2.6.13"
+  version              = "2.6.16"
   resource_group_id    = module.resource_group.resource_group_id
   region               = var.region
   secrets_manager_name = "${var.prefix}-secrets-manager"
