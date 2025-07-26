@@ -100,7 +100,7 @@ func TestRunFullyConfigurableSolutionSchematics(t *testing.T) {
 		{Name: "deletion_protection", Value: false, DataType: "bool"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 		{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
-		{Name: "mongodb_version", Value: "7.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
+		{Name: "mongodb_version", Value: latestVersion, DataType: "string"}, // Always lock this test into the latest supported MongoDB version
 		{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
 		{Name: "plan", Value: "standard", DataType: "string"},
 		{Name: "service_credential_names", Value: "{\"admin_test\": \"Administrator\", \"editor_test\": \"Editor\"}", DataType: "map(string)"},
@@ -192,7 +192,7 @@ func TestRunSecurityEnforcedSolutionSchematics(t *testing.T) {
 		{Name: "deletion_protection", Value: false, DataType: "bool"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 		{Name: "existing_backup_kms_key_crn", Value: permanentResources["hpcs_south_root_key_crn"], DataType: "string"},
-		{Name: "mongodb_version", Value: "7.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
+		{Name: "mongodb_version", Value: latestVersion, DataType: "string"}, // Always lock this test into the latest supported MongoDB version
 		{Name: "existing_resource_group_name", Value: uniqueResourceGroup, DataType: "string"},
 		{Name: "plan", Value: "standard", DataType: "string"},
 		{Name: "service_credential_names", Value: "{\"admin_test\": \"Administrator\", \"editor_test\": \"Editor\"}", DataType: "map(string)"},
@@ -297,7 +297,7 @@ func TestRunfullyConfigurableSolutionIBMKeys(t *testing.T) {
 	})
 
 	options.TerraformVars = map[string]interface{}{
-		"mongodb_version":              "7.0",
+		"mongodb_version":              latestVersion,
 		"provider_visibility":          "public",
 		"existing_resource_group_name": resourceGroup,
 		"prefix":                       options.Prefix,
