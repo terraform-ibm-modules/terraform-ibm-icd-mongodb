@@ -374,7 +374,8 @@
             {
               "key": "existing_mongodb_instance_crn"
             }
-          ]
+          ],
+          "terraform_version": "1.10.5"
         },
         {
           "label": "Security-enforced",
@@ -635,7 +636,8 @@
             {
               "key": "existing_mongodb_instance_crn"
             }
-          ]
+          ],
+          "terraform_version": "1.10.5"
         }
       ]
     }
