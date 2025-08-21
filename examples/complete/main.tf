@@ -53,7 +53,7 @@ locals {
 
 module "key_protect_all_inclusive" {
   source            = "terraform-ibm-modules/kms-all-inclusive/ibm"
-  version           = "5.1.16"
+  version           = "5.1.20"
   resource_group_id = module.resource_group.resource_group_id
   # Only us-south, us-east and eu-de backup encryption keys are supported. See https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok for details.
   # Note: Database instance and Key Protect must be created on the same region.
@@ -89,7 +89,7 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 ##############################################################################
 module "cbr_zone" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
-  version          = "1.32.6"
+  version          = "1.33.0"
   name             = "${var.prefix}-VPC-network-zone"
   zone_description = "CBR Network zone containing VPC"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
@@ -137,7 +137,7 @@ module "icd_mongodb" {
 module "secrets_manager" {
   count                = var.existing_secrets_manager_instance_guid == null ? 1 : 0
   source               = "terraform-ibm-modules/secrets-manager/ibm"
-  version              = "2.6.17"
+  version              = "2.7.7"
   resource_group_id    = module.resource_group.resource_group_id
   region               = var.region
   secrets_manager_name = "${var.prefix}-secrets-manager"
@@ -149,7 +149,7 @@ module "secrets_manager" {
 # Add a Secrets Group to the secret manager instance
 module "secrets_manager_secrets_group" {
   source               = "terraform-ibm-modules/secrets-manager-secret-group/ibm"
-  version              = "1.3.12"
+  version              = "1.3.13"
   region               = local.secrets_manager_region
   secrets_manager_guid = local.secrets_manager_guid
   #tfsec:ignore:general-secrets-no-plaintext-exposure
