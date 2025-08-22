@@ -39,6 +39,11 @@ output "hostname" {
   value       = module.icd_mongodb.hostname
 }
 
+output "replica_hostnames" {
+  description = "List of hostnames for all MongoDB replica set members"
+  value       = module.icd_mongodb.replica_hostnames
+}
+
 output "port" {
   description = "MongoDB instance port"
   value       = module.icd_mongodb.port

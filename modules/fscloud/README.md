@@ -69,6 +69,7 @@ No resources.
 | <a name="output_hostname"></a> [hostname](#output\_hostname) | Database connection hostname |
 | <a name="output_id"></a> [id](#output\_id) | MongoDB instance id |
 | <a name="output_port"></a> [port](#output\_port) | Database connection port |
+| <a name="output_replica_hostnames"></a> [replica\_hostnames](#output\_replica\_hostnames) | List of hostnames for all MongoDB replica set members |
 | <a name="output_service_credentials_json"></a> [service\_credentials\_json](#output\_service\_credentials\_json) | Service credentials json map |
 | <a name="output_service_credentials_object"></a> [service\_credentials\_object](#output\_service\_credentials\_object) | Service credentials object |
 | <a name="output_version"></a> [version](#output\_version) | MongoDB instance version |
