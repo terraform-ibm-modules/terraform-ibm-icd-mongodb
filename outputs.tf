@@ -49,7 +49,7 @@ output "hostname" {
   value       = data.ibm_database_connection.database_connection.mongodb[0].hosts[0].hostname
 }
 
-output "replica_hostnames" {
+output "member_hostnames" {
   description = "List of hostnames for all MongoDB replica set members"
   value       = [for host in data.ibm_database_connection.database_connection.mongodb[0].hosts : host.hostname]
 }

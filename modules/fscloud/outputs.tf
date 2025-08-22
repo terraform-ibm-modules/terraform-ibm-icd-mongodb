@@ -49,9 +49,9 @@ output "hostname" {
   value       = module.mongodb.hostname
 }
 
-output "replica_hostnames" {
+output "member_hostnames" {
   description = "List of hostnames for all MongoDB replica set members"
-  value       = module.mongodb.replica_hostnames
+  value       = module.mongodb.member_hostnames
 }
 
 output "port" {
