@@ -96,7 +96,7 @@ variable "service_endpoints" {
   default     = "private"
 
   validation {
-    condition     = can(regex("public|private", var.service_endpoints))
+    condition     = can(regex("^(public|private)$", var.service_endpoints))
     error_message = "Valid values for service_endpoints are 'public' or 'private'"
   }
 }
@@ -234,7 +234,7 @@ variable "kms_endpoint_type" {
   default     = "private"
 
   validation {
-    condition     = can(regex("public|private", var.kms_endpoint_type))
+    condition     = can(regex("^(public|private)$", var.kms_endpoint_type))
     error_message = "The kms_endpoint_type value must be 'public' or 'private'."
   }
 }
