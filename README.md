@@ -64,7 +64,7 @@ You need the following permissions to run this module.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_backup_key_crn_parser"></a> [backup\_key\_crn\_parser](#module\_backup\_key\_crn\_parser) | terraform-ibm-modules/common-utilities/ibm//modules/crn-parser | 1.2.0 |
-| <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module | 1.33.0 |
+| <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module | 1.33.2 |
 | <a name="module_kms_key_crn_parser"></a> [kms\_key\_crn\_parser](#module\_kms\_key\_crn\_parser) | terraform-ibm-modules/common-utilities/ibm//modules/crn-parser | 1.2.0 |
 
 ### Resources
@@ -124,6 +124,7 @@ You need the following permissions to run this module.
 | <a name="output_guid"></a> [guid](#output\_guid) | MongoDB instance guid |
 | <a name="output_hostname"></a> [hostname](#output\_hostname) | Database connection hostname |
 | <a name="output_id"></a> [id](#output\_id) | MongoDB instance ID |
+| <a name="output_member_hostnames"></a> [member\_hostnames](#output\_member\_hostnames) | List of hostnames for all MongoDB replica set members |
 | <a name="output_port"></a> [port](#output\_port) | Database connection port |
 | <a name="output_service_credentials_json"></a> [service\_credentials\_json](#output\_service\_credentials\_json) | Service credentials json map |
 | <a name="output_service_credentials_object"></a> [service\_credentials\_object](#output\_service\_credentials\_object) | Service credentials object |
