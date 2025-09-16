@@ -20,9 +20,9 @@ variable "mongodb_version" {
   validation {
     condition = anytrue([
       var.mongodb_version == null,
-      var.mongodb_version == "7.0",
+      var.mongodb_version == "8.0",
     ])
-    error_message = "Version must be either 7.0. If no value is passed, the current preferred version of IBM Cloud Databases is used."
+    error_message = "Version must be either 8.0. If no value is passed, the current preferred version of IBM Cloud Databases is used."
   }
 }
 

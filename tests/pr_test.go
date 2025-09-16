@@ -25,7 +25,7 @@ import (
 const fscloudExampleTerraformDir = "examples/fscloud"
 const fullyConfigurableSolutionTerraformDir = "solutions/fully-configurable"
 const securityEnforcedSolutionTerraformDir = "solutions/security-enforced"
-const latestVersion = "7.0"
+const latestVersion = "8.0"
 
 // Use existing resource group
 const resourceGroup = "geretain-test-mongo"
