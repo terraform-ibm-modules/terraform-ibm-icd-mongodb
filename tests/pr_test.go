@@ -26,6 +26,7 @@ const fscloudExampleTerraformDir = "examples/fscloud"
 const fullyConfigurableSolutionTerraformDir = "solutions/fully-configurable"
 const securityEnforcedSolutionTerraformDir = "solutions/security-enforced"
 const latestVersion = "8.0"
+const lowestVersion = "7.0"
 
 // Use existing resource group
 const resourceGroup = "geretain-test-mongo"
@@ -227,7 +228,7 @@ func TestRunExistingInstance(t *testing.T) {
 		Vars: map[string]interface{}{
 			"prefix":            prefix,
 			"region":            region,
-			"mongodb_version":   latestVersion,
+			"mongodb_version":   lowestVersion,
 			"service_endpoints": "private",
 		},
 		// Set Upgrade to true to ensure latest version of providers and modules are used by terratest.
