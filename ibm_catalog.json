@@ -206,7 +206,17 @@
             {
               "key": "mongodb_version",
               "hidden": true,
-              "default_value": "7.0"
+              "default_value": "8.0",
+              "options": [
+                {
+                  "displayname": "8.0",
+                  "value": "8.0"
+                },
+                {
+                  "displayname": "7.0",
+                  "value": "7.0"
+                }
+              ]
             },
             {
               "key": "plan"
@@ -529,7 +539,17 @@
             {
               "key": "mongodb_version",
               "hidden": true,
-              "default_value": "7.0"
+              "default_value": "8.0",
+              "options": [
+                {
+                  "displayname": "8.0",
+                  "value": "8.0"
+                },
+                {
+                  "displayname": "7.0",
+                  "value": "7.0"
+                }
+              ]
             },
             {
               "key": "plan"
