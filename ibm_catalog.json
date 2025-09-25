@@ -11,7 +11,7 @@
         "solution",
         "data_management",
         "database",
-        "converged_infra"
+        "platform_engineering"
       ],
       "keywords": [
         "mongodb",
@@ -142,7 +142,9 @@
                 "config_constraints": {
                   "identifier": "rg_name"
                 }
-              }
+              },
+              "default_value": "Default",
+              "description": "The name of an existing resource group to provision the resources."
             },
             {
               "key": "prefix"
@@ -204,7 +206,17 @@
             {
               "key": "mongodb_version",
               "hidden": true,
-              "default_value": "7.0"
+              "default_value": "8.0",
+              "options": [
+                {
+                  "displayname": "8.0",
+                  "value": "8.0"
+                },
+                {
+                  "displayname": "7.0",
+                  "value": "7.0"
+                }
+              ]
             },
             {
               "key": "plan"
@@ -250,7 +262,12 @@
               "key": "member_host_flavor"
             },
             {
-              "key": "auto_scaling"
+              "key": "auto_scaling",
+              "custom_config": {
+                "type": "code_editor",
+                "grouping": "deployment",
+                "original_grouping": "deployment"
+              }
             },
             {
               "key": "service_endpoints",
@@ -275,7 +292,12 @@
               "key": "version_upgrade_skip_backup"
             },
             {
-              "key": "service_credential_names"
+              "key": "service_credential_names",
+              "custom_config": {
+                "type": "code_editor",
+                "grouping": "deployment",
+                "original_grouping": "deployment"
+              }
             },
             {
               "key": "service_credential_secrets",
@@ -453,7 +475,9 @@
                 "config_constraints": {
                   "identifier": "rg_name"
                 }
-              }
+              },
+              "default_value": "Default",
+              "description": "The name of an existing resource group to provision the resources."
             },
             {
               "key": "prefix"
@@ -515,7 +539,17 @@
             {
               "key": "mongodb_version",
               "hidden": true,
-              "default_value": "7.0"
+              "default_value": "8.0",
+              "options": [
+                {
+                  "displayname": "8.0",
+                  "value": "8.0"
+                },
+                {
+                  "displayname": "7.0",
+                  "value": "7.0"
+                }
+              ]
             },
             {
               "key": "plan"
@@ -561,7 +595,12 @@
               "key": "member_host_flavor"
             },
             {
-              "key": "auto_scaling"
+              "key": "auto_scaling",
+              "custom_config": {
+                "type": "code_editor",
+                "grouping": "deployment",
+                "original_grouping": "deployment"
+              }
             },
             {
               "key": "deletion_protection"
@@ -570,7 +609,12 @@
               "key": "timeouts_update"
             },
             {
-              "key": "service_credential_names"
+              "key": "service_credential_names",
+              "custom_config": {
+                "type": "code_editor",
+                "grouping": "deployment",
+                "original_grouping": "deployment"
+              }
             },
             {
               "key": "service_credential_secrets",
