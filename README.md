@@ -10,7 +10,9 @@ This module implements an instance of the IBM Cloud Databases for MongoDB servic
 
 :exclamation: The module does not support updates to encryption and backup encryption keys. The module only supports setting the disk encryption and backup encryption key CRNs on creation. The KMS manual or automatic key rotation may be used to change the key value and initiate the re-encryption of the deployment.
 
-:exclamation: To upgrade to a new major version see [Upgrading to a new major version](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-upgrading) in the IBM Cloud Docs. Before you begin, prepare for the upgrade by reviewing the [upgrade considerations](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-upgrading&interface=terraform#upgrading-considerations). The database will be put into READ-ONLY mode during upgrade. It is highly recommended to test before upgrading. To upgrade, update the `mongodb_version` value in your configuration. There is an optional bool flag, `version_upgrade_skip_backup`, that can be set to skip backup. This is not recommended, but can reduce the upgrade time. For larger instances, there is an optional `timeouts_update` value that can be configured to avoid terraform timeouts.
+## Upgrade steps
+
+To upgrade to a new major version see [Upgrading to a new major version](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-upgrading) in the IBM Cloud Docs. Before you begin, prepare for the upgrade by reviewing the [upgrade considerations](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-upgrading&interface=terraform#upgrading-considerations). The database will be put into READ-ONLY mode during upgrade. It is highly recommended to test before upgrading. To upgrade, update the `mongodb_version` value in your configuration. There is an optional bool flag, `version_upgrade_skip_backup`, that can be set to skip backup. This is not recommended, but can reduce the upgrade time. For larger instances, there is an optional `timeouts_update` value that can be configured to avoid terraform timeouts.
 
 ## Usage
 
