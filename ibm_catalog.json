@@ -184,7 +184,7 @@
             {
               "key": "mongodb_version",
               "required": false,
-              "default_value": "__NULL__",
+              "default_value": "6.0",
               "options": [
                 {
                 "displayname": "preferred",
