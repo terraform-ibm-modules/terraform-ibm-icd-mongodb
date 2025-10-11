@@ -170,6 +170,7 @@ func TestRunSecurityEnforcedUpgradeSolutionSchematics(t *testing.T) {
 		{Name: "deletion_protection", Value: false, DataType: "bool"},
 		{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
+		{Name: "existing_secrets_manager_instance_crn", Value: permanentResources["secretsManagerCRN"], DataType: "string"},
 		{Name: "service_credential_secrets", Value: serviceCredentialSecrets, DataType: "list(object)"},
 		{Name: "service_credential_names", Value: string(serviceCredentialNamesJSON), DataType: "map(string)"},
 		{Name: "admin_pass_secrets_manager_secret_name", Value: options.Prefix, DataType: "string"},
