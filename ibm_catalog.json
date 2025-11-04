@@ -388,7 +388,7 @@
               "key": "existing_mongodb_instance_crn"
             }
           ],
-          "terraform_version": "1.10.5",
+          "terraform_version": "1.12.2",
           "ignore_readme": true
         },
         {
@@ -664,7 +664,7 @@
               "key": "existing_mongodb_instance_crn"
             }
           ],
-          "terraform_version": "1.10.5",
+          "terraform_version": "1.12.2",
           "ignore_readme": true
         }
       ]
