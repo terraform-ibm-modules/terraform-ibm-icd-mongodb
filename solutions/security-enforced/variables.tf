@@ -57,6 +57,14 @@ variable "existing_mongodb_instance_crn" {
   type        = string
   default     = null
   description = "The CRN of an existing Databases for MongoDB instance. If no value is specified, a new instance is created."
+
+  validation {
+    condition = anytrue([
+      var.existing_mongodb_instance_crn == null,
+      can(regex("^crn:v\\d:(.*:){2}databases-for-mongodb:(.*:)([aos]\\/[\\w_\\-]+):[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}::$", var.existing_mongodb_instance_crn))
+    ])
+    error_message = "The value provided for 'existing_mongodb_instance_crn' is not valid."
+  }
 }
 
 variable "mongodb_version" {
