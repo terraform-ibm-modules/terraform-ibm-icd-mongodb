@@ -297,7 +297,16 @@
               "key": "deletion_protection"
             },
             {
-              "key": "timeouts_update"
+              "key": "create_timeout",
+              "hidden": true
+            },
+            {
+              "key": "update_timeout",
+              "hidden": true
+            },
+            {
+              "key": "delete_timeout",
+              "hidden": true
             },
             {
               "key": "version_upgrade_skip_backup"
@@ -682,7 +691,16 @@
               "key": "deletion_protection"
             },
             {
-              "key": "timeouts_update"
+              "key": "create_timeout",
+              "hidden": true
+            },
+            {
+              "key": "update_timeout",
+              "hidden": true
+            },
+            {
+              "key": "delete_timeout",
+              "hidden": true
             },
             {
               "key": "service_credential_names",
