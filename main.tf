@@ -158,21 +158,23 @@ resource "time_sleep" "wait_for_backup_kms_authorization_policy" {
 ########################################################################################################################
 
 resource "ibm_database" "mongodb" {
-  depends_on                  = [time_sleep.wait_for_authorization_policy, time_sleep.wait_for_backup_kms_authorization_policy]
-  name                        = var.name
-  plan                        = var.plan
-  location                    = var.region
-  service                     = "databases-for-mongodb"
-  version                     = var.mongodb_version
-  resource_group_id           = var.resource_group_id
-  service_endpoints           = var.service_endpoints
-  deletion_protection         = var.deletion_protection
-  version_upgrade_skip_backup = var.version_upgrade_skip_backup
-  tags                        = var.tags
-  adminpassword               = var.admin_pass
-  key_protect_key             = var.kms_key_crn
-  backup_encryption_key_crn   = local.backup_encryption_key_crn
-  backup_id                   = var.backup_crn
+  depends_on                           = [time_sleep.wait_for_authorization_policy, time_sleep.wait_for_backup_kms_authorization_policy]
+  name                                 = var.name
+  plan                                 = var.plan
+  location                             = var.region
+  service                              = "databases-for-mongodb"
+  version                              = var.mongodb_version
+  resource_group_id                    = var.resource_group_id
+  service_endpoints                    = var.service_endpoints
+  deletion_protection                  = var.deletion_protection
+  version_upgrade_skip_backup          = var.version_upgrade_skip_backup
+  tags                                 = var.tags
+  adminpassword                        = var.admin_pass
+  key_protect_key                      = var.kms_key_crn
+  backup_encryption_key_crn            = local.backup_encryption_key_crn
+  backup_id                            = var.backup_crn
+  point_in_time_recovery_deployment_id = var.pitr_id
+  point_in_time_recovery_time          = var.pitr_time
 
   dynamic "users" {
     for_each = nonsensitive(var.users != null ? var.users : [])
