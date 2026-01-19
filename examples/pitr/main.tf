@@ -24,7 +24,7 @@ module "mongo_db_pitr" {
   disk_mb             = 20480
   memory_mb           = 4096
   deletion_protection = false
-  mongodb_version     = "8.0"
+  mongodb_version     = var.mongodb_version
   pitr_id             = var.pitr_id
   pitr_time           = var.pitr_time == "" ? " " : var.pitr_time
   plan                = var.plan
