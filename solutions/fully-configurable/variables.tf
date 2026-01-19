@@ -87,8 +87,9 @@ variable "plan" {
     condition = anytrue([
       var.plan == "standard",
       var.plan == "enterprise",
+      var.plan == "enterprise-sharding",
     ])
-    error_message = "Only supported plans are standard or enterprise"
+    error_message = "Only supported plans are standard , enterprise and enterprise-sharding"
   }
 }
 

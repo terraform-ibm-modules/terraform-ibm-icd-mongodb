@@ -44,9 +44,8 @@ variable "mongodb_version" {
 variable "plan" {
   type        = string
   description = "The name of the service plan that you choose for your MongoDB instance"
-  default     = "enterprise"
+  default     = "standard"
 }
-
 variable "existing_secrets_manager_instance_guid" {
   type        = string
   description = "Existing Secrets Manager GUID. If not provided an new instance will be provisioned"
