@@ -61,17 +61,17 @@ func TestRunRestoredDBExample(t *testing.T) {
 
 func TestRunPointInTimeRecoveryDBExample(t *testing.T) {
 	t.Parallel()
-
+	t.Skip("Skipping PITR test: we don't maintain a permanent MongoDB Enterprise instance.")
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:       t,
 		TerraformDir:  "examples/pitr",
 		Prefix:        "mongodb-pitr",
-		Region:        fmt.Sprint(permanentResources["mongodbEnterpriseRegion"]),
+		Region:        "us-south",
 		ResourceGroup: resourceGroup,
 		TerraformVars: map[string]interface{}{
-			"pitr_id":         permanentResources["mongodbEnterpriseCrn"],
+			"pitr_id":         "<mongodb-enterprise-crn>",
 			"pitr_time":       " ",
-			"mongodb_version": permanentResources["mongodbEnterpriseVersion"],
+			"mongodb_version": "<mongodb-enterprise-version>",
 		},
 		CloudInfoService: sharedInfoSvc,
 	})

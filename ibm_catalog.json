@@ -226,7 +226,21 @@
               ]
             },
             {
-              "key": "plan"
+              "key": "plan",
+              "options": [
+                {
+                  "displayname": "standard",
+                  "value": "standard"
+                },
+                {
+                  "displayname": "enterprise",
+                  "value": "enterprise"
+                },
+                {
+                  "displayname": "enterprise-sharding",
+                  "value": "enterprise-sharding"
+                }
+              ]
             },
             {
               "key": "name"
