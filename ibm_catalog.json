@@ -229,15 +229,15 @@
               "key": "plan",
               "options": [
                 {
-                  "displayname": "standard",
+                  "displayname": "Standard",
                   "value": "standard"
                 },
                 {
-                  "displayname": "enterprise",
+                  "displayname": "Enterprise",
                   "value": "enterprise"
                 },
                 {
-                  "displayname": "enterprise-sharding",
+                  "displayname": "Enterprise Sharding",
                   "value": "enterprise-sharding"
                 }
               ]
