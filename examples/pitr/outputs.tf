@@ -2,13 +2,13 @@
 # Outputs
 ##############################################################################
 
-output "pitr_mysql_db_id" {
-  description = "PITR MySQL instance id"
+output "pitr_instance_id" {
+  description = "PITR MongoDB instance id"
   value       = module.mongo_db_pitr.id
 }
 
-output "pitr_mysql_db_version" {
-  description = "PITR MySQL instance version"
+output "pitr_instance_version" {
+  description = "PITR MongoDB instance version"
   value       = module.mongo_db_pitr.version
 }
 

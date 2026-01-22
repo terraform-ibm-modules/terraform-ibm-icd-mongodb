@@ -22,7 +22,6 @@ module "mongo_db_pitr" {
   tags                = var.resource_tags
   access_tags         = var.access_tags
   disk_mb             = 20480
-  memory_mb           = 4096
   deletion_protection = false
   mongodb_version     = var.mongodb_version
   pitr_id             = var.pitr_id
