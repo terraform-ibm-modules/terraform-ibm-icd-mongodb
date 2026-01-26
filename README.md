@@ -44,15 +44,20 @@ You need the following permissions to run this module.
     - **Databases for MongoDB** service
         - `Editor` role access
 
-<!-- BEGIN EXAMPLES HOOK -->
-## Examples
-
-- [ Restore from backup example](examples/backup-restore)
-- [ Basic example](examples/basic)
-- [ Complete example with BYOK encryption and CBR rules](examples/complete)
-- [ Financial Services Cloud profile example with autoscaling enabled](examples/fscloud)
-- [ Point in time recovery example (PITR)](examples/pitr)
-<!-- END EXAMPLES HOOK -->
+<!-- BEGIN OVERVIEW HOOK -->
+## Overview
+* [terraform-ibm-icd-mongodb](#terraform-ibm-icd-mongodb)
+* [Submodules](./modules)
+    * [fscloud](./modules/fscloud)
+* [Examples](./examples)
+:information_source: Ctrl/Cmd+Click or right-click on the Schematics deploy button to open in a new tab
+    * <a href="./examples/backup-restore">Restore from backup example</a> <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=icd-mongodb-backup-restore-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/tree/main/examples/backup-restore"><img src="https://img.shields.io/badge/Deploy%20with IBM%20Cloud%20Schematics-0f62fe?logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
+    * <a href="./examples/basic">Basic example</a> <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=icd-mongodb-basic-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/tree/main/examples/basic"><img src="https://img.shields.io/badge/Deploy%20with IBM%20Cloud%20Schematics-0f62fe?logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
+    * <a href="./examples/complete">Complete example with BYOK encryption and CBR rules</a> <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=icd-mongodb-complete-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/tree/main/examples/complete"><img src="https://img.shields.io/badge/Deploy%20with IBM%20Cloud%20Schematics-0f62fe?logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
+    * <a href="./examples/fscloud">Financial Services Cloud profile example with autoscaling enabled</a> <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=icd-mongodb-fscloud-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/tree/main/examples/fscloud"><img src="https://img.shields.io/badge/Deploy%20with IBM%20Cloud%20Schematics-0f62fe?logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
+    * <a href="./examples/pitr">Point in time recovery example (PITR)</a> <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=icd-mongodb-pitr-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/tree/main/examples/pitr"><img src="https://img.shields.io/badge/Deploy%20with IBM%20Cloud%20Schematics-0f62fe?logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
+* [Contributing](#contributing)
+<!-- END OVERVIEW HOOK -->
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
 
