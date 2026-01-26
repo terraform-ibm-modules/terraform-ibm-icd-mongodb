@@ -44,15 +44,6 @@ You need the following permissions to run this module.
     - **Databases for MongoDB** service
         - `Editor` role access
 
-<!-- BEGIN EXAMPLES HOOK -->
-## Examples
-
-- [ Restore from backup example](examples/backup-restore)
-- [ Basic example](examples/basic)
-- [ Complete example with BYOK encryption and CBR rules](examples/complete)
-- [ Financial Services Cloud profile example with autoscaling enabled](examples/fscloud)
-- [ Point in time recovery example (PITR)](examples/pitr)
-<!-- END EXAMPLES HOOK -->
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
 
