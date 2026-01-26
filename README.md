@@ -14,7 +14,9 @@ This module implements an instance of the IBM Cloud Databases for MongoDB servic
 
 To upgrade to a new major version see [Upgrading to a new major version](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-upgrading) in the IBM Cloud Docs. Before you begin, prepare for the upgrade by reviewing the [upgrade considerations](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-upgrading&interface=terraform#upgrading-considerations). The database will be put into READ-ONLY mode during upgrade. It is highly recommended to test before upgrading. To upgrade, update the `mongodb_version` value in your configuration. There is an optional bool flag, `version_upgrade_skip_backup`, that can be set to skip backup. This is not recommended, but can reduce the upgrade time. For larger instances, there is an optional `timeouts_update` value that can be configured to avoid terraform timeouts.
 
-## Usage
+## terraform-ibm-icd-mongodb
+
+### Usage
 
 IBM Cloud Databases supports:
 - Key Protect encryption in `us-south`, `us-east`, and `eu-de` for backup encryption. For more information, see [Bring Your Own Key for Backups](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok) in the IBM Cloud Docs.
