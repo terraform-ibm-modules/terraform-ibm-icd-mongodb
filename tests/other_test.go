@@ -65,7 +65,6 @@ func TestRunCompleteExample(t *testing.T) {
 		BestRegionYAMLPath: regionSelectionPath,
 		ResourceGroup:      resourceGroup,
 		TerraformVars: map[string]interface{}{
-			"mongodb_version": latestVersion,
 			"users": []map[string]interface{}{
 				{
 					"name":     "testuser",
