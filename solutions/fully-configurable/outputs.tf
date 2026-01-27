@@ -48,3 +48,18 @@ output "secrets_manager_secrets" {
   description = "Service credential secrets"
   value       = length(local.service_credential_secrets) > 0 ? module.secrets_manager_service_credentials[0].secrets : null
 }
+
+output "next_steps_text" {
+  value       = "Your Database for MongoDB is ready."
+  description = "Next steps text"
+}
+
+output "next_step_primary_label" {
+  value       = "Go To Database"
+  description = "Primary label"
+}
+
+output "next_step_primary_url" {
+  value       = "https://cloud.ibm.com/services/databases-for-mongodb/${local.mongodb_crn}"
+  description = "Primary URL"
+}
