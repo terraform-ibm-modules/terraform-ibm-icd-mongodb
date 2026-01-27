@@ -33,17 +33,39 @@ func TestRunRestoredDBExample(t *testing.T) {
 	assert.NotNil(t, output, "Expected some output")
 }
 
+func TestRunPointInTimeRecoveryDBExample(t *testing.T) {
+	t.Parallel()
+	t.Skip("Skipping PITR test: we don't maintain a permanent MongoDB Enterprise instance.")
+	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+		Testing:       t,
+		TerraformDir:  "examples/pitr",
+		Prefix:        "mongodb-pitr",
+		Region:        "us-south",
+		ResourceGroup: resourceGroup,
+		TerraformVars: map[string]interface{}{
+			"pitr_id":         "<mongodb-enterprise-crn>",
+			"pitr_time":       " ",
+			"mongodb_version": "<mongodb-enterprise-version>",
+		},
+		CloudInfoService: sharedInfoSvc,
+	})
+
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
+}
+
 func TestRunCompleteExample(t *testing.T) {
 	t.Parallel()
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:            t,
 		TerraformDir:       "examples/complete",
-		Prefix:             "mongodb-upg",
+		Prefix:             "mongodb-cmp",
 		BestRegionYAMLPath: regionSelectionPath,
 		ResourceGroup:      resourceGroup,
 		TerraformVars: map[string]interface{}{
-			"plan": "standard",
+			"mongodb_version": latestVersion,
 			"users": []map[string]interface{}{
 				{
 					"name":     "testuser",
