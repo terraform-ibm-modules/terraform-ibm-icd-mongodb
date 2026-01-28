@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -25,8 +27,8 @@ import (
 const fscloudExampleTerraformDir = "examples/fscloud"
 const fullyConfigurableSolutionTerraformDir = "solutions/fully-configurable"
 const securityEnforcedSolutionTerraformDir = "solutions/security-enforced"
-const latestVersion = "8.0"
-const lowestVersion = "7.0"
+
+const icdType = "mongodb"
 
 // Use existing resource group
 const resourceGroup = "geretain-test-mongo"
@@ -43,6 +45,56 @@ var sharedInfoSvc *cloudinfo.CloudInfoService
 var validICDRegions = []string{
 	"eu-de",
 	"us-south",
+}
+
+func GetRegionVersions(region string) (string, string) {
+
+	cloudInfoSvc, err := cloudinfo.NewCloudInfoServiceFromEnv("TF_VAR_ibmcloud_api_key", cloudinfo.CloudInfoServiceOptions{
+		IcdRegion: region,
+	})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	icdAvailableVersions, err := cloudInfoSvc.GetAvailableIcdVersions(icdType)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if len(icdAvailableVersions) == 0 {
+		log.Fatal("No available ICD versions found")
+	}
+
+	sort.Slice(icdAvailableVersions, func(i, j int) bool {
+		partsI := strings.Split(icdAvailableVersions[i], ".")
+		partsJ := strings.Split(icdAvailableVersions[j], ".")
+
+		majorI, _ := strconv.Atoi(partsI[0])
+		majorJ, _ := strconv.Atoi(partsJ[0])
+
+		if majorI != majorJ {
+			return majorI < majorJ
+		}
+
+		minorI := 0
+		minorJ := 0
+
+		if len(partsI) >= 2 {
+			minorI, _ = strconv.Atoi(partsI[1])
+		}
+		if len(partsJ) >= 2 {
+			minorJ, _ = strconv.Atoi(partsJ[1])
+		}
+		return minorI < minorJ
+	})
+
+	fmt.Println("version list is ", icdAvailableVersions)
+	latestVersion := icdAvailableVersions[len(icdAvailableVersions)-1]
+	oldestVersion := icdAvailableVersions[0]
+
+	return latestVersion, oldestVersion
 }
 
 // TestMain will be run before any parallel tests, used to read data from yaml for use with tests
@@ -97,6 +149,9 @@ func TestRunFullyConfigurableSolutionSchematics(t *testing.T) {
 		},
 	}
 
+	region := "us-south"
+	latestVersion, _ := GetRegionVersions(region)
+
 	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 		{Name: "access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
@@ -104,6 +159,7 @@ func TestRunFullyConfigurableSolutionSchematics(t *testing.T) {
 		{Name: "deletion_protection", Value: false, DataType: "bool"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 		{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
+		{Name: "region", Value: region, DataType: "string"},
 		{Name: "mongodb_version", Value: latestVersion, DataType: "string"}, // Always lock this test into the latest supported MongoDB version
 		{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
 		{Name: "plan", Value: "standard", DataType: "string"},
@@ -166,10 +222,14 @@ func TestRunSecurityEnforcedUpgradeSolutionSchematics(t *testing.T) {
 		log.Fatalf("Error converting to JSON: %s", err)
 	}
 
+	region := "us-south"
+	latestVersion, _ := GetRegionVersions(region)
 	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 		{Name: "prefix", Value: options.Prefix, DataType: "string"},
 		{Name: "deletion_protection", Value: false, DataType: "bool"},
+		{Name: "region", Value: region, DataType: "string"},
+		{Name: "mongodb_version", Value: latestVersion, DataType: "string"},
 		{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 		{Name: "existing_secrets_manager_instance_crn", Value: permanentResources["secretsManagerCRN"], DataType: "string"},
@@ -222,12 +282,15 @@ func TestRunSecurityEnforcedSolutionSchematics(t *testing.T) {
 
 	uniqueResourceGroup := generateUniqueResourceGroupName(options.Prefix)
 
+	region := "us-south"
+	latestVersion, _ := GetRegionVersions(region)
 	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 		{Name: "access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
 		{Name: "deletion_protection", Value: false, DataType: "bool"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 		{Name: "existing_backup_kms_key_crn", Value: permanentResources["hpcs_south_root_key_crn"], DataType: "string"},
+		{Name: "region", Value: region, DataType: "string"},
 		{Name: "mongodb_version", Value: latestVersion, DataType: "string"}, // Always lock this test into the latest supported MongoDB version
 		{Name: "existing_resource_group_name", Value: uniqueResourceGroup, DataType: "string"},
 		{Name: "plan", Value: "standard", DataType: "string"},
@@ -258,12 +321,14 @@ func TestRunExistingInstance(t *testing.T) {
 	require.NotEqual(t, "", val, checkVariable+" environment variable is empty")
 
 	logger.Log(t, "Tempdir: ", tempTerraformDir)
+
+	_, oldestVersion := GetRegionVersions(region)
 	existingTerraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		TerraformDir: tempTerraformDir + "/examples/basic",
 		Vars: map[string]interface{}{
 			"prefix":            prefix,
 			"region":            region,
-			"mongodb_version":   lowestVersion,
+			"mongodb_version":   oldestVersion,
 			"service_endpoints": "private",
 		},
 		// Set Upgrade to true to ensure latest version of providers and modules are used by terratest.
@@ -332,8 +397,12 @@ func TestRunfullyConfigurableSolutionIBMKeys(t *testing.T) {
 		ResourceGroup: resourceGroup,
 	})
 
+	region := options.Region
+	latestVersion, _ := GetRegionVersions(region)
+
 	options.TerraformVars = map[string]interface{}{
 		"mongodb_version":              latestVersion,
+		"region":                       region,
 		"provider_visibility":          "public",
 		"existing_resource_group_name": resourceGroup,
 		"prefix":                       options.Prefix,
