@@ -14,7 +14,24 @@ This module implements an instance of the IBM Cloud Databases for MongoDB servic
 
 To upgrade to a new major version see [Upgrading to a new major version](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-upgrading) in the IBM Cloud Docs. Before you begin, prepare for the upgrade by reviewing the [upgrade considerations](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-upgrading&interface=terraform#upgrading-considerations). The database will be put into READ-ONLY mode during upgrade. It is highly recommended to test before upgrading. To upgrade, update the `mongodb_version` value in your configuration. There is an optional bool flag, `version_upgrade_skip_backup`, that can be set to skip backup. This is not recommended, but can reduce the upgrade time. For larger instances, there is an optional `timeouts_update` value that can be configured to avoid terraform timeouts.
 
-## Usage
+<!-- BEGIN OVERVIEW HOOK -->
+## Overview
+* [terraform-ibm-icd-mongodb](#terraform-ibm-icd-mongodb)
+* [Submodules](./modules)
+    * [fscloud](./modules/fscloud)
+* [Examples](./examples)
+:information_source: Ctrl/Cmd+Click or right-click on the Schematics deploy button to open in a new tab
+    * <a href="./examples/backup-restore">Restore from backup example</a> <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=icd-mongodb-backup-restore-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/tree/main/examples/backup-restore"><img src="https://img.shields.io/badge/Deploy%20with IBM%20Cloud%20Schematics-0f62fe?logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
+    * <a href="./examples/basic">Basic example</a> <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=icd-mongodb-basic-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/tree/main/examples/basic"><img src="https://img.shields.io/badge/Deploy%20with IBM%20Cloud%20Schematics-0f62fe?logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
+    * <a href="./examples/complete">Complete example with BYOK encryption and CBR rules</a> <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=icd-mongodb-complete-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/tree/main/examples/complete"><img src="https://img.shields.io/badge/Deploy%20with IBM%20Cloud%20Schematics-0f62fe?logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
+    * <a href="./examples/fscloud">Financial Services Cloud profile example with autoscaling enabled</a> <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=icd-mongodb-fscloud-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/tree/main/examples/fscloud"><img src="https://img.shields.io/badge/Deploy%20with IBM%20Cloud%20Schematics-0f62fe?logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
+    * <a href="./examples/pitr">Point in time recovery example (PITR)</a> <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=icd-mongodb-pitr-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/tree/main/examples/pitr"><img src="https://img.shields.io/badge/Deploy%20with IBM%20Cloud%20Schematics-0f62fe?logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
+* [Contributing](#contributing)
+<!-- END OVERVIEW HOOK -->
+
+## terraform-ibm-icd-mongodb
+
+### Usage
 
 IBM Cloud Databases supports:
 - Key Protect encryption in `us-south`, `us-east`, and `eu-de` for backup encryption. For more information, see [Bring Your Own Key for Backups](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok) in the IBM Cloud Docs.
@@ -44,15 +61,6 @@ You need the following permissions to run this module.
     - **Databases for MongoDB** service
         - `Editor` role access
 
-<!-- BEGIN EXAMPLES HOOK -->
-## Examples
-
-- [ Restore from backup example](examples/backup-restore)
-- [ Basic example](examples/basic)
-- [ Complete example with BYOK encryption and CBR rules](examples/complete)
-- [ Financial Services Cloud profile example with autoscaling enabled](examples/fscloud)
-- [ Point in time recovery example (PITR)](examples/pitr)
-<!-- END EXAMPLES HOOK -->
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
 
@@ -132,7 +140,7 @@ You need the following permissions to run this module.
 | <a name="output_guid"></a> [guid](#output\_guid) | MongoDB instance guid |
 | <a name="output_hostname"></a> [hostname](#output\_hostname) | Database connection hostname |
 | <a name="output_id"></a> [id](#output\_id) | MongoDB instance ID |
-| <a name="output_member_hostnames"></a> [member\_hostnames](#output\_member\_hostnames) | List of hostnames for all MongoDB replica set members |
+| <a name="output_member_hosts"></a> [member\_hosts](#output\_member\_hosts) | Replica set member list of objects with hostnames and ports |
 | <a name="output_port"></a> [port](#output\_port) | Database connection port |
 | <a name="output_service_credentials_json"></a> [service\_credentials\_json](#output\_service\_credentials\_json) | Service credentials json map |
 | <a name="output_service_credentials_object"></a> [service\_credentials\_object](#output\_service\_credentials\_object) | Service credentials object |

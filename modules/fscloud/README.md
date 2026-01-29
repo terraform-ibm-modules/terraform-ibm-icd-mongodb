@@ -70,7 +70,7 @@ No resources.
 | <a name="output_guid"></a> [guid](#output\_guid) | MongoDB instance guid |
 | <a name="output_hostname"></a> [hostname](#output\_hostname) | Database connection hostname |
 | <a name="output_id"></a> [id](#output\_id) | MongoDB instance id |
-| <a name="output_member_hostnames"></a> [member\_hostnames](#output\_member\_hostnames) | List of hostnames for all MongoDB replica set members |
+| <a name="output_member_hosts"></a> [member\_hosts](#output\_member\_hosts) | Replica set member list of objects with hostnames and ports |
 | <a name="output_port"></a> [port](#output\_port) | Database connection port |
 | <a name="output_service_credentials_json"></a> [service\_credentials\_json](#output\_service\_credentials\_json) | Service credentials json map |
 | <a name="output_service_credentials_object"></a> [service\_credentials\_object](#output\_service\_credentials\_object) | Service credentials object |
