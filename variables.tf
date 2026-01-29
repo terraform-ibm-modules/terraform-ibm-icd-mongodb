@@ -18,12 +18,8 @@ variable "mongodb_version" {
   default     = null
 
   validation {
-    condition = anytrue([
-      var.mongodb_version == null,
-      var.mongodb_version == "8.0",
-      var.mongodb_version == "7.0",
-    ])
-    error_message = "Version must be either 8.0 or 7.0. If no value is passed, the current preferred version of IBM Cloud Databases is used."
+    condition     = var.mongodb_version == null ? true : contains(local.icd_supported_versions, var.mongodb_version)
+    error_message = "Unsupported mongodb_version '${var.mongodb_version == null ? "null" : var.mongodb_version}'. Supported versions: ${join(", ", local.icd_supported_versions)}"
   }
 }
 
