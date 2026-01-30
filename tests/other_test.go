@@ -2,14 +2,12 @@
 package test
 
 import (
-	"crypto/rand"
-	"encoding/base64"
 	"fmt"
 
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/common"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 )
 
@@ -68,11 +66,11 @@ func TestRunCompleteExample(t *testing.T) {
 			"users": []map[string]interface{}{
 				{
 					"name":     "testuser",
-					"password": GetRandomAdminPassword(t),
+					"password": common.GetRandomPasswordWithPrefix(),
 					"type":     "database",
 				},
 			},
-			"admin_pass": GetRandomAdminPassword(t),
+			"admin_pass": common.GetRandomPasswordWithPrefix(),
 		},
 		CloudInfoService: sharedInfoSvc,
 	})
@@ -84,13 +82,4 @@ func TestRunCompleteExample(t *testing.T) {
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
 	assert.NotNil(t, output, "Expected some output")
-}
-
-func GetRandomAdminPassword(t *testing.T) string {
-	// Generate a 15 char long random string for the admin_pass
-	randomBytes := make([]byte, 13)
-	_, randErr := rand.Read(randomBytes)
-	require.Nil(t, randErr) // do not proceed if we can't gen a random password
-	randomPass := "A1" + base64.URLEncoding.EncodeToString(randomBytes)[:13]
-	return randomPass
 }
