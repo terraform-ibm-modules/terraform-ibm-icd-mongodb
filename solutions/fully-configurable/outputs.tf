@@ -50,16 +50,26 @@ output "secrets_manager_secrets" {
 }
 
 output "next_steps_text" {
-  value       = "Your Database for MongoDB is ready."
+  value       = "Your Database for MongoDB instance is ready. You can now take advantage of the latest MongoDB features: rich JSON documents, powerful query language, multi-document transactions, and authentic APIs."
   description = "Next steps text"
 }
 
 output "next_step_primary_label" {
-  value       = "Go To Database"
+  value       = "Deployment Details"
   description = "Primary label"
 }
 
 output "next_step_primary_url" {
   value       = "https://cloud.ibm.com/services/databases-for-mongodb/${local.mongodb_crn}"
   description = "Primary URL"
+}
+
+output "next_step_secondary_label" {
+  value       = "Learn more about Databases for MongoDB"
+  description = "Secondary label"
+}
+
+output "next_step_secondary_url" {
+  value       = "https://cloud.ibm.com/docs/databases-for-mongodb"
+  description = "Secondary URL"
 }
