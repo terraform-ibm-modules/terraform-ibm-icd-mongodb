@@ -374,7 +374,7 @@ func TestRunExistingInstance(t *testing.T) {
 			},
 			TemplateFolder:         fullyConfigurableSolutionTerraformDir,
 			BestRegionYAMLPath:     regionSelectionPath,
-			Prefix:                 "mdb-sr-da",
+			Prefix:                 "mdb-ex",
 			ResourceGroup:          resourceGroup,
 			DeleteWorkspaceOnFail:  false,
 			WaitJobCompleteMinutes: 60,
