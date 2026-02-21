@@ -89,7 +89,7 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 ##############################################################################
 module "cbr_zone" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
-  version          = "1.35.14"
+  version          = "1.35.15"
   name             = "${var.prefix}-VPC-network-zone"
   zone_description = "CBR Network zone containing VPC"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
@@ -149,7 +149,7 @@ module "secrets_manager" {
 # Add a Secrets Group to the secret manager instance
 module "secrets_manager_secrets_group" {
   source               = "terraform-ibm-modules/secrets-manager-secret-group/ibm"
-  version              = "1.4.5"
+  version              = "1.4.6"
   region               = local.secrets_manager_region
   secrets_manager_guid = local.secrets_manager_guid
   #tfsec:ignore:general-secrets-no-plaintext-exposure
