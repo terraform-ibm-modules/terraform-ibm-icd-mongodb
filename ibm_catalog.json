@@ -174,7 +174,6 @@
             },
             {
               "key": "mongodb_version",
-              "hidden": true,
               "default_value": "8.0",
               "options": [
                 {
@@ -580,7 +579,6 @@
             },
             {
               "key": "mongodb_version",
-              "hidden": true,
               "default_value": "8.0",
               "options": [
                 {
