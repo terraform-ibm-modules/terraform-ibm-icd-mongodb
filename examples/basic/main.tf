@@ -28,10 +28,26 @@ module "database" {
   service_endpoints   = var.service_endpoints
   member_host_flavor  = var.member_host_flavor
   deletion_protection = false
-  service_credential_names = {
-    "mongodb_admin" : "Administrator",
-    "mongodb_operator" : "Operator",
-    "mongodb_viewer" : "Viewer",
-    "mongodb_editor" : "Editor",
-  }
+  service_credential_names = [
+    {
+      name     = "mongodb_admin"
+      role     = "Administrator"
+      endpoint = "public"
+    },
+    {
+      name     = "mongodb_operator"
+      role     = "Operator"
+      endpoint = "public"
+    },
+    {
+      name     = "mongodb_viewer"
+      role     = "Viewer"
+      endpoint = "public"
+    },
+    {
+      name     = "mongodb_editor"
+      role     = "Editor"
+      endpoint = "public"
+    }
+  ]
 }

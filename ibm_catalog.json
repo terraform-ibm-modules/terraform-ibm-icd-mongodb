@@ -290,6 +290,7 @@
             },
             {
               "key": "service_credential_names",
+              "type": "array",
               "custom_config": {
                 "type": "code_editor",
                 "grouping": "deployment",
@@ -666,6 +667,7 @@
             },
             {
               "key": "service_credential_names",
+              "type": "array",
               "custom_config": {
                 "type": "code_editor",
                 "grouping": "deployment",

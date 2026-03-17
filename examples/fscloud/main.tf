@@ -68,12 +68,28 @@ module "mongodb" {
   backup_encryption_key_crn = var.backup_encryption_key_crn
   backup_crn                = var.backup_crn
   mongodb_version           = var.mongodb_version
-  service_credential_names = {
-    "mongodb_admin" : "Administrator",
-    "mongodb_operator" : "Operator",
-    "mongodb_viewer" : "Viewer",
-    "mongodb_editor" : "Editor",
-  }
+  service_credential_names = [
+    {
+      name     = "mongodb_admin"
+      role     = "Administrator"
+      endpoint = "private"
+    },
+    {
+      name     = "mongodb_operator"
+      role     = "Operator"
+      endpoint = "private"
+    },
+    {
+      name     = "mongodb_viewer"
+      role     = "Viewer"
+      endpoint = "private"
+    },
+    {
+      name     = "mongodb_editor"
+      role     = "Editor"
+      endpoint = "private"
+    }
+  ]
   auto_scaling       = var.auto_scaling
   member_host_flavor = "b3c.4x16.encrypted"
   cbr_rules = [
