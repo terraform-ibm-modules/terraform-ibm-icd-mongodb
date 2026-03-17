@@ -32,22 +32,22 @@ module "database" {
     {
       name     = "mongodb_admin"
       role     = "Administrator"
-      endpoint = "public"
+      endpoint = "private"
     },
     {
       name     = "mongodb_operator"
       role     = "Operator"
-      endpoint = "public"
+      endpoint = "private"
     },
     {
       name     = "mongodb_viewer"
       role     = "Viewer"
-      endpoint = "public"
+      endpoint = "private"
     },
     {
       name     = "mongodb_editor"
       role     = "Editor"
-      endpoint = "public"
+      endpoint = "private"
     }
   ]
 }
