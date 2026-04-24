@@ -165,7 +165,7 @@ module "secrets_manager" {
 # Add a Secrets Group to the secret manager instance
 module "secrets_manager_secrets_group" {
   source               = "terraform-ibm-modules/secrets-manager-secret-group/ibm"
-  version              = "1.5.0"
+  version              = "1.5.1"
   region               = local.secrets_manager_region
   secrets_manager_guid = local.secrets_manager_guid
   #tfsec:ignore:general-secrets-no-plaintext-exposure
@@ -176,7 +176,7 @@ module "secrets_manager_secrets_group" {
 # Add service credentials to secret manager as a username/password secret type in the created secret group
 module "secrets_manager_service_credentials_user_pass" {
   source                  = "terraform-ibm-modules/secrets-manager-secret/ibm"
-  version                 = "1.10.0"
+  version                 = "1.10.1"
   for_each                = { for credential in local.service_credential_names : credential.name => credential }
   region                  = local.secrets_manager_region
   secrets_manager_guid    = local.secrets_manager_guid
@@ -191,7 +191,7 @@ module "secrets_manager_service_credentials_user_pass" {
 # Add MongoDB certificate to secret manager as a certificate secret type in the created secret group.
 module "secrets_manager_service_credentials_cert" {
   source                    = "terraform-ibm-modules/secrets-manager-secret/ibm"
-  version                   = "1.10.0"
+  version                   = "1.10.1"
   region                    = local.secrets_manager_region
   secrets_manager_guid      = local.secrets_manager_guid
   secret_group_id           = module.secrets_manager_secrets_group.secret_group_id
