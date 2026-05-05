@@ -132,7 +132,7 @@ module "icd_mongodb" {
   region              = var.region
   plan                = var.plan
   access_tags         = var.access_tags
-  tags                = var.resource_tags
+  resource_tags       = var.resource_tags
   deletion_protection = false
   auto_scaling        = var.auto_scaling
   # Example of how to use different KMS keys for data and backups
