@@ -49,7 +49,7 @@ variable "resource_tags" {
 variable "service_endpoints" {
   type        = string
   description = "Specify whether you want to enable the public or private endpoints on the instance. Supported values are 'public' or 'private'."
-  default     = "private"
+  default     = "public"
 
   validation {
     condition     = can(regex("^(public|private)$", var.service_endpoints))

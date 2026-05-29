@@ -107,9 +107,10 @@ func TestRunBasicGen2Example(t *testing.T) {
 		BestRegionYAMLPath: regionSelectionPath,
 		ResourceGroup:      resourceGroup,
 		TerraformVars: map[string]interface{}{ // Limited gen2 to Montreal and version 18
-			"region":          "ca-mon",
-			"plan":            "standard-gen2",
-			"mongodb_version": "8.0",
+			"region":            "ca-mon",
+			"plan":              "standard-gen2",
+			"mongodb_version":   "8.0",
+			"service_endpoints": "private",
 		},
 		CloudInfoService: sharedInfoSvc,
 	})
