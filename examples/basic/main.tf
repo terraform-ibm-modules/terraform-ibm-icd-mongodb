@@ -5,38 +5,41 @@ locals {
   gen2_host_flavor    = "bx3d.4x20"
   classic_host_flavor = "multitenant"
 
+  # mongodb does not support public-and-private
+  endpoint_type = var.service_endpoints
+
   gen2_service_credential_names = [
     {
       name     = "mongodb_manager"
       role     = "Manager"
-      endpoint = var.service_endpoints
+      endpoint = local.endpoint_type
     },
     {
       name     = "mongodb_writer"
       role     = "Writer"
-      endpoint = var.service_endpoints
+      endpoint = local.endpoint_type
     }
   ]
   classic_service_credential_names = [
     {
       name     = "mongodb_admin"
       role     = "Administrator"
-      endpoint = var.service_endpoints
+      endpoint = local.endpoint_type
     },
     {
       name     = "mongodb_operator"
       role     = "Operator"
-      endpoint = var.service_endpoints
+      endpoint = local.endpoint_type
     },
     {
       name     = "mongodb_viewer"
       role     = "Viewer"
-      endpoint = var.service_endpoints
+      endpoint = local.endpoint_type
     },
     {
       name     = "mongodb_editor"
       role     = "Editor"
-      endpoint = var.service_endpoints
+      endpoint = local.endpoint_type
     }
   ]
 }
