@@ -4,22 +4,22 @@
 
 output "id" {
   description = "MongoDB instance ID"
-  value       = ibm_database.mongodb.id
+  value       = can(ibm_database.mongodb.id) ? ibm_database.mongodb.id : null
 }
 
 output "version" {
   description = "MongoDB instance version"
-  value       = ibm_database.mongodb.version
+  value       = can(ibm_database.mongodb.version) ? ibm_database.mongodb.version : null
 }
 
 output "guid" {
   description = "MongoDB instance guid"
-  value       = ibm_database.mongodb.guid
+  value       = can(ibm_database.mongodb.guid) ? ibm_database.mongodb.guid : null
 }
 
 output "crn" {
   description = "MongoDB instance crn"
-  value       = ibm_database.mongodb.resource_crn
+  value       = can(ibm_database.mongodb.resource_crn) ? ibm_database.mongodb.resource_crn : null
 }
 
 output "service_credentials_json" {
@@ -41,26 +41,26 @@ output "cbr_rule_ids" {
 
 output "adminuser" {
   description = "Database admin user name"
-  value       = ibm_database.mongodb.adminuser
+  value       = can(ibm_database.mongodb.adminuser) ? ibm_database.mongodb.adminuser : null
 }
 
 output "hostname" {
   description = "Database connection hostname"
-  value       = data.ibm_database_connection.database_connection.mongodb[0].hosts[0].hostname
+  value       = can(data.ibm_database_connection.database_connection[0].mongodb[0].hosts[0].hostname) ? data.ibm_database_connection.database_connection[0].mongodb[0].hosts[0].hostname : null
 }
 
 output "member_hosts" {
   description = "Replica set member list of objects with hostnames and ports"
-  value       = data.ibm_database_connection.database_connection.mongodb[0].hosts
+  value       = can(data.ibm_database_connection.database_connection[0].mongodb[0].hosts) ? data.ibm_database_connection.database_connection[0].mongodb[0].hosts : null
 }
 
 output "port" {
   description = "Database connection port"
-  value       = data.ibm_database_connection.database_connection.mongodb[0].hosts[0].port
+  value       = can(data.ibm_database_connection.database_connection[0].mongodb[0].hosts[0].port) ? data.ibm_database_connection.database_connection[0].mongodb[0].hosts[0].port : null
 }
 
 output "certificate_base64" {
   description = "Database connection certificate"
-  value       = data.ibm_database_connection.database_connection.mongodb[0].certificate[0].certificate_base64
+  value       = can(data.ibm_database_connection.database_connection[0].mongodb[0].certificate[0].certificate_base64) ? data.ibm_database_connection.database_connection[0].mongodb[0].certificate[0].certificate_base64 : null
   sensitive   = true
 }
