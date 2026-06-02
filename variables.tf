@@ -21,8 +21,6 @@ variable "mongodb_version" {
     condition     = var.mongodb_version == null ? true : contains(local.icd_supported_versions, var.mongodb_version)
     error_message = "Unsupported mongodb_version '${var.mongodb_version == null ? "null" : var.mongodb_version}'. Supported versions: ${join(", ", local.icd_supported_versions)}"
   }
-
-  # Gen2 versions are different. Todo: add support for Gen2 validation
 }
 
 variable "region" {
