@@ -46,21 +46,21 @@ output "adminuser" {
 
 output "hostname" {
   description = "Database connection hostname"
-  value       = data.ibm_database_connection.database_connection.mongodb[0].hosts[0].hostname
+  value       = can(data.ibm_database_connection.database_connection[0].mongodb[0].hosts[0].hostname) ? data.ibm_database_connection.database_connection[0].mongodb[0].hosts[0].hostname : null
 }
 
 output "member_hosts" {
   description = "Replica set member list of objects with hostnames and ports"
-  value       = data.ibm_database_connection.database_connection.mongodb[0].hosts
+  value       = can(data.ibm_database_connection.database_connection[0].mongodb[0].hosts) ? data.ibm_database_connection.database_connection[0].mongodb[0].hosts : null
 }
 
 output "port" {
   description = "Database connection port"
-  value       = data.ibm_database_connection.database_connection.mongodb[0].hosts[0].port
+  value       = can(data.ibm_database_connection.database_connection[0].mongodb[0].hosts[0].port) ? data.ibm_database_connection.database_connection[0].mongodb[0].hosts[0].port : null
 }
 
 output "certificate_base64" {
   description = "Database connection certificate"
-  value       = data.ibm_database_connection.database_connection.mongodb[0].certificate[0].certificate_base64
+  value       = can(data.ibm_database_connection.database_connection[0].mongodb[0].certificate[0].certificate_base64) ? data.ibm_database_connection.database_connection[0].mongodb[0].certificate[0].certificate_base64 : null
   sensitive   = true
 }
