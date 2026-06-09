@@ -4,22 +4,22 @@
 
 output "id" {
   description = "MongoDB instance ID"
-  value       = can(ibm_database.mongodb.id) ? ibm_database.mongodb.id : null
+  value       = ibm_database.mongodb.id
 }
 
 output "version" {
   description = "MongoDB instance version"
-  value       = can(ibm_database.mongodb.version) ? ibm_database.mongodb.version : null
+  value       = ibm_database.mongodb.version
 }
 
 output "guid" {
   description = "MongoDB instance guid"
-  value       = can(ibm_database.mongodb.guid) ? ibm_database.mongodb.guid : null
+  value       = ibm_database.mongodb.guid
 }
 
 output "crn" {
   description = "MongoDB instance crn"
-  value       = can(ibm_database.mongodb.resource_crn) ? ibm_database.mongodb.resource_crn : null
+  value       = ibm_database.mongodb.resource_crn
 }
 
 output "service_credentials_json" {
@@ -41,7 +41,7 @@ output "cbr_rule_ids" {
 
 output "adminuser" {
   description = "Database admin user name"
-  value       = can(ibm_database.mongodb.adminuser) ? ibm_database.mongodb.adminuser : null
+  value       = ibm_database.mongodb.adminuser
 }
 
 output "hostname" {
