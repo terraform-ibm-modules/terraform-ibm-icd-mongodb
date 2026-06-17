@@ -37,10 +37,11 @@ variable "plan" {
   validation {
     condition = anytrue([
       var.plan == "standard",
+      var.plan == "standard-gen2",
       var.plan == "enterprise",
       var.plan == "enterprise-sharding",
     ])
-    error_message = "Only supported plans are standard , enterprise and enterprise-sharding"
+    error_message = "Only supported plans are standard, standard-gen2, enterprise and enterprise-sharding"
   }
 }
 
@@ -88,6 +89,11 @@ variable "admin_pass" {
   description = "The password for the database administrator. If the admin password is null then the admin user ID cannot be accessed. More users can be specified in a user block."
   default     = null
   sensitive   = true
+
+  validation {
+    condition     = local.is_classic || (local.is_gen2 && var.admin_pass == null)
+    error_message = "`admin_pass` is only supported for classic instances, remove `admin_pass` or select a classic `plan`."
+  }
 }
 
 variable "users" {
@@ -100,6 +106,11 @@ variable "users" {
   description = "A list of users that you want to create on the database. Multiple blocks are allowed. The user password must be in the range of 10-32 characters. Be warned that in most case using IAM service credentials (via the var.service_credential_names) is sufficient to control access to the MongoDB instance. This blocks creates native MongoDB database users, more info on that can be found here https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-user-management&interface=ui"
   default     = []
   sensitive   = true
+
+  validation {
+    condition     = local.is_classic || (local.is_gen2 && length(var.users) == 0)
+    error_message = "`users` is only supported for classic instances, remove `users` or select a classic `plan`."
+  }
 }
 
 variable "service_credential_names" {
@@ -112,8 +123,13 @@ variable "service_credential_names" {
   default     = []
 
   validation {
-    condition     = alltrue([for credential in var.service_credential_names : contains(["Administrator", "Operator", "Viewer", "Editor"], credential.role)])
-    error_message = "`service_credential_names` role must be one of the following: `Administrator`, `Operator`, `Viewer` or `Editor`."
+    condition     = local.is_classic || (local.is_gen2 && alltrue([for credential in var.service_credential_names : contains(["Manager", "Writer"], credential.role)]))
+    error_message = "`service_credential_names` role must be one of the following: `Manager` or `Writer` for Gen2 instances."
+  }
+
+  validation {
+    condition     = local.is_gen2 || (local.is_classic && alltrue([for credential in var.service_credential_names : contains(["Administrator", "Operator", "Viewer", "Editor"], credential.role)]))
+    error_message = "`service_credential_names` role must be one of the following: `Administrator`, `Operator`, `Viewer` or `Editor` for classic instances."
   }
 
   validation {
@@ -228,6 +244,11 @@ variable "auto_scaling" {
   })
   description = "Optional rules to allow the database to increase resources in response to usage. Only a single autoscaling block is allowed. Make sure you understand the effects of autoscaling, especially for production environments. See https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-autoscaling&interface=cli#autoscaling-considerations in the IBM Cloud Docs."
   default     = null
+
+  validation {
+    condition     = local.is_classic || (local.is_gen2 && var.auto_scaling == null)
+    error_message = "`auto_scaling` is only supported for classic instances, remove `auto_scaling` or select a classic `plan`."
+  }
 }
 
 ##############################################################
@@ -311,6 +332,11 @@ variable "backup_encryption_key_crn" {
     ])
     error_message = "Value must be the KMS key CRN from a Key Protect or Hyper Protect Crypto Services instance in one of the supported backup regions."
   }
+
+  validation {
+    condition     = local.is_classic || (local.is_gen2 && var.backup_encryption_key_crn == null)
+    error_message = "`backup_encryption_key_crn` is only supported for classic instances, remove `backup_encryption_key_crn` or select a classic `plan`."
+  }
 }
 
 variable "skip_iam_authorization_policy" {
@@ -368,7 +394,13 @@ variable "backup_crn" {
     ])
     error_message = "backup_crn must be null OR starts with 'crn:' and contains ':backup:'"
   }
+
+  validation {
+    condition     = local.is_classic || (local.is_gen2 && var.backup_crn == null)
+    error_message = "`backup_crn` is only supported for classic instances, remove `backup_crn` or select a classic `plan`."
+  }
 }
+
 ##############################################################
 # Point-In-Time Recovery (PITR)
 ##############################################################
@@ -387,10 +419,20 @@ variable "pitr_id" {
     condition     = var.pitr_id == null ? true : var.pitr_time != null
     error_message = "To use Point-In-Time Recovery (PITR), a value for var.pitr_time needs to be set when var.pitr_id is specified. Otherwise, unset var.pitr_id."
   }
+
+  validation {
+    condition     = local.is_classic || (local.is_gen2 && var.pitr_id == null)
+    error_message = "`pitr_id` is only supported for classic instances, either remove `pitr_id` or select a classic `plan`."
+  }
 }
 
 variable "pitr_time" {
   type        = string
   description = "(Optional) The timestamp in UTC format (%Y-%m-%dT%H:%M:%SZ) for any time in the last 7 days that you want to restore to. If empty string (\"\") is passed, earliest_point_in_time_recovery_time will be used as pitr_time. To retrieve the timestamp, run the command (ibmcloud cdb mongodb-enterprise earliest-pitr-timestamp <deployment name or CRN>). For more info on Point-in-time Recovery, see https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pitr&interface=ui"
   default     = null
+
+  validation {
+    condition     = local.is_classic || (local.is_gen2 && var.pitr_time == null)
+    error_message = "`pitr_time` is only supported for classic instances, remove `pitr_time` or select a classic `plan`."
+  }
 }
