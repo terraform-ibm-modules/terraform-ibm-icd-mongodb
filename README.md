@@ -52,6 +52,7 @@ To upgrade to a new major version see [Upgrading to a new major version](https:/
   <li><a href="./solutions">Deployable Architectures</a>
     <ul>
       <li><a href="./solutions/fully-configurable">Cloud automation for MongoDB (Fully configurable)</a></li>
+      <li><a href="./solutions/fully-configurable-gen2">Cloud automation for MongoDB (VPC(Gen2))</a></li>
     </ul>
   </li>
   <li><a href="#contributing">Contributing</a></li>
