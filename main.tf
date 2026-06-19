@@ -162,7 +162,7 @@ resource "time_sleep" "wait_for_backup_kms_authorization_policy" {
 ########################################################################################################################
 
 # Workaround:
-# Montreal does not have ICD classic endpoint, so module will default to Toronto. This stops the module erroring.
+# Montreal does not have ICD classic endpoint, so common-utilities module will default to Toronto. This stops the module erroring.
 module "available_versions" {
   source   = "terraform-ibm-modules/common-utilities/ibm//modules/icd-versions"
   version  = "1.8.0"
