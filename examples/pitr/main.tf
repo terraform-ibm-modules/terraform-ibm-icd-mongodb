@@ -19,7 +19,7 @@ module "mongo_db_pitr" {
   resource_group_id   = module.resource_group.resource_group_id
   name                = "${var.prefix}-mongo-pitr"
   region              = var.region
-  tags                = var.resource_tags
+  resource_tags       = var.resource_tags
   access_tags         = var.access_tags
   disk_mb             = 20480
   deletion_protection = false
