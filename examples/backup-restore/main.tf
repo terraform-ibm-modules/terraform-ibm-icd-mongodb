@@ -25,7 +25,7 @@ module "restored_icd_mongodb" {
   region              = var.region
   mongodb_version     = var.mongodb_version
   access_tags         = var.access_tags
-  tags                = var.resource_tags
+  resource_tags       = var.resource_tags
   member_host_flavor  = "multitenant"
   deletion_protection = false
   backup_crn          = data.ibm_database_backups.backup_database.backups[0].backup_id

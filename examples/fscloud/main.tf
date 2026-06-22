@@ -61,7 +61,7 @@ module "mongodb" {
   resource_group_id         = module.resource_group.resource_group_id
   name                      = "${var.prefix}-mongodb"
   region                    = var.region
-  tags                      = var.resource_tags
+  resource_tags             = var.resource_tags
   access_tags               = var.access_tags
   deletion_protection       = false
   kms_key_crn               = var.kms_key_crn
