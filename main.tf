@@ -32,14 +32,14 @@ locals {
 module "kms_key_crn_parser" {
   count   = local.parse_kms_key ? 1 : 0
   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
-  version = "1.6.1"
+  version = "1.8.0"
   crn     = var.kms_key_crn
 }
 
 module "backup_key_crn_parser" {
   count   = local.parse_backup_kms_key ? 1 : 0
   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
-  version = "1.6.1"
+  version = "1.8.0"
   crn     = local.backup_encryption_key_crn
 }
 
@@ -162,15 +162,14 @@ resource "time_sleep" "wait_for_backup_kms_authorization_policy" {
 ########################################################################################################################
 
 # Workaround:
-# Montreal does not have ICD classic endpoint, so default to Toronto. This stops the module erroring,
-# but it gets the classic versions and not the gen2 versions.
-# This MAY be wrong and result in an apply time failure IF the user specifies gen2 and an unsupported version.
-# ref: https://github.com/terraform-ibm-modules/terraform-ibm-common-utilities/issues/157
+# Montreal does not have ICD classic endpoint, so common-utilities module will default to Toronto. This stops the module erroring.
 module "available_versions" {
   source   = "terraform-ibm-modules/common-utilities/ibm//modules/icd-versions"
-  version  = "1.6.1"
-  region   = var.region == "ca-mon" ? "ca-tor" : var.region
+  version  = "1.8.0"
+  region   = var.region
   icd_type = "mongodb"
+  plan     = var.plan
+  service  = "databases-for-mongodb"
 }
 
 locals {
@@ -188,7 +187,7 @@ resource "ibm_database" "mongodb" {
   service_endpoints                    = var.service_endpoints
   deletion_protection                  = var.deletion_protection
   version_upgrade_skip_backup          = var.version_upgrade_skip_backup
-  tags                                 = var.tags
+  tags                                 = var.resource_tags
   adminpassword                        = var.admin_pass
   key_protect_key                      = var.kms_key_crn
   backup_encryption_key_crn            = local.backup_encryption_key_crn
@@ -311,7 +310,14 @@ resource "ibm_database" "mongodb" {
   }
 }
 
+# Check whether access tags are valid and exist in the account
+data "ibm_iam_access_tag" "access_tags" {
+  for_each = toset(var.access_tags)
+  name     = each.value
+}
+
 resource "ibm_resource_tag" "access_tag" {
+  depends_on  = [data.ibm_iam_access_tag.access_tags] # Force dependency on data source validation to ensure access_tags exist and are valid before use.
   count       = length(var.access_tags) == 0 ? 0 : 1
   resource_id = ibm_database.mongodb.resource_crn
   tags        = var.access_tags
