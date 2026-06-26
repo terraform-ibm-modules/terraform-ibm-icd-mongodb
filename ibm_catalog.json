@@ -53,7 +53,7 @@
       ],
       "flavors": [
         {
-          "label": "Fully configurable",
+          "label": "Fully configurable Gen 1 (Classic)",
           "name": "fully-configurable",
           "index": 1,
           "install_type": "fullstack",
@@ -478,13 +478,13 @@
           "ignore_readme": true
         },
         {
-          "label": "Fully configurable VPC (Gen2)",
+          "label": "Fully configurable Gen 2 (VPC)",
           "name": "fully-configurable-gen2",
           "index": 2,
           "install_type": "fullstack",
           "working_directory": "solutions/fully-configurable-gen2",
           "release_notes_url": "https://github.com/terraform-ibm-modules/terraform-ibm-icd-mongodb/releases",
-          "short_description": "Ideal for users who want flexibility with a reliable starting point for IBM Cloud Database on VPC (Gen2).",
+          "short_description": "Ideal for users who want flexibility with a reliable starting point for IBM Cloud Databases Gen 2 (VPC).",
           "iam_permissions": [
             {
               "role_crns": [
@@ -505,20 +505,13 @@
               ],
               "service_name": "kms",
               "notes": "[Optional] Editor access is required to create keys. It is required only if KMS encryption is enabled."
-            },
-            {
-              "role_crns": [
-                "crn:v1:bluemix:public:iam::::role:Editor"
-              ],
-              "service_name": "hs-crypto",
-              "notes": "[Optional] Editor access is required to create keys in HPCS. It is only required when using HPCS for encryption."
             }
           ],
           "architecture": {
             "features": [
               {
                 "title": " ",
-                "description": "Configured to use IBM Cloud Databases for VPC (Gen2) by default standards that can't be changed."
+                "description": "Configured to use IBM Cloud Databases Gen 2 (VPC) by default standards that can't be changed."
               }
             ],
             "diagrams": [
