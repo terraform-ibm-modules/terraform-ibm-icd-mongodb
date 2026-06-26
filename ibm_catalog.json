@@ -530,6 +530,20 @@
               "key": "ibmcloud_api_key"
             },
             {
+              "key": "provider_visibility",
+              "hidden": true,
+              "options": [
+                {
+                  "displayname": "private",
+                  "value": "private"
+                },
+                {
+                  "displayname": "public",
+                  "value": "public"
+                }
+              ]
+            },
+            {
               "key": "kms_encryption_enabled"
             },
             {
@@ -691,6 +705,20 @@
               ]
             },
             {
+              "key": "existing_secrets_manager_endpoint_type",
+              "hidden": true,
+              "options": [
+                {
+                  "displayname": "public",
+                  "value": "public"
+                },
+                {
+                  "displayname": "private",
+                  "value": "private"
+                }
+              ]
+            },
+            {
               "key": "skip_mongodb_secrets_manager_auth_policy"
             },
             {
@@ -714,6 +742,20 @@
                   "type": "regex",
                   "description": "The value provided for 'existing_kms_key_crn' is not valid.",
                   "value": "^__NULL__$|^crn:v\\d:(.*:){2}kms:(.*:)([aos]\\/[\\w_\\-]+):[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}:key:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              ]
+            },
+            {
+              "key": "kms_endpoint_type",
+              "hidden": true,
+              "options": [
+                {
+                  "displayname": "public",
+                  "value": "public"
+                },
+                {
+                  "displayname": "private",
+                  "value": "private"
                 }
               ]
             },
