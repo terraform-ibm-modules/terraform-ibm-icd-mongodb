@@ -4,67 +4,67 @@
 
 output "id" {
   description = "MongoDB instance id"
-  value       = module.mongodb.id
+  value       = local.mongodb_id
 }
 
 output "version" {
   description = "MongoDB instance version"
-  value       = module.mongodb.version
+  value       = local.mongodb_version
 }
 
 output "guid" {
   description = "MongoDB instance guid"
-  value       = module.mongodb.guid
+  value       = local.mongodb_guid
 }
 
 output "crn" {
   description = "MongoDB instance crn"
-  value       = module.mongodb.crn
+  value       = local.mongodb_crn
 }
 
 output "service_credentials_json" {
   description = "Service credentials json map"
-  value       = module.mongodb.service_credentials_json
+  value       = var.existing_mongodb_instance_crn != null ? null : module.mongodb[0].service_credentials_json
   sensitive   = true
 }
 
 output "service_credentials_object" {
   description = "Service credentials object"
-  value       = module.mongodb.service_credentials_object
+  value       = var.existing_mongodb_instance_crn != null ? null : module.mongodb[0].service_credentials_object
   sensitive   = true
 }
 
 output "hostname" {
   description = "MongoDB instance hostname"
-  value       = module.mongodb.hostname
+  value       = local.mongodb_hostname
 }
 
 output "port" {
   description = "MongoDB instance port"
-  value       = module.mongodb.port
+  value       = local.mongodb_port
 }
 
 output "next_steps_text" {
-  value       = module.mongodb.next_steps_text
+  value       = "Your IBM Cloud Databases Gen 2 (VPC) for MongoDB instance is ready. You can now take advantage of the latest MongoDB features: rich JSON documents, powerful query language, multi-document transactions, and authentic APIs. For more information, see [Databases for PostgreSQL Gen 2](https://cloud.ibm.com/docs/databases-for-mongodb-gen2?topic=databases-for-mongodb-gen2-provisioning&interface=ui)."
   description = "Next steps text"
 }
 
 output "next_step_primary_label" {
-  value       = module.mongodb.next_step_primary_label
+  value       = "Deployment Details"
   description = "Primary label"
 }
 
 output "next_step_primary_url" {
-  value       = module.mongodb.next_step_primary_url
+  value       = "https://cloud.ibm.com/services/databases-for-mongodb/${local.mongodb_crn}"
   description = "Primary URL"
 }
 
 output "next_step_secondary_label" {
-  value       = module.mongodb.next_step_secondary_label
+  value       = "Learn more about Databases for MongoDB"
   description = "Secondary label"
 }
 
 output "next_step_secondary_url" {
-  value       = module.mongodb.next_step_secondary_url
+  value       = "https://cloud.ibm.com/docs/databases-for-mongodb"
   description = "Secondary URL"
 }

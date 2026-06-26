@@ -50,7 +50,12 @@ variable "name" {
 variable "region" {
   description = "The region where you want to deploy your instance."
   type        = string
-  default     = "us-south"
+  default     = "ca-mon"
+
+  validation {
+    condition     = var.existing_mongodb_instance_crn != null && var.region != local.existing_mongodb_region ? false : true
+    error_message = "The region detected in the 'existing_mongodb_instance_crn' value must match the value of the 'region' input variable when passing an existing instance."
+  }
 }
 
 variable "existing_mongodb_instance_crn" {
@@ -68,7 +73,7 @@ variable "existing_mongodb_instance_crn" {
 }
 
 variable "mongodb_version" {
-  description = "The version of the Databases for Redis instance."
+  description = "The version of the Databases for MongoDB instance."
   type        = string
   default     = null
 }
@@ -202,7 +207,7 @@ variable "existing_kms_instance_crn" {
 
 variable "existing_kms_key_crn" {
   type        = string
-  description = "The CRN of a Key Protect encryption key to encrypt your data. By default this key is used for deployment data. If no value is passed a new key will be created in the instance specified in the `existing_kms_instance_crn` input. Bare in mind that backups encryption is only available in certain regions. See [Bring your own key for backups](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok) and [Using the HPCS Key for Backup encryption](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-hpcs#use-hpcs-backups)."
+  description = "The CRN of a Key Protect encryption key to encrypt your data. By default this key is used for deployment data. If no value is passed a new key will be created in the instance specified in the `existing_kms_instance_crn` input. Bare in mind that backups encryption is only available in certain regions. See [Bring your own key for backups](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok)."
   default     = null
 
   validation {
@@ -210,7 +215,7 @@ variable "existing_kms_key_crn" {
       var.existing_kms_key_crn == null,
       can(regex("^crn:v\\d:(.*:){2}kms:(.*:)([aos]\\/[\\w_\\-]+):[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}:key:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", var.existing_kms_key_crn))
     ])
-    error_message = "The value provided for 'existing_kms_key_crn’ is not valid."
+    error_message = "The value provided for 'existing_kms_key_crn' is not valid."
   }
 }
 
@@ -301,4 +306,41 @@ variable "skip_mongodb_secrets_manager_auth_policy" {
   type        = bool
   default     = false
   description = "Whether an IAM authorization policy is created for Secrets Manager instance to create a service credential secrets for Databases for MongoDB. If set to false, the Secrets Manager instance passed by the user is granted the Key Manager access to the MongoDB instance created by the Deployable Architecture. Set to `true` to use an existing policy. The value of this is ignored if any value for 'existing_secrets_manager_instance_crn' is not passed."
+}
+
+##############################################################
+# Endpoint Configuration
+##############################################################
+
+variable "provider_visibility" {
+  description = "Set the visibility value for the IBM terraform provider. Supported values are `public`, `private`, `public-and-private`. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/guides/custom-service-endpoints)."
+  type        = string
+  default     = "private"
+
+  validation {
+    condition     = contains(["public", "private", "public-and-private"], var.provider_visibility)
+    error_message = "Invalid visibility option. Allowed values are 'public', 'private', or 'public-and-private'."
+  }
+}
+
+variable "kms_endpoint_type" {
+  type        = string
+  description = "The type of endpoint to use for communicating with the Key Protect. Possible values: `public`, `private`. Applies only if `existing_kms_key_crn` is not specified."
+  default     = "private"
+
+  validation {
+    condition     = can(regex("^(public|private)$", var.kms_endpoint_type))
+    error_message = "The kms_endpoint_type value must be 'public' or 'private'."
+  }
+}
+
+variable "existing_secrets_manager_endpoint_type" {
+  type        = string
+  description = "The endpoint type to use if `existing_secrets_manager_instance_crn` is specified. Possible values: public, private."
+  default     = "private"
+
+  validation {
+    condition     = contains(["public", "private"], var.existing_secrets_manager_endpoint_type)
+    error_message = "Only \"public\" and \"private\" are allowed values for 'existing_secrets_endpoint_type'."
+  }
 }
