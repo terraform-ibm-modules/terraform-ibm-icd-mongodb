@@ -86,11 +86,10 @@ variable "plan" {
   validation {
     condition = anytrue([
       var.plan == "standard",
-      var.plan == "standard-gen2",
       var.plan == "enterprise",
       var.plan == "enterprise-sharding",
     ])
-    error_message = "Only supported plans are standard, standard-gen2, enterprise and enterprise-sharding"
+    error_message = "Only supported plans are standard , enterprise and enterprise-sharding"
   }
 }
 
@@ -485,12 +484,8 @@ variable "admin_pass_secrets_manager_secret_group" {
 
   validation {
     condition = (
-      local.is_gen2 || (
-        local.is_classic && (
-          var.existing_secrets_manager_instance_crn == null ||
-          var.admin_pass_secrets_manager_secret_group != null
-        )
-      )
+      var.existing_secrets_manager_instance_crn == null ||
+      var.admin_pass_secrets_manager_secret_group != null
     )
     error_message = "`admin_pass_secrets_manager_secret_group` is required when `existing_secrets_manager_instance_crn` is set."
   }
@@ -509,12 +504,8 @@ variable "admin_pass_secrets_manager_secret_name" {
 
   validation {
     condition = (
-      local.is_gen2 || (
-        local.is_classic && (
-          var.existing_secrets_manager_instance_crn == null ||
-          var.admin_pass_secrets_manager_secret_name != null
-        )
-      )
+      var.existing_secrets_manager_instance_crn == null ||
+      var.admin_pass_secrets_manager_secret_name != null
     )
     error_message = "`admin_pass_secrets_manager_secret_name` is required when `existing_secrets_manager_instance_crn` is set."
   }
