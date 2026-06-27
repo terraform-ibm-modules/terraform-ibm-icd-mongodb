@@ -193,7 +193,7 @@ variable "kms_encryption_enabled" {
 
 variable "existing_kms_instance_crn" {
   type        = string
-  description = "The CRN of a Key Protect instance. Required to create a new encryption key and key ring which will be used to encrypt both deployment data and backups. To use an existing key, pass a value for `existing_kms_key_crn`. Bare in mind that backups encryption is only available in certain regions. See [Bring your own key for backups](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok)."
+  description = "The CRN of a Key Protect instance. Required to create a new encryption key and key ring which will be used to encrypt both deployment data and backups. To use an existing key, pass a value for `existing_kms_key_crn`. Bear in mind that backups encryption is only available in certain regions. See [Bring your own key for backups](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok)."
   default     = null
 
   validation {
@@ -207,7 +207,7 @@ variable "existing_kms_instance_crn" {
 
 variable "existing_kms_key_crn" {
   type        = string
-  description = "The CRN of a Key Protect encryption key to encrypt your data. By default this key is used for deployment data. If no value is passed a new key will be created in the instance specified in the `existing_kms_instance_crn` input. Bare in mind that backups encryption is only available in certain regions. See [Bring your own key for backups](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok)."
+  description = "The CRN of a Key Protect encryption key to encrypt your data. By default this key is used for deployment data. If no value is passed a new key will be created in the instance specified in the `existing_kms_instance_crn` input. Bear in mind that backups encryption is only available in certain regions. See [Bring your own key for backups](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok)."
   default     = null
 
   validation {
