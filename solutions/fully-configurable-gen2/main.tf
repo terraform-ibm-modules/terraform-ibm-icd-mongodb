@@ -141,53 +141,56 @@ resource "time_sleep" "wait_for_authorization_policy" {
   create_duration = "30s"
 }
 
-# Create auth policy (scoped to exact KMS key for backups)
-resource "ibm_iam_authorization_policy" "backup_kms_policy" {
-  count                    = local.create_cross_account_kms_auth_policy ? 1 : 0
-  provider                 = ibm.kms
-  source_service_account   = local.account_id
-  source_service_name      = "databases-for-mongodb"
-  source_resource_group_id = module.resource_group.resource_group_id
-  roles                    = ["Reader", "Authorization Delegator"] # Authorization Delegator role required for backup encryption key
-  description              = "Allow all MongoDB instances in the resource group ${module.resource_group.resource_group_id} in the account ${local.account_id} to read the ${local.kms_service} key ${local.kms_key_id} from the instance GUID ${local.kms_instance_guid}"
-  resource_attributes {
-    name     = "serviceName"
-    operator = "stringEquals"
-    value    = local.kms_service
-  }
-  resource_attributes {
-    name     = "accountId"
-    operator = "stringEquals"
-    value    = local.kms_account_id
-  }
-  resource_attributes {
-    name     = "serviceInstance"
-    operator = "stringEquals"
-    value    = local.kms_instance_guid
-  }
-  resource_attributes {
-    name     = "resourceType"
-    operator = "stringEquals"
-    value    = "key"
-  }
-  resource_attributes {
-    name     = "resource"
-    operator = "stringEquals"
-    value    = local.kms_key_id
-  }
-  # Scope of policy now includes the key, so ensure to create new policy before
-  # destroying old one to prevent any disruption to every day services.
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+##################################################
+# Backup encryption is not yet supported in Gen2
+##################################################
+# # Create auth policy (scoped to exact KMS key for backups)
+# resource "ibm_iam_authorization_policy" "backup_kms_policy" {
+#   count                    = local.create_cross_account_kms_auth_policy ? 1 : 0
+#   provider                 = ibm.kms
+#   source_service_account   = local.account_id
+#   source_service_name      = "databases-for-mongodb"
+#   source_resource_group_id = module.resource_group.resource_group_id
+#   roles                    = ["Reader", "Authorization Delegator"] # Authorization Delegator role required for backup encryption key
+#   description              = "Allow all MongoDB instances in the resource group ${module.resource_group.resource_group_id} in the account ${local.account_id} to read the ${local.kms_service} key ${local.kms_key_id} from the instance GUID ${local.kms_instance_guid}"
+#   resource_attributes {
+#     name     = "serviceName"
+#     operator = "stringEquals"
+#     value    = local.kms_service
+#   }
+#   resource_attributes {
+#     name     = "accountId"
+#     operator = "stringEquals"
+#     value    = local.kms_account_id
+#   }
+#   resource_attributes {
+#     name     = "serviceInstance"
+#     operator = "stringEquals"
+#     value    = local.kms_instance_guid
+#   }
+#   resource_attributes {
+#     name     = "resourceType"
+#     operator = "stringEquals"
+#     value    = "key"
+#   }
+#   resource_attributes {
+#     name     = "resource"
+#     operator = "stringEquals"
+#     value    = local.kms_key_id
+#   }
+#   # Scope of policy now includes the key, so ensure to create new policy before
+#   # destroying old one to prevent any disruption to every day services.
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 
-# workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
-resource "time_sleep" "wait_for_backup_kms_authorization_policy" {
-  count           = local.create_cross_account_kms_auth_policy ? 1 : 0
-  depends_on      = [ibm_iam_authorization_policy.kms_policy]
-  create_duration = "30s"
-}
+# # workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
+# resource "time_sleep" "wait_for_backup_kms_authorization_policy" {
+#   count           = local.create_cross_account_kms_auth_policy ? 1 : 0
+#   depends_on      = [ibm_iam_authorization_policy.backup_kms_policy]
+#   create_duration = "30s"
+# }
 
 #######################################################################################################################
 # MongoDB
