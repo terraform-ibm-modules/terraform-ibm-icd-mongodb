@@ -1,0 +1,70 @@
+##############################################################################
+# Outputs
+##############################################################################
+
+output "id" {
+  description = "MongoDB instance id"
+  value       = local.mongodb_id
+}
+
+output "version" {
+  description = "MongoDB instance version"
+  value       = local.mongodb_version
+}
+
+output "guid" {
+  description = "MongoDB instance guid"
+  value       = local.mongodb_guid
+}
+
+output "crn" {
+  description = "MongoDB instance crn"
+  value       = local.mongodb_crn
+}
+
+output "service_credentials_json" {
+  description = "Service credentials json map"
+  value       = var.existing_mongodb_instance_crn != null ? null : module.mongodb[0].service_credentials_json
+  sensitive   = true
+}
+
+output "service_credentials_object" {
+  description = "Service credentials object"
+  value       = var.existing_mongodb_instance_crn != null ? null : module.mongodb[0].service_credentials_object
+  sensitive   = true
+}
+
+output "hostname" {
+  description = "MongoDB instance hostname"
+  value       = local.mongodb_hostname
+}
+
+output "port" {
+  description = "MongoDB instance port"
+  value       = local.mongodb_port
+}
+
+output "next_steps_text" {
+  value       = "Your IBM Cloud Databases Gen 2 (VPC) for MongoDB instance is ready. You can now take advantage of the latest MongoDB features: rich JSON documents, powerful query language, multi-document transactions, and authentic APIs."
+  description = "Next steps text"
+}
+
+output "next_step_primary_label" {
+  value       = "Deployment Details"
+  description = "Primary label"
+}
+
+output "next_step_primary_url" {
+  value       = "https://cloud.ibm.com/services/databases-for-mongodb/${local.mongodb_crn}"
+  description = "Primary URL"
+}
+
+output "next_step_secondary_label" {
+  value       = "Learn more about Databases for MongoDB"
+  description = "Secondary label"
+}
+
+output "next_step_secondary_url" {
+  value       = "https://cloud.ibm.com/docs/databases-for-mongodb-gen2"
+  description = "Secondary URL"
+}
