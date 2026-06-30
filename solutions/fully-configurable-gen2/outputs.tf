@@ -45,7 +45,7 @@ output "port" {
 }
 
 output "next_steps_text" {
-  value       = "Your IBM Cloud Databases Gen 2 (VPC) for MongoDB instance is ready. You can now take advantage of the latest MongoDB features: rich JSON documents, powerful query language, multi-document transactions, and authentic APIs. For more information, see [Databases for PostgreSQL Gen 2](https://cloud.ibm.com/docs/databases-for-mongodb-gen2?topic=databases-for-mongodb-gen2-provisioning&interface=ui)."
+  value       = "Your IBM Cloud Databases Gen 2 (VPC) for MongoDB instance is ready. You can now take advantage of the latest MongoDB features: rich JSON documents, powerful query language, multi-document transactions, and authentic APIs."
   description = "Next steps text"
 }
 
@@ -65,6 +65,6 @@ output "next_step_secondary_label" {
 }
 
 output "next_step_secondary_url" {
-  value       = "https://cloud.ibm.com/docs/databases-for-mongodb"
+  value       = "https://cloud.ibm.com/docs/databases-for-mongodb-gen2"
   description = "Secondary URL"
 }
