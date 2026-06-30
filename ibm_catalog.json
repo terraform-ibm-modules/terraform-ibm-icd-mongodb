@@ -592,11 +592,11 @@
             {
               "key": "mongodb_version",
               "required": true,
-              "default_value": "18",
+              "default_value": "8.0",
               "options": [
                 {
-                  "displayname": "18",
-                  "value": "18"
+                  "displayname": "8.0",
+                  "value": "8.0"
                 }
               ]
             },
