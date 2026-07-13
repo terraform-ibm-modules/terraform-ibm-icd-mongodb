@@ -73,7 +73,7 @@
                 "crn:v1:bluemix:public:iam::::role:Editor"
               ],
               "service_name": "databases-for-mongodb",
-              "notes": "Required to configure a Databases for MongoDB instance."
+              "notes": "Required to configure an instance of Databases for MongoDB."
             },
             {
               "role_crns": [
@@ -499,7 +499,7 @@
                 "crn:v1:bluemix:public:iam::::role:Editor"
               ],
               "service_name": "databases-for-mongodb",
-              "notes": "Required to configure a Databases for MongoDB instance."
+              "notes": "Required to configure an instance of Databases for MongoDB."
             },
             {
               "role_crns": [
