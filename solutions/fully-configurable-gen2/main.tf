@@ -242,7 +242,7 @@ module "mongodb" {
   resource_group_id                 = module.resource_group.resource_group_id
   name                              = "${local.prefix}${var.name}"
   region                            = var.region
-  plan                              = "standard-gen2" # This is the only gen2 plan available
+  plan                              = var.plan
   mongodb_version                   = var.mongodb_version
   skip_iam_authorization_policy     = var.kms_encryption_enabled ? var.skip_mongodb_kms_auth_policy : true
   use_ibm_owned_encryption_key      = local.use_ibm_owned_encryption_key
