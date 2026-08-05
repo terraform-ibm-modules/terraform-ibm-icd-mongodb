@@ -119,16 +119,20 @@ variable "member_disk_mb" {
 
 variable "member_host_flavor" {
   type        = string
-  description = "The host flavor per member. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/database#host_flavor)."
+  description = "The host flavor per member. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/database#host_flavor). Not applicable for `enterprise-sharding-gen2`, which is multitenant — set to `null` when using that plan."
   default     = "bx3d.4x20"
-  # Prevent null or "", require a machine type
+  nullable    = true
   validation {
-    condition     = (length(var.member_host_flavor) > 0)
-    error_message = "Member host flavor must be specified. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/database#host_flavor)."
+    condition     = var.member_host_flavor == null || can(regex(".+", var.member_host_flavor))
+    error_message = "Member host flavor must be specified or null. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/database#host_flavor)."
   }
   validation {
-    condition     = (length(var.member_host_flavor) > 0) && var.member_host_flavor != "multitenant"
+    condition     = var.member_host_flavor == null || var.member_host_flavor != "multitenant"
     error_message = "Shared compute, `multitenant`, is not supported for Gen2. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/database#host_flavor)."
+  }
+  validation {
+    condition     = !(var.plan == "enterprise-sharding-gen2" && var.member_host_flavor != null)
+    error_message = "`member_host_flavor` must be null for `enterprise-sharding-gen2` — this plan is multitenant and the broker rejects a host flavor value."
   }
 }
 

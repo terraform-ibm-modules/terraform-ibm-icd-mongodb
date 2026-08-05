@@ -252,10 +252,10 @@ module "mongodb" {
   use_default_backup_encryption_key = false # Not supported by gen2
   access_tags                       = var.access_tags
   resource_tags                     = var.resource_tags
-  admin_pass                        = null # Not supported by gen2
-  users                             = []   # Not supported by gen2
-  members                           = var.members
-  member_host_flavor                = var.member_host_flavor
+  admin_pass                        = null                                                                   # Not supported by gen2
+  users                             = []                                                                     # Not supported by gen2
+  members                           = var.plan == "enterprise-sharding-gen2" ? null : var.members            # members fixed at 3 by plan, broker rejects the field
+  member_host_flavor                = var.plan == "enterprise-sharding-gen2" ? null : var.member_host_flavor # multitenant plan, broker rejects host_flavor
   memory_mb                         = var.member_memory_mb
   disk_mb                           = var.member_disk_mb
   cpu_count                         = var.member_cpu_count

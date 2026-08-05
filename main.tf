@@ -247,22 +247,31 @@ resource "ibm_database" "mongodb" {
     }
   }
 
-  ## This block is for if host_flavor IS NOT set
+  ## This block is for if host_flavor IS NOT set (classic only — memory/cpu not valid in Gen2)
   dynamic "group" {
     for_each = !local.host_flavor_set && var.backup_crn == null ? [1] : []
     content {
       group_id = "member" # Only member type is allowed for IBM Cloud Databases
-      memory {
-        allocation_mb = var.memory_mb
+      dynamic "memory" {
+        for_each = local.is_classic ? [1] : []
+        content {
+          allocation_mb = var.memory_mb
+        }
       }
       disk {
         allocation_mb = var.disk_mb
       }
-      cpu {
-        allocation_count = var.cpu_count
+      dynamic "cpu" {
+        for_each = local.is_classic ? [1] : []
+        content {
+          allocation_count = var.cpu_count
+        }
       }
-      members {
-        allocation_count = var.members
+      dynamic "members" {
+        for_each = var.members != null ? [1] : []
+        content {
+          allocation_count = var.members
+        }
       }
     }
   }
