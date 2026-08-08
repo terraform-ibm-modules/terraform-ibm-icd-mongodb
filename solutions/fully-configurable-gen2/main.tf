@@ -95,13 +95,12 @@ locals {
 
 # Create auth policy (scoped to exact KMS key)
 resource "ibm_iam_authorization_policy" "kms_policy" {
-  count                    = local.create_cross_account_kms_auth_policy ? 1 : 0
-  provider                 = ibm.kms
-  source_service_account   = local.account_id
-  source_service_name      = "databases-for-mongodb"
-  source_resource_group_id = module.resource_group.resource_group_id
-  roles                    = ["Reader", "Authorization Delegator"]
-  description              = "Allow all MongoDB instances in the resource group ${module.resource_group.resource_group_id} in the account ${local.account_id} to read the ${local.kms_service} key ${local.kms_key_id} from the instance GUID ${local.kms_instance_guid}"
+  count                  = local.create_cross_account_kms_auth_policy ? 1 : 0
+  provider               = ibm.kms
+  source_service_account = local.account_id
+  source_service_name    = "databases-for-mongodb"
+  roles                  = ["Reader", "Authorization Delegator"]
+  description            = "Allow all MongoDB instances in the resource group ${module.resource_group.resource_group_id} in the account ${local.account_id} to read the ${local.kms_service} key ${local.kms_key_id} from the instance GUID ${local.kms_instance_guid}"
   resource_attributes {
     name     = "serviceName"
     operator = "stringEquals"
@@ -252,10 +251,10 @@ module "mongodb" {
   use_default_backup_encryption_key = false # Not supported by gen2
   access_tags                       = var.access_tags
   resource_tags                     = var.resource_tags
-  admin_pass                        = null                                                                   # Not supported by gen2
-  users                             = []                                                                     # Not supported by gen2
-  members                           = var.plan == "enterprise-sharding-gen2" ? null : var.members            # members fixed at 3 by plan, broker rejects the field
-  member_host_flavor                = var.plan == "enterprise-sharding-gen2" ? null : var.member_host_flavor # multitenant plan, broker rejects host_flavor
+  admin_pass                        = null # Not supported by gen2
+  users                             = []   # Not supported by gen2
+  members                           = var.members
+  member_host_flavor                = var.member_host_flavor
   memory_mb                         = var.member_memory_mb
   disk_mb                           = var.member_disk_mb
   cpu_count                         = var.member_cpu_count

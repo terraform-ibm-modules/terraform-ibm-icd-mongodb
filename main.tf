@@ -70,7 +70,7 @@ locals {
 resource "ibm_iam_authorization_policy" "kms_policy" {
   count                    = local.create_kms_auth_policy
   source_service_name      = "databases-for-mongodb"
-  source_resource_group_id = var.resource_group_id
+  source_resource_group_id = local.is_classic ? var.resource_group_id : null
   roles                    = ["Reader", "Authorization Delegator"] # Authorization Delegator role required for backup encryption key
   description              = "Allow all MongoDB instances in the resource group ${var.resource_group_id} to read the ${local.kms_service} key ${local.kms_key_id} from the instance GUID ${local.kms_key_instance_guid}"
   resource_attributes {
@@ -247,31 +247,22 @@ resource "ibm_database" "mongodb" {
     }
   }
 
-  ## This block is for if host_flavor IS NOT set (classic only — memory/cpu not valid in Gen2)
+  ## This block is for if host_flavor IS NOT set
   dynamic "group" {
     for_each = !local.host_flavor_set && var.backup_crn == null ? [1] : []
     content {
       group_id = "member" # Only member type is allowed for IBM Cloud Databases
-      dynamic "memory" {
-        for_each = local.is_classic ? [1] : []
-        content {
-          allocation_mb = var.memory_mb
-        }
+      memory {
+        allocation_mb = var.memory_mb
       }
       disk {
         allocation_mb = var.disk_mb
       }
-      dynamic "cpu" {
-        for_each = local.is_classic ? [1] : []
-        content {
-          allocation_count = var.cpu_count
-        }
+      cpu {
+        allocation_count = var.cpu_count
       }
-      dynamic "members" {
-        for_each = var.members != null ? [1] : []
-        content {
-          allocation_count = var.members
-        }
+      members {
+        allocation_count = var.members
       }
     }
   }
