@@ -120,7 +120,7 @@ variable "member_disk_mb" {
 variable "member_host_flavor" {
   type        = string
   description = "The host flavor per member. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/database#host_flavor)."
-  default     = "bx3d.4x20"
+  default     = "bx3d.8x40"
   # Prevent null or "", require a machine type
   validation {
     condition     = (length(var.member_host_flavor) > 0)
