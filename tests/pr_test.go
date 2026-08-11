@@ -298,7 +298,6 @@ func TestRunFullyConfigurableGen2SolutionSchematics(t *testing.T) {
 		{Name: "existing_secrets_manager_instance_crn", Value: permanentResources["secretsManagerCRN"], DataType: "string"},
 		{Name: "kms_encryption_enabled", Value: true, DataType: "bool"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["kp_dedicated_us_south_crn"], DataType: "string"},
-		{Name: "mongodb_version", Value: "8.0", DataType: "string"}, // Always lock this test into the latest supported MongoDB version
 	}
 
 	err := sharedInfoSvc.WithNewResourceGroup(uniqueResourceGroup, func() error {
