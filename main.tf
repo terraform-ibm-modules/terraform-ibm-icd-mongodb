@@ -163,21 +163,6 @@ resource "time_sleep" "wait_for_backup_kms_authorization_policy" {
 # MongoDB instance
 ########################################################################################################################
 
-# Workaround:
-# Montreal does not have ICD classic endpoint, so common-utilities module will default to Toronto. This stops the module erroring.
-module "available_versions" {
-  source   = "terraform-ibm-modules/common-utilities/ibm//modules/icd-versions"
-  version  = "1.9.0"
-  region   = var.region
-  icd_type = "mongodb"
-  plan     = var.plan
-  service  = "databases-for-mongodb"
-}
-
-locals {
-  icd_supported_versions = module.available_versions.supported_versions
-}
-
 resource "ibm_database" "mongodb" {
   depends_on                           = [time_sleep.wait_for_authorization_policy, time_sleep.wait_for_backup_kms_authorization_policy]
   name                                 = var.name

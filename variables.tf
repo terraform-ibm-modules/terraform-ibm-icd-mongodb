@@ -16,11 +16,6 @@ variable "mongodb_version" {
   type        = string
   description = "The version of the MongoDB to provision. If no value passed, the current ICD preferred version is used. For our version policy, see https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-versioning-policy for more details"
   default     = null
-
-  validation {
-    condition     = var.mongodb_version == null ? true : contains(local.icd_supported_versions, var.mongodb_version)
-    error_message = "Unsupported mongodb_version '${var.mongodb_version == null ? "null" : var.mongodb_version}'. Supported versions: ${join(", ", local.icd_supported_versions)}"
-  }
 }
 
 variable "region" {
