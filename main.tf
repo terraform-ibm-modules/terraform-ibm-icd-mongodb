@@ -68,9 +68,11 @@ locals {
 
 # Create IAM Authorization Policies to allow MongoDB to access KMS for the encryption key
 resource "ibm_iam_authorization_policy" "kms_policy" {
-  count                    = local.create_kms_auth_policy
-  source_service_name      = "databases-for-mongodb"
-  source_resource_group_id = var.resource_group_id
+  count               = local.create_kms_auth_policy
+  source_service_name = "databases-for-mongodb"
+  # See issue,https://github.com/terraform-ibm-modules/terraform-ibm-icd-postgresql/issues/885
+  # source_resource_group_id = var.resource_group_id
+  source_resource_group_id = local.is_classic ? var.resource_group_id : null
   roles                    = ["Reader", "Authorization Delegator"] # Authorization Delegator role required for backup encryption key
   description              = "Allow all MongoDB instances in the resource group ${var.resource_group_id} to read the ${local.kms_service} key ${local.kms_key_id} from the instance GUID ${local.kms_key_instance_guid}"
   resource_attributes {
@@ -378,8 +380,8 @@ locals {
     credentials = {
       for service_credential in ibm_resource_key.service_credentials :
       service_credential["name"] => {
-        username = can(service_credential.credentials["connection.mongodb.authentication.username"]) ? service_credential.credentials["connection.mongodb.authentication.username"] : null
-        password = can(service_credential.credentials["connection.mongodb.authentication.password"]) ? service_credential.credentials["connection.mongodb.authentication.password"] : null
+        username = local.is_gen2 ? service_credential.credentials["username"] : service_credential.credentials["connection.mongodb.authentication.username"]
+        password = local.is_gen2 ? service_credential.credentials["password"] : service_credential.credentials["connection.mongodb.authentication.password"]
       }
     }
   } : null
