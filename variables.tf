@@ -35,8 +35,9 @@ variable "plan" {
       var.plan == "standard-gen2",
       var.plan == "enterprise",
       var.plan == "enterprise-sharding",
+      var.plan == "enterprise-sharding-gen2",
     ])
-    error_message = "Only supported plans are standard, standard-gen2, enterprise and enterprise-sharding"
+    error_message = "Only supported plans are standard, standard-gen2, enterprise, enterprise-sharding and enterprise-sharding-gen2"
   }
 }
 

@@ -78,6 +78,17 @@ variable "mongodb_version" {
   default     = null
 }
 
+variable "plan" {
+  type        = string
+  description = "The name of the IBM Cloud Databases Gen 2 service plan to use for the MongoDB instance. Supported Gen 2 plans are `standard-gen2` and `enterprise-sharding-gen2`."
+  default     = "standard-gen2"
+
+  validation {
+    condition     = contains(["standard-gen2", "enterprise-sharding-gen2"], var.plan)
+    error_message = "Only supported Gen 2 plans are `standard-gen2` and `enterprise-sharding-gen2`."
+  }
+}
+
 ##############################################################################
 # ICD hosting model properties
 ##############################################################################

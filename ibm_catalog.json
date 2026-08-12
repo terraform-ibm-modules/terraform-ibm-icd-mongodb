@@ -603,6 +603,19 @@
               ]
             },
             {
+              "key": "plan",
+              "options": [
+                {
+                  "displayname": "Standard Gen 2",
+                  "value": "standard-gen2"
+                },
+                {
+                  "displayname": "Enterprise Sharding Gen 2",
+                  "value": "enterprise-sharding-gen2"
+                }
+              ]
+            },
+            {
               "key": "name"
             },
             {
