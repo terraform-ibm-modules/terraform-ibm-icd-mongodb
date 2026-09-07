@@ -536,7 +536,7 @@ func TestRunRestoredDBGen2Example(t *testing.T) {
 		ResourceGroup: resourceGroup,
 		TerraformVars: map[string]interface{}{
 			"plan":       "standard-gen2",
-			"backup_crn": "crn:v1:bluemix:public:databases-for-mongodb:eu-de:a/abac0df06b644a9cabc6e44f55b3880e:0d459b7a-2896-444a-99a7-5bade08186fd:backup:ded08ca3-7b1e-4ee6-95ae-9f1fcaa68cf3",
+			"backup_crn": "crn:v1:bluemix:public:databases-for-mongodb:eu-de:a/abac0df06b644a9cabc6e44f55b3880e:0d459b7a-2896-444a-99a7-5bade08186fd:backup:ded08ca3-7b1e-4ee6-95ae-9f1fcaa68cf3", // Hardcode the backup_crn of permanent resource. Reference issue: https://github.com/IBM-Cloud/terraform-provider-ibm/issues/6918
 		},
 		CloudInfoService: sharedInfoSvc,
 	})
