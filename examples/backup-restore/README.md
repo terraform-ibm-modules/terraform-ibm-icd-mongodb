@@ -9,7 +9,11 @@
 </p>
 <!-- END SCHEMATICS DEPLOY HOOK -->
 
-This example provides an end-to-end executable flow of how a Mongo DB instance can be created from a backup instance. This example uses the IBM Cloud terraform provider to:
+This example provides an end-to-end executable flow of how a MongoDB instance can be restored from a backup. It supports both classic and Gen2 plans. This example uses the IBM Cloud Terraform provider to:
 
 - Create a new resource group if one is not passed in.
-- Create a restored ICD Mongo database instance pointing to the latest backup of the existing Mongo database instance crn passed.
+- Create a restored ICD MongoDB instance pointing to the latest backup of the existing MongoDB instance CRN passed.
+
+To restore a **classic** instance, use a classic plan (e.g. `standard` or `enterprise`). The `member_host_flavor` is automatically set to `multitenant`.
+
+To restore a **Gen2** instance, set `plan` to a Gen2 plan (e.g. `standard-gen2` or `enterprise-gen2`). The `member_host_flavor` is automatically set to a dedicated host type (`bx3d.4x20`). The source backup CRN must also originate from a Gen2 instance.

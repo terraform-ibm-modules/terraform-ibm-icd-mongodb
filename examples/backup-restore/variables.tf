@@ -22,6 +22,12 @@ variable "resource_group" {
   default     = null
 }
 
+variable "plan" {
+  type        = string
+  description = "The name of the service plan that you choose for your MongoDB instance. Use a `-gen2` plan (e.g. `standard-gen2`) to restore a Gen2 backup."
+  default     = "standard"
+}
+
 variable "access_tags" {
   type        = list(string)
   description = "A list of access tags to apply to the MongoDB instance created by the module, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial for more details"
@@ -42,6 +48,20 @@ variable "resource_tags" {
 
 variable "existing_database_crn" {
   type        = string
-  description = "The existing CRN of a mongoDB instance to fetch the latest backup crn."
+  description = "The existing CRN of a classic MongoDB instance to fetch the latest backup CRN."
   default     = null
+}
+
+variable "backup_crn" {
+  type        = string
+  description = "The CRN of a backup resource to restore from. Required when restoring a Gen2 instance. A backup CRN is in the format crn:v1:<…>:backup:."
+  default     = null
+
+  validation {
+    condition = anytrue([
+      var.backup_crn == null,
+      can(regex("^crn:.*:backup:", var.backup_crn))
+    ])
+    error_message = "backup_crn must be null OR starts with 'crn:' and contains ':backup:'"
+  }
 }

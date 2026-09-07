@@ -799,6 +799,16 @@
               "key": "key_name"
             },
             {
+              "key": "backup_crn",
+              "value_constraints": [
+                {
+                  "type": "regex",
+                  "description": "The value provided for 'backup_crn' is not valid.",
+                  "value": "^__NULL__$|^crn:v\\d:(.*:){2}databases-for-mongodb:(.*:)([aos]\\/[\\w_\\-]+):[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}:backup:[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$"
+                }
+              ]
+            },
+            {
               "key": "skip_mongodb_kms_auth_policy"
             },
             {

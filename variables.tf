@@ -397,11 +397,6 @@ variable "backup_crn" {
     ])
     error_message = "backup_crn must be null OR starts with 'crn:' and contains ':backup:'"
   }
-
-  validation {
-    condition     = local.is_classic || (local.is_gen2 && var.backup_crn == null)
-    error_message = "`backup_crn` is only supported for classic instances, remove `backup_crn` or select a classic `plan`."
-  }
 }
 
 ##############################################################

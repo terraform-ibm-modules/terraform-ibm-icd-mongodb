@@ -262,7 +262,7 @@ module "mongodb" {
   cpu_count                         = var.member_cpu_count
   auto_scaling                      = null # Not supported by gen2
   service_credential_names          = var.service_credential_names
-  backup_crn                        = null # Not supported by gen2
+  backup_crn                        = var.backup_crn
   service_endpoints                 = "private"
   deletion_protection               = var.deletion_protection
   version_upgrade_skip_backup       = false
