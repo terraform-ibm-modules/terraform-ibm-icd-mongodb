@@ -126,7 +126,7 @@ func GetVersionsGen2(region string, plan string) (string, string) {
 }
 
 func TestRunBasicGen2Example(t *testing.T) {
-	t.Parallel()
+	// t.Parallel() [Commenting out the parallel test. Uncomment once the issue https://github.com/terraform-ibm-modules/terraform-ibm-icd-postgresql/issues/885 is resolved]
 
 	latestVersion, _ := GetVersionsGen2("ca-mon", "standard-gen2")
 	fmt.Println("latestVersion is ", latestVersion)
