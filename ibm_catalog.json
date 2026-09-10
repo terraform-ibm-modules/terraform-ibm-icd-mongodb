@@ -662,6 +662,9 @@
               "key": "members"
             },
             {
+              "key": "shards"
+            },
+            {
               "key": "member_memory_mb"
             },
             {
