@@ -393,9 +393,10 @@ variable "backup_crn" {
   validation {
     condition = anytrue([
       var.backup_crn == null,
-      can(regex("^crn:.*:backup:", var.backup_crn))
+      can(regex("^crn:.*:backup:", var.backup_crn)),
+      can(regex("^crn:.*:databases-independent-backups:", var.backup_crn))
     ])
-    error_message = "backup_crn must be null OR starts with 'crn:' and contains ':backup:'"
+    error_message = "backup_crn must be null, OR a classic backup CRN containing ':backup:', OR a Gen2 independent backup CRN containing ':databases-independent-backups:'"
   }
 }
 

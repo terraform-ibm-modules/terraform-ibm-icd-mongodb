@@ -17,7 +17,6 @@ module "resource_group" {
 }
 
 data "ibm_database_backups" "backup_database" {
-  count         = local.is_gen2 ? 0 : 1
   deployment_id = var.existing_database_crn
 }
 
@@ -35,6 +34,7 @@ module "restored_icd_mongodb" {
   access_tags         = var.access_tags
   resource_tags       = var.resource_tags
   member_host_flavor  = local.is_gen2 ? local.gen2_host_flavor : local.classic_host_flavor
+  disk_mb             = var.disk_mb
   deletion_protection = false
-  backup_crn          = local.is_gen2 ? var.backup_crn : data.ibm_database_backups.backup_database[0].backups[0].backup_id
+  backup_crn          = data.ibm_database_backups.backup_database.backups[0].backup_id
 }

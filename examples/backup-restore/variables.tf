@@ -28,6 +28,14 @@ variable "plan" {
   default     = "standard"
 }
 
+variable "disk_mb" {
+  type        = number
+  description = "The disk that is allocated per member. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-pricing#mongodb-scale-member)"
+  default     = 10240
+  # Validation is done in the Terraform plan phase by the IBM provider, so no need to add extra validation here.
+}
+
+
 variable "access_tags" {
   type        = list(string)
   description = "A list of access tags to apply to the MongoDB instance created by the module, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial for more details"
@@ -50,18 +58,4 @@ variable "existing_database_crn" {
   type        = string
   description = "The existing CRN of a classic MongoDB instance to fetch the latest backup CRN."
   default     = null
-}
-
-variable "backup_crn" {
-  type        = string
-  description = "The CRN of a backup resource to restore from. Required when restoring a Gen2 instance. A backup CRN is in the format crn:v1:<…>:backup:."
-  default     = null
-
-  validation {
-    condition = anytrue([
-      var.backup_crn == null,
-      can(regex("^crn:.*:backup:", var.backup_crn))
-    ])
-    error_message = "backup_crn must be null OR starts with 'crn:' and contains ':backup:'"
-  }
 }
