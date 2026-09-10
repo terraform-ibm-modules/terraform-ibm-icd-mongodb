@@ -260,6 +260,7 @@ module "mongodb" {
   memory_mb                         = var.member_memory_mb
   disk_mb                           = var.member_disk_mb
   cpu_count                         = var.member_cpu_count
+  shards                            = var.shards
   auto_scaling                      = null # Not supported by gen2
   service_credential_names          = var.service_credential_names
   backup_crn                        = null # Not supported by gen2

@@ -99,6 +99,13 @@ variable "members" {
   default     = 2
 }
 
+variable "shards" {
+  type        = number
+  description = "The number of shards to allocate for the MongoDB Enterprise Edition Server (EES) Gen2 instance. Supported only for the `enterprise-sharding-gen2` plan. Default is 1. Supported range is 1–3. Shard count can be increased post-provisioning but cannot be decreased."
+  default     = null
+  # Validation is done in the root module
+}
+
 variable "member_memory_mb" {
   type        = number
   description = "The memory per member that is allocated. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)"
