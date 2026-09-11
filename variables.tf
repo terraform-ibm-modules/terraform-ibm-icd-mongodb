@@ -398,6 +398,24 @@ variable "backup_crn" {
     ])
     error_message = "backup_crn must be null, OR a classic backup CRN containing ':backup:', OR a Gen2 independent backup CRN containing ':databases-independent-backups:'"
   }
+
+  validation {
+    condition = anytrue([
+      var.backup_crn == null,
+      !can(regex("^crn:.*:databases-independent-backups:", var.backup_crn)),
+      can(regex("-gen2$", var.plan))
+    ])
+    error_message = "A Gen2 independent backup CRN (containing ':databases-independent-backups:') can only be used with a Gen2 plan (plan must end with '-gen2')."
+  }
+
+  validation {
+    condition = anytrue([
+      var.backup_crn == null,
+      !can(regex("^crn:.*:backup:", var.backup_crn)),
+      !can(regex("-gen2$", var.plan))
+    ])
+    error_message = "A classic backup CRN (containing ':backup:') cannot be used with a Gen2 plan."
+  }
 }
 
 ##############################################################

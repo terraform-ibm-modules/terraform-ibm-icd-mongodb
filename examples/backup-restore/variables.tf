@@ -56,6 +56,6 @@ variable "resource_tags" {
 
 variable "existing_database_crn" {
   type        = string
-  description = "The existing CRN of a classic MongoDB instance to fetch the latest backup CRN."
+  description = "The existing CRN of a MongoDB instance to fetch the latest backup CRN."
   default     = null
 }
