@@ -12,8 +12,25 @@
 This example provides an end-to-end executable flow of how a MongoDB instance can be restored from a backup. It supports both classic and Gen2 plans. This example uses the IBM Cloud Terraform provider to:
 
 - Create a new resource group if one is not passed in.
-- Create a restored ICD MongoDB instance pointing to the latest backup of the existing MongoDB instance CRN passed.
+- Look up the latest available backup of an existing MongoDB instance using the `ibm_database_backups` data source.
+- Create a restored ICD MongoDB instance from that backup.
 
-To restore a **classic** instance, use a classic plan (e.g. `standard` or `enterprise`). The `member_host_flavor` is automatically set to `multitenant`.
+## Classic restore
 
-To restore a **Gen2** instance, set `plan` to a Gen2 plan (e.g. `standard-gen2` or `enterprise-gen2`). The `member_host_flavor` is automatically set to a dedicated host type (`bx3d.4x20`). The source backup CRN must also originate from a Gen2 instance.
+Set `plan` to a classic plan (e.g. `standard` or `enterprise`) and provide the CRN of an existing **classic** MongoDB instance via `existing_database_crn`. The `member_host_flavor` is automatically set to `multitenant`.
+
+## Gen2 restore
+
+Set `plan` to a Gen2 plan (e.g. `standard-gen2`) and provide the CRN of an existing **Gen2** MongoDB instance via `existing_database_crn`. The `member_host_flavor` is automatically set to `bx3d.4x20`.
+
+The `ibm_database_backups` data source returns backups for the given deployment. For Gen2 instances, the backup CRN is in the `databases-independent-backups` format:
+
+```
+crn:v1:bluemix:public:databases-independent-backups:<region>:a/<account-id>:<backup-id>::
+```
+
+For classic instances, the backup CRN is in the legacy format:
+
+```
+crn:v1:bluemix:public:databases-for-mongodb:<region>:a/<account-id>:<instance-id>:backup:<backup-id>
+```
