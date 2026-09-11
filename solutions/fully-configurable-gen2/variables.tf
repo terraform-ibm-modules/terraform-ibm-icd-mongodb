@@ -325,16 +325,15 @@ variable "skip_mongodb_secrets_manager_auth_policy" {
 
 variable "backup_crn" {
   type        = string
-  description = "The CRN of a backup resource to restore from. The backup is created by a database deployment with the same service ID. The backup is loaded after provisioning and the new deployment starts up that uses that data. Supports classic backup CRNs in the format `crn:v1:<…>:backup:<…>` and Gen2 independent backup CRNs in the format `crn:v1:<…>:databases-independent-backups:<…>`. If omitted, the database is provisioned empty."
+  description = "The CRN of a backup resource to restore from. The backup is created by a database deployment with the same service ID. The backup is loaded after provisioning and the new deployment starts up that uses that data. Supports only Gen2 independent backup CRNs in the format `crn:v1:<…>:databases-independent-backups:<…>`. If omitted, the database is provisioned empty."
   default     = null
 
   validation {
     condition = anytrue([
       var.backup_crn == null,
-      can(regex("^crn:.*:backup:", var.backup_crn)),
       can(regex("^crn:.*:databases-independent-backups:", var.backup_crn))
     ])
-    error_message = "backup_crn must be null, OR a classic backup CRN containing ':backup:', OR a Gen2 independent backup CRN containing ':databases-independent-backups:'"
+    error_message = "backup_crn must be null, OR a Gen2 independent backup CRN containing ':databases-independent-backups:'"
   }
 }
 
