@@ -130,13 +130,13 @@ func TestRunBasicGen2Example(t *testing.T) {
 
 	latestVersion, _ := GetVersionsGen2("ca-mon", "standard-gen2")
 	fmt.Println("latestVersion is ", latestVersion)
-
+	// ResourceGroup is intentionally not set so a unique group is created per run for this test.
+	// Independent backup policies may not be destroyed on failure, causing conflicts on re-runs within the same group.
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:            t,
 		TerraformDir:       "examples/basic",
 		Prefix:             "mdb-gen2",
 		BestRegionYAMLPath: regionSelectionPath,
-		ResourceGroup:      resourceGroup,
 		TerraformVars: map[string]interface{}{ // Limited gen2 to Montreal and version 18
 			"region":            "ca-mon",
 			"plan":              "standard-gen2",
@@ -241,6 +241,9 @@ func TestRunFullyConfigurableSolutionSchematics(t *testing.T) {
 }
 
 func setupFullyConfigurableGen2Options(t *testing.T, prefix string) (*testschematic.TestSchematicOptions, string) {
+
+	// ResourceGroup is intentionally not set so a unique group is created per run for this test.
+	// Independent backup policies may not be destroyed on failure, causing conflicts on re-runs within the same group.
 	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
 		Testing: t,
 		TarIncludePatterns: []string{
@@ -249,7 +252,6 @@ func setupFullyConfigurableGen2Options(t *testing.T, prefix string) (*testschema
 		},
 		TemplateFolder:             fullyConfigurableGen2SolutionTerraformDir,
 		Prefix:                     prefix,
-		ResourceGroup:              resourceGroup,
 		DeleteWorkspaceOnFail:      false,
 		CheckApplyResultForUpgrade: true,
 	})
@@ -543,4 +545,27 @@ func TestRunExistingInstance(t *testing.T) {
 func generateUniqueResourceGroupName(baseName string) string {
 	id := uuid.New().String()[:8] // Shorten UUID for readability
 	return fmt.Sprintf("%s-%s", baseName, id)
+}
+
+func TestRunRestoredDBGen2Example(t *testing.T) {
+	t.Parallel()
+	// ResourceGroup is intentionally not set so a unique group is created per run for this test.
+	// Independent backup policies may not be destroyed on failure, causing conflicts on re-runs within the same group.
+	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+		Testing:      t,
+		TerraformDir: "examples/backup-restore",
+		Prefix:       "g2-restored",
+		TerraformVars: map[string]interface{}{
+			"plan":                  "standard-gen2",
+			"disk_mb":               permanentResources["mongodbGen2DiskMb"],
+			"mongodb_version":       fmt.Sprintf("%.1f", permanentResources["mongodbGen2Version"]),
+			"region":                permanentResources["mongodbGen2Region"],
+			"existing_database_crn": permanentResources["mongodbGen2Crn"],
+		},
+		CloudInfoService: sharedInfoSvc,
+	})
+
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
 }
