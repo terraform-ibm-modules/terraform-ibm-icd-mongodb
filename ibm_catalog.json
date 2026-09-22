@@ -812,6 +812,9 @@
               "key": "skip_mongodb_kms_auth_policy"
             },
             {
+              "key": "skip_independent_backup_policies"
+            },
+            {
               "key": "existing_mongodb_instance_crn",
               "display_name": "existing_mongodb_instance",
               "custom_config": {
