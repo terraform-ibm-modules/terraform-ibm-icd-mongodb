@@ -102,7 +102,7 @@ variable "members" {
 variable "shards" {
   type        = number
   description = "The number of shards to allocate for the MongoDB Enterprise Edition Server (EES) Gen2 instance. Supported only for the `enterprise-sharding-gen2` plan. Default is 1. Supported range is 1–3. Shard count can be increased post-provisioning but cannot be decreased."
-  default     = null
+  default     = 1
   # Validation is done in the root module
 }
 
