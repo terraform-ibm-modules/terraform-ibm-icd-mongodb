@@ -18,6 +18,7 @@ locals {
   # Determine if gen2 plan is being used
   is_gen2    = can(regex("-gen2$", var.plan))
   is_classic = !local.is_gen2 # For code readability and maintenance
+  shards     = local.is_gen2 ? var.shards : null
 }
 
 ########################################################################################################################
@@ -248,6 +249,7 @@ resource "ibm_database" "mongodb" {
   backup_id                            = var.backup_crn
   point_in_time_recovery_deployment_id = var.pitr_id
   point_in_time_recovery_time          = var.pitr_time
+  shards                               = local.shards
 
   dynamic "users" {
     for_each = nonsensitive(var.users != null ? var.users : [])

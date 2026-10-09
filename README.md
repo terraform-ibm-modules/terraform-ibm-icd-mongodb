@@ -64,6 +64,7 @@ To upgrade to a new major version see [Upgrading to a new major version](https:/
 ### Usage
 
 IBM Cloud Databases supports:
+
 - Key Protect encryption in `us-south`, `us-east`, and `eu-de` for backup encryption. For more information, see [Bring Your Own Key for Backups](https://cloud.ibm.com/docs/cloud-databases?topic=cloud-databases-key-protect&interface=ui#key-byok) in the IBM Cloud Docs.
 
 If you enable key management encryption and no value is passed for 'backup_encryption_key_crn', the value of 'kms_key_crn' is used.
@@ -84,11 +85,12 @@ module "mongodb" {
 ```
 
 ## Required IAM access policies
+
 You need the following permissions to run this module.
 
 - Account Management
-    - **Databases for MongoDB** service
-        - `Editor` role access
+  - **Databases for MongoDB** service
+    - `Editor` role access
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
@@ -154,6 +156,7 @@ You need the following permissions to run this module.
 | <a name="input_resource_tags"></a> [resource\_tags](#input\_resource\_tags) | Add user resource tags to the MongoDB instance to organize, track, and manage costs. [Learn more](https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#tag-types). | `list(string)` | `[]` | no |
 | <a name="input_service_credential_names"></a> [service\_credential\_names](#input\_service\_credential\_names) | List of service credentials to create for the database, including name and optionally role and endpoint type. | <pre>list(object({<br/>    name     = string<br/>    role     = optional(string, "Viewer")<br/>    endpoint = optional(string, "private")<br/>  }))</pre> | `[]` | no |
 | <a name="input_service_endpoints"></a> [service\_endpoints](#input\_service\_endpoints) | Specify whether you want to enable the public or private endpoints on the instance. Supported values are 'public' or 'private'. | `string` | `"private"` | no |
+| <a name="input_shards"></a> [shards](#input\_shards) | The number of shards allocated for the MongoDB Enterprise Edition Server (EES) Gen2 instance. Supported only for `enterprise-sharding-gen2` plan. Default is 1. Supported range is 1–3. Shard count can be increased post-provisioning but cannot be decreased. | `number` | `null` | no |
 | <a name="input_skip_iam_authorization_policy"></a> [skip\_iam\_authorization\_policy](#input\_skip\_iam\_authorization\_policy) | Set to true to skip the creation of IAM authorization policies that permits all Databases for MongoDB instances in the given resource group 'Reader' access to the Key Protect key that was provided in the `kms_key_crn` and `backup_encryption_key_crn` inputs. This policy is required in order to enable KMS encryption, so only skip creation if there is one already present in your account. No policy is created if `use_ibm_owned_encryption_key` is true. | `bool` | `false` | no |
 | <a name="input_update_timeout"></a> [update\_timeout](#input\_update\_timeout) | A database update may require a longer timeout for the update to complete. The default is 120 minutes. Set this variable to change the `update` value in the `timeouts` block. [Learn more](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts). | `string` | `"120m"` | no |
 | <a name="input_use_default_backup_encryption_key"></a> [use\_default\_backup\_encryption\_key](#input\_use\_default\_backup\_encryption\_key) | When `use_ibm_owned_encryption_key` is set to false, backups will be encrypted with either the key specified in `kms_key_crn`, or in `backup_encryption_key_crn` if a value is passed. If you do not want to use your own key for backups encryption, you can set this to `true` to use the IBM Cloud Databases default encryption for backups. Alternatively set `use_ibm_owned_encryption_key` to true to use the default encryption for both backups and deployment data. | `bool` | `false` | no |
