@@ -246,6 +246,7 @@ module "mongodb" {
   plan                              = var.plan
   mongodb_version                   = var.mongodb_version
   skip_iam_authorization_policy     = var.kms_encryption_enabled ? var.skip_mongodb_kms_auth_policy : true
+  skip_independent_backup_policies  = var.skip_independent_backup_policies
   use_ibm_owned_encryption_key      = local.use_ibm_owned_encryption_key
   kms_key_crn                       = local.kms_key_crn
   backup_encryption_key_crn         = null  # Not supported by gen2
