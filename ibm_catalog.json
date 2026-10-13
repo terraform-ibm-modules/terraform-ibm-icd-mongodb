@@ -812,7 +812,7 @@
               "key": "skip_mongodb_kms_auth_policy"
             },
             {
-              "key": "skip_independent_backup_policies"
+              "key": "skip_independent_backup_auth_policies"
             },
             {
               "key": "existing_mongodb_instance_crn",
