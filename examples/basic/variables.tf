@@ -46,6 +46,12 @@ variable "resource_tags" {
   default     = []
 }
 
+variable "shards" {
+  type        = number
+  description = "The number of shards to allocate. Only supported for the `enterprise-sharding-gen2` plan. Default is 1. Supported range is 1–3."
+  default     = null
+}
+
 variable "service_endpoints" {
   type        = string
   description = "Specify whether you want to enable the public or private endpoints on the instance. Supported values are 'public' or 'private'."

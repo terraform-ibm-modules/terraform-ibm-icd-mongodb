@@ -76,5 +76,5 @@ module "database" {
   member_host_flavor       = local.is_gen2 ? local.gen2_host_flavor : local.classic_host_flavor
   deletion_protection      = false
   service_credential_names = local.is_gen2 ? local.gen2_service_credential_names : local.classic_service_credential_names
-
+  shards                   = var.shards
 }
