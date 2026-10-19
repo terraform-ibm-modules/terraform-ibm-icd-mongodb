@@ -45,6 +45,22 @@ variable "plan" {
 # ICD hosting model properties
 ##############################################################################
 
+variable "shards" {
+  type        = number
+  description = "The number of shards allocated for the MongoDB Enterprise Edition Server (EES) Gen2 instance. Supported only for `enterprise-sharding-gen2` plan. Default is 1. Supported range is 1–3. Shard count can be increased post-provisioning but cannot be decreased."
+  default     = null
+
+  validation {
+    condition     = var.shards == null || try(var.shards >= 1 && var.shards <= 3, false)
+    error_message = "`shards` must be between 1 and 3 (inclusive)."
+  }
+
+  validation {
+    condition     = var.shards == null || var.plan == "enterprise-sharding-gen2"
+    error_message = "`shards` is only supported for the `enterprise-sharding-gen2` plan."
+  }
+}
+
 variable "members" {
   type        = number
   description = "The number of members that are allocated. [Learn more](https://cloud.ibm.com/docs/databases-for-mongodb?topic=databases-for-mongodb-resources-scaling)"
