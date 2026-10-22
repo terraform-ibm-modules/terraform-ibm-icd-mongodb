@@ -222,17 +222,8 @@ data "ibm_database" "existing_db_instance" {
   count             = var.existing_mongodb_instance_crn != null ? 1 : 0
   name              = data.ibm_resource_instance.existing_instance_resource[0].name
   resource_group_id = data.ibm_resource_instance.existing_instance_resource[0].resource_group_id
-  location          = var.region
+  location          = data.ibm_resource_instance.existing_instance_resource[0].location
   service           = "databases-for-mongodb"
-}
-
-# Lookup existing instance connection details
-data "ibm_database_connection" "existing_connection" {
-  count         = var.existing_mongodb_instance_crn != null ? 1 : 0
-  endpoint_type = "private"
-  deployment_id = data.ibm_database.existing_db_instance[0].id
-  user_id       = data.ibm_database.existing_db_instance[0].adminuser
-  user_type     = "database"
 }
 
 # Create new instance
@@ -278,8 +269,8 @@ locals {
   mongodb_id       = var.existing_mongodb_instance_crn != null ? data.ibm_database.existing_db_instance[0].id : module.mongodb[0].id
   mongodb_version  = var.existing_mongodb_instance_crn != null ? data.ibm_database.existing_db_instance[0].version : module.mongodb[0].version
   mongodb_crn      = var.existing_mongodb_instance_crn != null ? var.existing_mongodb_instance_crn : module.mongodb[0].crn
-  mongodb_hostname = var.existing_mongodb_instance_crn != null ? data.ibm_database_connection.existing_connection[0].mongodb[0].hosts[0].hostname : module.mongodb[0].hostname
-  mongodb_port     = var.existing_mongodb_instance_crn != null ? data.ibm_database_connection.existing_connection[0].mongodb[0].hosts[0].port : module.mongodb[0].port
+  mongodb_hostname = var.existing_mongodb_instance_crn != null ? null : module.mongodb[0].hostname
+  mongodb_port     = var.existing_mongodb_instance_crn != null ? null : module.mongodb[0].port
 }
 
 #######################################################################################################################
