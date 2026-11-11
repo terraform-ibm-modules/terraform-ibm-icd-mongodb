@@ -158,9 +158,6 @@ func TestPlanValidation(t *testing.T) {
 	}
 }
 
-// TestRunExistingInstance validates the fully-configurable DA in "bring your own instance" mode.
-// It reuses the permanent MongoDB instance defined in common-permanent-resources.yaml rather than
-// provisioning and destroying a short-lived instance, which saves significant CI time and cost.
 func TestRunExistingInstance(t *testing.T) {
 	t.Parallel()
 
