@@ -295,8 +295,6 @@ func TestRunFullyConfigurableGen2UpgradeSolutionSchematics(t *testing.T) {
 	}
 }
 
-// TestRunFullyConfigurableWithKMSUpgradeSolution upgrade-tests the fully-configurable DA with
-// KMS encryption (KYOK) to detect breaking changes on every PR.
 func TestRunFullyConfigurableWithKMSUpgradeSolution(t *testing.T) {
 	t.Parallel()
 
