@@ -281,8 +281,6 @@ func TestRunFullyConfigurableGen2SolutionSchematics(t *testing.T) {
 	assert.Nil(t, err, "This should not have errored")
 }
 
-// TestRunFullyConfigurableGen2UpgradeSolutionSchematics upgrade-tests the fully-configurable-gen2
-// DA to detect breaking changes on every PR.
 func TestRunFullyConfigurableGen2UpgradeSolutionSchematics(t *testing.T) {
 	t.Parallel()
 
