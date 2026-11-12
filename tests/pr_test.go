@@ -14,6 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/cloudinfo"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/common"
+	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testschematic"
 )
 
@@ -368,4 +369,27 @@ func TestRunFullyConfigurableWithKMSUpgradeSolution(t *testing.T) {
 func generateUniqueResourceGroupName(baseName string) string {
 	id := uuid.New().String()[:8] // Shorten UUID for readability
 	return fmt.Sprintf("%s-%s", baseName, id)
+}
+
+func TestRunRestoredDBGen2Example(t *testing.T) {
+	t.Parallel()
+	// ResourceGroup is intentionally not set so a unique group is created per run for this test.
+	// Independent backup policies may not be destroyed on failure, causing conflicts on re-runs within the same group.
+	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+		Testing:      t,
+		TerraformDir: "examples/backup-restore",
+		Prefix:       "g2-restored",
+		TerraformVars: map[string]interface{}{
+			"plan":                  "standard-gen2",
+			"disk_mb":               permanentResources["mongodbGen2DiskMb"],
+			"mongodb_version":       fmt.Sprintf("%.1f", permanentResources["mongodbGen2Version"]),
+			"region":                permanentResources["mongodbGen2Region"],
+			"existing_database_crn": permanentResources["mongodbGen2Crn"],
+		},
+		CloudInfoService: sharedInfoSvc,
+	})
+
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
 }
